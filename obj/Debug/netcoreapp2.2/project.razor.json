@@ -2943,6 +2943,11 @@
   "RootNamespace": "ScientificStudiesRecord",
   "Documents": [
     {
+      "FilePath": "Views/TestSubject/Delete.cshtml",
+      "TargetPath": "Views/TestSubject/Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "Views/Shared/_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views/Shared/_ValidationScriptsPartial.cshtml",
       "FileKind": "mvc"
@@ -2963,13 +2968,53 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "Views/Study/Edit.cshtml",
+      "TargetPath": "Views/Study/Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/Study/Create.cshtml",
+      "TargetPath": "Views/Study/Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/Study/Index.cshtml",
+      "TargetPath": "Views/Study/Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "Views/_ViewImports.cshtml",
       "TargetPath": "Views/_ViewImports.cshtml",
       "FileKind": "mvc"
     },
     {
+      "FilePath": "Views/TestSubject/Edit.cshtml",
+      "TargetPath": "Views/TestSubject/Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "Views/Shared/Error.cshtml",
       "TargetPath": "Views/Shared/Error.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/TestSubject/Details.cshtml",
+      "TargetPath": "Views/TestSubject/Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/TestSubject/Index.cshtml",
+      "TargetPath": "Views/TestSubject/Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/Study/Details.cshtml",
+      "TargetPath": "Views/Study/Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/TestSubject/Create.cshtml",
+      "TargetPath": "Views/TestSubject/Create.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -2980,6 +3025,11 @@
     {
       "FilePath": "Views/Shared/_Layout.cshtml",
       "TargetPath": "Views/Shared/_Layout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/Study/Delete.cshtml",
+      "TargetPath": "Views/Study/Delete.cshtml",
       "FileKind": "mvc"
     }
   ],

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/teo/Projects/Master_rad/ScientificStudiesRecord/ScientificStudiesRecord.csproj": {}
+    "/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudiesRecord.csproj": {}
   },
   "projects": {
-    "/home/teo/Projects/Master_rad/ScientificStudiesRecord/ScientificStudiesRecord.csproj": {
+    "/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudiesRecord.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/teo/Projects/Master_rad/ScientificStudiesRecord/ScientificStudiesRecord.csproj",
+        "projectUniqueName": "/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudiesRecord.csproj",
         "projectName": "ScientificStudiesRecord",
-        "projectPath": "/home/teo/Projects/Master_rad/ScientificStudiesRecord/ScientificStudiesRecord.csproj",
+        "projectPath": "/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudiesRecord.csproj",
         "packagesPath": "/home/teo/.nuget/packages/",
-        "outputPath": "/home/teo/Projects/Master_rad/ScientificStudiesRecord/obj/",
+        "outputPath": "/home/teo/Projects/Master_rad/ScientificStudyRecords/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "/usr/share/dotnet/sdk/NuGetFallbackFolder"
@@ -63,6 +63,10 @@
               "target": "Package",
               "version": "[2.2.0, )",
               "autoReferenced": true
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[2.2.3, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
               "target": "Package",
