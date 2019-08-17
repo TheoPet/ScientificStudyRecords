@@ -36,7 +36,8 @@ namespace ScientificStudiesRecord.Data
         public DbSet<Task> Tasks {get; set;}
         public DbSet<TestSubject> TestSubjects {get; set;}
         public DbSet<Experiment> Experiments {get; set;}
-        //public DbSet<TestSubjectStudyGroup> TestSubjectStudyGroups {get; set;}
+        
+        public DbSet<User> Users {get; set;}
 
     }
 }
