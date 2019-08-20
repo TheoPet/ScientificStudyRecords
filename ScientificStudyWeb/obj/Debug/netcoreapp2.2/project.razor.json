@@ -2941,17 +2941,6 @@
     "CSharpLanguageVersion": 703
   },
   "RootNamespace": "ScientificStudiesRecord",
-  "Documents": [
-    {
-      "FilePath": "Views/_ViewStart.cshtml",
-      "TargetPath": "Views/_ViewStart.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views/_ViewImports.cshtml",
-      "TargetPath": "Views/_ViewImports.cshtml",
-      "FileKind": "mvc"
-    }
-  ],
+  "Documents": [],
   "SerializationFormat": "0.1"
 }
