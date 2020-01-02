@@ -61,12 +61,17 @@ namespace ScientificStudiesRecord
                
             }
 
+            app.UseRouting();
+            //app.UseAuthorization();
             //app.UseAuthentication();
 
             //app.UseStaticFiles();
             //app.UseCookiePolicy();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();    
+            });
         }
     }
 }
