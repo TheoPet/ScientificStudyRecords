@@ -1,17 +1,11 @@
-﻿using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ScientificStudiesRecord.Data;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace ScientificStudiesRecord
 {
@@ -34,15 +28,14 @@ namespace ScientificStudiesRecord
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddEntityFrameworkNpgsql()
-            .AddDbContext<ScientificStudiesRecordDbContext>(options =>
+            services.AddControllers();
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddDbContext<ScientificStudiesRecordDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IAuthentificationRepository,AuthentificationRepository>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+           /* services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options => {
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
@@ -51,13 +44,13 @@ namespace ScientificStudiesRecord
                             ValidateIssuer = false,
                             ValidateAudience = false
                         };
-                    });
+                    });*/
             
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -68,7 +61,7 @@ namespace ScientificStudiesRecord
                
             }
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             //app.UseStaticFiles();
             //app.UseCookiePolicy();

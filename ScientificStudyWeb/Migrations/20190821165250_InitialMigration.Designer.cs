@@ -10,8 +10,8 @@ using ScientificStudiesRecord.Data;
 namespace ScientificStudiesRecord.Migrations
 {
     [DbContext(typeof(ScientificStudiesRecordDbContext))]
-    [Migration("20190810211608_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190821165250_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,9 +31,9 @@ namespace ScientificStudiesRecord.Migrations
 
                     b.Property<long>("Duration");
 
-                    b.Property<int?>("TaskId");
+                    b.Property<int>("TaskId");
 
-                    b.Property<int?>("TestSubjectId");
+                    b.Property<int>("TestSubjectId");
 
                     b.HasKey("Id");
 
@@ -42,6 +42,19 @@ namespace ScientificStudiesRecord.Migrations
                     b.HasIndex("TestSubjectId");
 
                     b.ToTable("Experiments");
+                });
+
+            modelBuilder.Entity("ScientificStudiesRecord.Models.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("ScientificStudiesRecord.Models.Study", b =>
@@ -59,15 +72,28 @@ namespace ScientificStudiesRecord.Migrations
 
             modelBuilder.Entity("ScientificStudiesRecord.Models.StudyGroup", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("StudyId");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(50);
+                    b.Property<int>("GroupId");
 
-                    b.HasKey("Id");
+                    b.HasKey("StudyId", "GroupId");
 
-                    b.ToTable("Groups");
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("StudyGroup");
+                });
+
+            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyTestSubject", b =>
+                {
+                    b.Property<int>("StudyId");
+
+                    b.Property<int>("TestSubjectId");
+
+                    b.HasKey("StudyId", "TestSubjectId");
+
+                    b.HasIndex("TestSubjectId");
+
+                    b.ToTable("StudyTestSubject");
                 });
 
             modelBuilder.Entity("ScientificStudiesRecord.Models.Task", b =>
@@ -78,7 +104,7 @@ namespace ScientificStudiesRecord.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(50);
 
-                    b.Property<int?>("StudyId");
+                    b.Property<int>("StudyId");
 
                     b.HasKey("Id");
 
@@ -110,56 +136,66 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("TestSubjects");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.TestSubjectStudyGroup", b =>
+            modelBuilder.Entity("ScientificStudiesRecord.Models.User", b =>
                 {
-                    b.Property<int>("TestSubjectId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("StudyGroupId");
+                    b.Property<byte[]>("PasswordHash");
 
-                    b.Property<int>("StudyId");
+                    b.Property<byte[]>("PaswordSalt");
 
-                    b.HasKey("TestSubjectId", "StudyGroupId", "StudyId");
+                    b.Property<string>("Username");
 
-                    b.HasIndex("StudyGroupId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("StudyId");
-
-                    b.ToTable("TestSubjectStudyGroup");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ScientificStudiesRecord.Models.Experiment", b =>
                 {
                     b.HasOne("ScientificStudiesRecord.Models.Task", "Task")
                         .WithMany("Experiments")
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ScientificStudiesRecord.Models.TestSubject", "TestSubject")
                         .WithMany("Experiments")
-                        .HasForeignKey("TestSubjectId");
+                        .HasForeignKey("TestSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyGroup", b =>
+                {
+                    b.HasOne("ScientificStudiesRecord.Models.Group", "Group")
+                        .WithMany("StudyGroups")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
+                        .WithMany("StudyGroups")
+                        .HasForeignKey("StudyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyTestSubject", b =>
+                {
+                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
+                        .WithMany("StudyTestSubjects")
+                        .HasForeignKey("StudyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ScientificStudiesRecord.Models.TestSubject", "TestSubject")
+                        .WithMany("StudyTestSubjects")
+                        .HasForeignKey("TestSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ScientificStudiesRecord.Models.Task", b =>
                 {
                     b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
                         .WithMany("Tasks")
-                        .HasForeignKey("StudyId");
-                });
-
-            modelBuilder.Entity("ScientificStudiesRecord.Models.TestSubjectStudyGroup", b =>
-                {
-                    b.HasOne("ScientificStudiesRecord.Models.StudyGroup", "StudyGroup")
-                        .WithMany("TestSubjectStudyGroups")
-                        .HasForeignKey("StudyGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
-                        .WithMany("TestSubjectStudyGroups")
                         .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ScientificStudiesRecord.Models.TestSubject", "TestSubject")
-                        .WithMany("TestSubjectStudyGroups")
-                        .HasForeignKey("TestSubjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

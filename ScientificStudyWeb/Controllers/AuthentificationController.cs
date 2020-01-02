@@ -80,5 +80,14 @@ namespace ScientificStudiesRecord.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> TestMetoda()
+        {
+
+             var array = await _repository.UserExists("lana");
+             
+            return Ok();
+        }
     }
 }

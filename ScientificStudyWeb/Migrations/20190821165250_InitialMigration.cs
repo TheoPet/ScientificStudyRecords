@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ScientificStudiesRecord.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,13 +51,52 @@ namespace ScientificStudiesRecord.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Username = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<byte[]>(nullable: true),
+                    PaswordSalt = table.Column<byte[]>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudyGroup",
+                columns: table => new
+                {
+                    GroupId = table.Column<int>(nullable: false),
+                    StudyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudyGroup", x => new { x.StudyId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_StudyGroup_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudyGroup_Studies_StudyId",
+                        column: x => x.StudyId,
+                        principalTable: "Studies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
-                    StudyId = table.Column<int>(nullable: true)
+                    StudyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,34 +106,27 @@ namespace ScientificStudiesRecord.Migrations
                         column: x => x.StudyId,
                         principalTable: "Studies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestSubjectStudyGroup",
+                name: "StudyTestSubject",
                 columns: table => new
                 {
-                    TestSubjectId = table.Column<int>(nullable: false),
-                    StudyGroupId = table.Column<int>(nullable: false),
-                    StudyId = table.Column<int>(nullable: false)
+                    StudyId = table.Column<int>(nullable: false),
+                    TestSubjectId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestSubjectStudyGroup", x => new { x.TestSubjectId, x.StudyGroupId, x.StudyId });
+                    table.PrimaryKey("PK_StudyTestSubject", x => new { x.StudyId, x.TestSubjectId });
                     table.ForeignKey(
-                        name: "FK_TestSubjectStudyGroup_Groups_StudyGroupId",
-                        column: x => x.StudyGroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TestSubjectStudyGroup_Studies_StudyId",
+                        name: "FK_StudyTestSubject_Studies_StudyId",
                         column: x => x.StudyId,
                         principalTable: "Studies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TestSubjectStudyGroup_TestSubjects_TestSubjectId",
+                        name: "FK_StudyTestSubject_TestSubjects_TestSubjectId",
                         column: x => x.TestSubjectId,
                         principalTable: "TestSubjects",
                         principalColumn: "Id",
@@ -109,8 +141,8 @@ namespace ScientificStudiesRecord.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Duration = table.Column<long>(nullable: false),
                     Comment = table.Column<string>(maxLength: 256, nullable: true),
-                    TestSubjectId = table.Column<int>(nullable: true),
-                    TaskId = table.Column<int>(nullable: true)
+                    TestSubjectId = table.Column<int>(nullable: false),
+                    TaskId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,13 +152,13 @@ namespace ScientificStudiesRecord.Migrations
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Experiments_TestSubjects_TestSubjectId",
                         column: x => x.TestSubjectId,
                         principalTable: "TestSubjects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -140,18 +172,18 @@ namespace ScientificStudiesRecord.Migrations
                 column: "TestSubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudyGroup_GroupId",
+                table: "StudyGroup",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudyTestSubject_TestSubjectId",
+                table: "StudyTestSubject",
+                column: "TestSubjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasks_StudyId",
                 table: "Tasks",
-                column: "StudyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestSubjectStudyGroup_StudyGroupId",
-                table: "TestSubjectStudyGroup",
-                column: "StudyGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestSubjectStudyGroup_StudyId",
-                table: "TestSubjectStudyGroup",
                 column: "StudyId");
         }
 
@@ -161,7 +193,13 @@ namespace ScientificStudiesRecord.Migrations
                 name: "Experiments");
 
             migrationBuilder.DropTable(
-                name: "TestSubjectStudyGroup");
+                name: "StudyGroup");
+
+            migrationBuilder.DropTable(
+                name: "StudyTestSubject");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Tasks");

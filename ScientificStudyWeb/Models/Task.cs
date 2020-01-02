@@ -12,6 +12,7 @@ namespace ScientificStudiesRecord.Models
         public string Name {get; set;}
 
         public Study Study {get; set;}
+        public int StudyId { get; set; }
 
          public ICollection<Experiment> Experiments {get; set;}
     }
