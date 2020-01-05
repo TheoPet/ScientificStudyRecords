@@ -62,9 +62,9 @@ namespace ScientificStudiesRecord
             }
 
             app.UseRouting();
-            //app.UseAuthorization();
             //app.UseAuthentication();
-
+            //app.UseAuthorization();
+            
             //app.UseStaticFiles();
             //app.UseCookiePolicy();
 
