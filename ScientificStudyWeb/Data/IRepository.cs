@@ -8,19 +8,17 @@ namespace ScientificStudiesRecord.Data
 {
     public interface IRepository<TEntity> where TEntity:class
     {
-        Task Add(TEntity entity);
+        void Add(TEntity entity);
 
-        Task Remove(TEntity entity);
+        void Remove(TEntity entity);
       
-        Task Remove(int id);
+        void Remove(int id);
 
         Task<TEntity> GetByID(int id);
 
-        Task<IEnumerable<TEntity>> Get(
-               Expression<Func<TEntity, bool>> filter = null,
-               Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-               string includeProperties = "");
+        Task<IEnumerable<TEntity>> GetAll();
+        
+        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate);
 
-        Task Update(TEntity entity);
     }
 }

@@ -19,65 +19,37 @@ namespace ScientificStudiesRecord.Data
             dbSet = context.Set<TEntity>();
         }
 
-        public async Task Add(TEntity entity)
+        public void Add(TEntity entity)
         {
-            await dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            dbSet.Add(entity);
         }
 
-        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-             IQueryable<TEntity> query = dbSet;
+             return await dbSet.ToListAsync();
+        }
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-
-
-            if (orderBy != null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-            else
-            {
-                return await query.ToListAsync();
-            }
+        public async Task <IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await dbSet.Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity> GetByID(int id)
         {
-
             return await dbSet.FindAsync(id);     
         } 
         
 
-        public Task Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
             dbSet.Remove(entity);
-            return _context.SaveChangesAsync();        
         }
 
-        public Task Remove(int id)
+        public void Remove(int id)
         {
-            TEntity entityToDelete = dbSet.FindAsync(id).Result;
-            dbSet.Remove(entityToDelete);
-            return _context.SaveChangesAsync();
-        }
-
-        public Task Update(TEntity entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            return _context.SaveChangesAsync();
+            TEntity entityToDelete = dbSet.Find(id);
+            if(entityToDelete != null)
+                dbSet.Remove(entityToDelete);
         }
     }
 }
