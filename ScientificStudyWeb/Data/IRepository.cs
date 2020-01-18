@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ScientificStudiesRecord.Data
+namespace ScientificStudyWeb.Data
 {
     public interface IRepository<TEntity> where TEntity:class
     {

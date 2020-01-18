@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ScientificStudiesRecord.Models;
-using ScientificStudiesRecord.Data;
+using ScientificStudyWeb.Data;
 
-namespace ScientificStudiesRecord.Controllers
+namespace ScientificStudyWeb.Controllers
 {
     [Route("master/[controller]")]
     [ApiController]

@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ScientificStudiesRecord.Models;
-using ScientificStudiesRecord.Data;
+using ScientificStudyWeb.Data;
 using ScientificStudiesRecord.DataObjects;
 
-namespace ScientificStudiesRecord.Controllers
+namespace ScientificStudyWeb.Controllers
 {
     [Route("master/[controller]")]
     [ApiController]

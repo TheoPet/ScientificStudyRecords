@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace ScientificStudiesRecord.Data
+namespace ScientificStudyWeb.Data
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

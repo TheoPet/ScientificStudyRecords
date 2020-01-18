@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ScientificStudiesRecord.Models;
 
-namespace ScientificStudiesRecord.Data
+namespace ScientificStudyWeb.Data
 {
     public interface IAuthentificationRepository
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ScientificStudiesRecord.Data;
+using ScientificStudyWeb.Data;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 

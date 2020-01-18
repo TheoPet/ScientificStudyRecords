@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using ScientificStudiesRecord.Models;
 
-namespace ScientificStudiesRecord.Data
+namespace ScientificStudyWeb.Data
 {
     public class AuthentificationRepository : IAuthentificationRepository
     {
