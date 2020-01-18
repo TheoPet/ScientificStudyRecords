@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ScientificStudiesRecord.Models;
+using ScientificStudyWeb.Models;
 
 namespace ScientificStudyWeb.Data
 {

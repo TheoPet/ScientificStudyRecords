@@ -1,6 +1,6 @@
 using System;
 
-namespace ScientificStudiesRecord.Models
+namespace ScientificStudyWeb.Models
 {
     public class ErrorViewModel
     {

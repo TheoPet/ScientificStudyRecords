@@ -6,8 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ScientificStudiesRecord.Models;
-using ScientificStudyWeb.Data;
+using ScientificStudyWeb.Models;
+using ScientificStudyWeb.Data.Interfaces;
 using ScientificStudiesRecord.DataObjects;
 
 namespace ScientificStudyWeb.Controllers

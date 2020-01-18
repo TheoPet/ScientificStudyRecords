@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ScientificStudiesRecord.Models
+namespace ScientificStudyWeb.Models
 {
     public class Experiment 
     {

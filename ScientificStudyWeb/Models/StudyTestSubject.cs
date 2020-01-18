@@ -1,4 +1,4 @@
-namespace ScientificStudiesRecord.Models
+namespace ScientificStudyWeb.Models
 {
     public class StudyTestSubject
     {

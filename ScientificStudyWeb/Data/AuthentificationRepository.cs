@@ -2,7 +2,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-using ScientificStudiesRecord.Models;
+using ScientificStudyWeb.Models;
+using ScientificStudyWeb.Data.Interfaces;
+
 
 namespace ScientificStudyWeb.Data
 {

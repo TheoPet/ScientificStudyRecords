@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ScientificStudiesRecord.Models;
+using ScientificStudyWeb.Models;
 using ScientificStudyWeb.Data;
 
 namespace ScientificStudyWeb.Controllers
@@ -38,7 +38,7 @@ namespace ScientificStudyWeb.Controllers
         public async Task<IActionResult>DeleteStudies()
         {
             var study = await _context.Studies.FirstOrDefaultAsync();
-            var task = new ScientificStudiesRecord.Models.Task
+          /*  var task = new ScientificStudiesRecord.Models.Task
             {
                 Name = "Test2",
                 Study =study
@@ -47,7 +47,7 @@ namespace ScientificStudyWeb.Controllers
             await _context.Tasks.AddAsync(task);
             await _context.SaveChangesAsync();
             study = await _context.Studies.FirstOrDefaultAsync();
-            _context.Studies.Remove(study);
+            _context.Studies.Remove(study);*/
             await _context.SaveChangesAsync();
              return Ok();
 

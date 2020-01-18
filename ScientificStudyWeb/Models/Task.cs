@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace ScientificStudiesRecord.Models
+namespace ScientificStudyWeb.Models
 {
     public class Task
     {

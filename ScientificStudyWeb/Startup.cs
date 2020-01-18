@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ScientificStudyWeb.Data;
+using ScientificStudyWeb.Data.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
