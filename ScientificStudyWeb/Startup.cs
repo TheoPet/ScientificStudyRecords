@@ -46,7 +46,13 @@ namespace ScientificStudiesRecord
                             ValidateAudience = false
                         };
                     });*/
-            
+                    
+            services.AddScoped<IExperimentRepository, ExperimentRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IStudyRepository,StudyRepository>();
+            services.AddScoped<ITaskRepository,TaskRepository>();
+            services.AddScoped<ITestSubjectRepository,TestSubjectRepository>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
 
         }
 
