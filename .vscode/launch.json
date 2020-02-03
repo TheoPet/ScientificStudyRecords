@@ -16,7 +16,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/ScientificStudyWeb/bin/Debug/netcoreapp2.2/ScientificStudiesRecord.dll",
+            "program": "${workspaceFolder}/ScientificStudyWeb/bin/Debug/netcoreapp3.1/ScientificStudiesRecord.dll",
             "args": [],
             "cwd": "${workspaceFolder}/ScientificStudyWeb",
             "stopAtEntry": false,
