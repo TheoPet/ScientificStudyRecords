@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink='/'>Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink='/study'>Test Subjects</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink='/study'>Experiments</a>
+      </li>
+      <li class="nav-item dropdown" ngbDropdown>
+          <a class="nav-link dropdown-toggle" role="button"  ngbDropdownToggle>Studies</a>
+          <div ngbDropdownMenu>
+            <a class="dropdown-item" routerLinkActive="active" routerLink='study/new' ngbDropdownItem>
+              New</a>
+            <button ngbDropdownItem>Another Action</button>
+            <button ngbDropdownItem>Something else is here</button>
+          </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>

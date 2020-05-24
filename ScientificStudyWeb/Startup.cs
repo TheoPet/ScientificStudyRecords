@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +29,8 @@ namespace ScientificStudiesRecord
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.AddCors();
+            services.AddAutoMapper(typeof(StudyRepository).Assembly);
             services.AddControllers();
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
@@ -75,10 +77,14 @@ namespace ScientificStudiesRecord
             //app.UseStaticFiles();
             //app.UseCookiePolicy();
 
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();    
+                endpoints.MapControllers();
             });
+
+
         }
     }
 }

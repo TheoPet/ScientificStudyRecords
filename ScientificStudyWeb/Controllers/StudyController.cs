@@ -1,118 +1,67 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ScientificStudyWeb.Models;
 using ScientificStudyWeb.Data;
 using ScientificStudyWeb.Data.Interfaces;
 using System.Collections.Generic;
 using ScientificStudiesRecord.DataObjects;
+using System;
+using AutoMapper;
 
 namespace ScientificStudyWeb.Controllers
 {
-    [Route("master/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StudyController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
+        private readonly IMapper _mapper;
+        private IUnitOfWork _unitOfWork;
 
-        private IUnitOfWork unitOfWork;
-
-        public StudyController(ScientificStudiesRecordDbContext context)
+        public StudyController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
-            this.unitOfWork = new UnitOfWork(_context); 
+            _mapper = mapper;
+            _unitOfWork = new UnitOfWork(_context); 
         }
 
-
-       /* [HttpGet("studies")]
-        public async Task<IActionResult> GetStudies()
+        [HttpGet("{id}", Name = "GetStudy")]
+        public async Task<IActionResult> GetStudy(int Id)
         {
-            var studies = await _context.Studies.ToListAsync();
-            return Ok(studies);
-        }*/
-
-        [HttpPost("test")]
-        public async Task<IActionResult> TestCode()
-        {
-            var study = new Study
-            {
-                Name = "std"
-            };
-            unitOfWork.studyRepository.Add(study);
-
-            var group = new Group { Name = "groupName" };
-            var group2 = new Group {Name = "groupName2"};
-            
-            unitOfWork.groupRepository.Add(group);
-            unitOfWork.groupRepository.Add(group2);
-            
-            study.StudyGroups = new List<StudyGroup>
-            {
-                new StudyGroup {
-                    Study = study,
-                    Group = group
-                    }
-            };
-            study.StudyGroups = new List<StudyGroup>
-            {
-                new StudyGroup {
-                    Study = study,
-                    Group = group2
-                    }
-            };
-
-            unitOfWork.taskRepository.Add
-            (
-                new ScientificStudyWeb.Models.Task
-                {
-                    Name = "taskName"
-                }
-                );
-           await unitOfWork.SaveChangesAsync();
-           return Ok();
+            var study = await _unitOfWork.studyRepository.Get(Id);
+            var data = _mapper.Map<StudyData>(study);
+            return Ok(data);
         }
 
-        [HttpPost("savestudies")]
-        public async Task<IActionResult> SaveStudies(StudyData data)
+       
+        [HttpPost("Save")]
+        public async Task<IActionResult> Save(StudyData data)
 
         {
-            var study = new Study
+            var study = _mapper.Map<Study>(data);
+
+            _unitOfWork.studyRepository.Add(study);
+            _unitOfWork.taskRepository.AddRange(study.Tasks);
+            foreach(var group in study.StudyGroups)
+                _unitOfWork.groupRepository.Add(group.Group);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return CreatedAtRoute("GetStudy", new { id = study.Id }, study.Id);
+
+        }
+    
+        [HttpDelete("{id}", Name = "Delete")]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            if(_unitOfWork.studyRepository.Remove(Id))
             {
-                Name = data.Study
-            };
-
-            unitOfWork.studyRepository.Add(study);        
-            study.StudyGroups = new List<StudyGroup>();
-            foreach (var groupName in data.Groups)
-            {
-                var group = new Group { Name = groupName };
-
-                study.StudyGroups.Add(
-                  new StudyGroup
-                  {
-                      Study = study,
-                      Group = group
-                  }
-                );
-
-                unitOfWork.groupRepository.Add(group);
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
             }
 
-            foreach(var taskName in data.Tasks)
-            {
-                var task = new ScientificStudyWeb.Models.Task
-                {
-                    Name = taskName,
-                    Study = study
-                };
-                unitOfWork.taskRepository.Add(task);
-                
-            }
-
-            await unitOfWork.SaveChangesAsync();
-            return Ok();
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
         }
     }
 }

@@ -25,32 +25,48 @@ namespace ScientificStudyWeb.Data
             dbSet.Add(entity);
         }
 
+        public void AddRange(IEnumerable<TEntity> entities)
+        {
+            foreach(var entity in entities)
+                dbSet.Add(entity);
+        }
+        
         public async Task<IEnumerable<TEntity>> GetAll()
         {
              return await dbSet.ToListAsync();
         }
 
-        public async Task <IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
+        {
+            var result = await dbSet.Where(predicate).ToListAsync();
+            return result.FirstOrDefault();
+        }
+
+        public virtual async Task <IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             return await dbSet.Where(predicate).ToListAsync();
         }
 
-        public async Task<TEntity> GetByID(int id)
+        public virtual async Task<TEntity> Get(int id)
         {
             return await dbSet.FindAsync(id);     
         } 
         
-
-        public void Remove(TEntity entity)
+        public virtual bool Remove(TEntity entity)
         {
             dbSet.Remove(entity);
+            return true;
         }
 
-        public void Remove(int id)
+        public virtual bool Remove(int id)
         {
             TEntity entityToDelete = dbSet.Find(id);
             if(entityToDelete != null)
+            {
                 dbSet.Remove(entityToDelete);
+                return true;
+            }
+            return false;
         }
     }
 }

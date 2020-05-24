@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using ScientificStudyWeb.DataObjects;
 
 namespace ScientificStudiesRecord.DataObjects
 {
     public class StudyData
     {
-        public string Study { get; set; }
+        public string Name { get; set; }
 
         public IEnumerable<string> Tasks { get; set; }
 

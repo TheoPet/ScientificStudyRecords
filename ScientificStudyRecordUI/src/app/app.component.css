@@ -1,0 +1,10 @@
+body
+{
+    background-image: url('../styles/images/books-768125.jpg');
+
+    /*height: 100%;*/
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+}

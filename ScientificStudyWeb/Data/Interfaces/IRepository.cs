@@ -9,15 +9,19 @@ namespace ScientificStudyWeb.Data.Interfaces
     {
         void Add(TEntity entity);
 
-        void Remove(TEntity entity);
-      
-        void Remove(int id);
+        void AddRange(IEnumerable<TEntity> entities);
 
-        Task<TEntity> GetByID(int id);
+        bool Remove(TEntity entity);
+      
+        bool Remove(int id);
+
+        Task<TEntity> Get(int id);
+
+        Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
 
         Task<IEnumerable<TEntity>> GetAll();
         
-        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate);
 
     }
 }

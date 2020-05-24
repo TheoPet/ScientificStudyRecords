@@ -45,3 +45,5 @@
 /home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/obj/Debug/netcoreapp3.1/ScientificStudiesRecord.csproj.CopyComplete
 /home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/obj/Debug/netcoreapp3.1/ScientificStudiesRecord.dll
 /home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/obj/Debug/netcoreapp3.1/ScientificStudiesRecord.pdb
+/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/obj/Debug/netcoreapp3.1/ScientificStudiesRecord.csproj.CoreCompileInputs.cache
+/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/obj/Debug/netcoreapp3.1/ScientificStudiesRecord.genruntimeconfig.cache

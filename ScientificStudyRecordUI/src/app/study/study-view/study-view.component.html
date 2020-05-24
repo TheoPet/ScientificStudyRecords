@@ -1,0 +1,38 @@
+<div class>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="container title">
+        <h1>Study {{ loadedStudy.name }}</h1>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="container title">
+        <h2>Study groups </h2>
+      <ul class="list-group list-group-flush">
+        <li
+          class="list-group-item d-flex justify-content-between"
+          *ngFor="let group of loadedStudy.groups">
+          {{ group }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="container title">
+        <h2>Study tasks</h2>
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex justify-content-between"
+            *ngFor="let task of loadedStudy.tasks">
+            {{ task }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

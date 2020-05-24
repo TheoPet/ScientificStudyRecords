@@ -15,23 +15,29 @@ namespace ScientificStudiesRecord.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Experiment", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Experiment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Comment")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<long>("Duration");
+                    b.Property<long>("Duration")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("TaskId");
+                    b.Property<int>("TaskId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("TestSubjectId");
+                    b.Property<int>("TestSubjectId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -42,12 +48,15 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("Experiments");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Group", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Group", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
@@ -55,12 +64,15 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Study", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Study", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
@@ -68,11 +80,13 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("Studies");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyGroup", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.StudyGroup", b =>
                 {
-                    b.Property<int>("StudyId");
+                    b.Property<int>("StudyId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("GroupId");
+                    b.Property<int>("GroupId")
+                        .HasColumnType("integer");
 
                     b.HasKey("StudyId", "GroupId");
 
@@ -81,28 +95,19 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("StudyGroup");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyTestSubject", b =>
-                {
-                    b.Property<int>("StudyId");
-
-                    b.Property<int>("TestSubjectId");
-
-                    b.HasKey("StudyId", "TestSubjectId");
-
-                    b.HasIndex("TestSubjectId");
-
-                    b.ToTable("StudyTestSubject");
-                });
-
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Task", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Task", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("StudyId");
+                    b.Property<int>("StudyId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -111,90 +116,118 @@ namespace ScientificStudiesRecord.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.TestSubject", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.TestSubject", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Comment")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("EntryTime");
+                    b.Property<DateTime>("EntryTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
+
+                    b.Property<int>("StudyId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Surname")
                         .IsRequired()
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("StudyId");
+
                     b.ToTable("TestSubjects");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.User", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<byte[]>("PasswordHash");
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("bytea");
 
-                    b.Property<byte[]>("PaswordSalt");
+                    b.Property<byte[]>("PaswordSalt")
+                        .HasColumnType("bytea");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Experiment", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Experiment", b =>
                 {
-                    b.HasOne("ScientificStudiesRecord.Models.Task", "Task")
+                    b.HasOne("ScientificStudyWeb.Models.Task", "Task")
                         .WithMany("Experiments")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ScientificStudiesRecord.Models.TestSubject", "TestSubject")
+                    b.HasOne("ScientificStudyWeb.Models.TestSubject", "TestSubject")
                         .WithMany("Experiments")
                         .HasForeignKey("TestSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyGroup", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.StudyGroup", b =>
                 {
-                    b.HasOne("ScientificStudiesRecord.Models.Group", "Group")
+                    b.HasOne("ScientificStudyWeb.Models.Group", "Group")
                         .WithMany("StudyGroups")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
+                    b.HasOne("ScientificStudyWeb.Models.Study", "Study")
                         .WithMany("StudyGroups")
                         .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificStudiesRecord.Models.StudyTestSubject", b =>
+            modelBuilder.Entity("ScientificStudyWeb.Models.Task", b =>
                 {
-                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
-                        .WithMany("StudyTestSubjects")
-                        .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ScientificStudiesRecord.Models.TestSubject", "TestSubject")
-                        .WithMany("StudyTestSubjects")
-                        .HasForeignKey("TestSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ScientificStudiesRecord.Models.Task", b =>
-                {
-                    b.HasOne("ScientificStudiesRecord.Models.Study", "Study")
+                    b.HasOne("ScientificStudyWeb.Models.Study", "Study")
                         .WithMany("Tasks")
                         .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificStudyWeb.Models.TestSubject", b =>
+                {
+                    b.HasOne("ScientificStudyWeb.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificStudyWeb.Models.Study", "Study")
+                        .WithMany("TestSubjects")
+                        .HasForeignKey("StudyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

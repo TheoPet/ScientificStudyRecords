@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+        <form 
+        [formGroup]="studyForm" (ngSubmit)= "onSubmit(studyForm.value)">
+          <div class="form-group">
+            <label for="study">Study</label>
+            <input
+              type="text"
+              id="study"
+              formControlName="study"
+              class="form-control">
+          </div>
+          <div formArrayName="groups">
+            <h4>Please enter study groups</h4>
+            <button
+            class="btn btn-default"
+            type="button"
+            (click)="onAddGroups()">Add Group</button>
+            <div 
+            class="form-group"
+            *ngFor="let groupControl of studyForm.get('groups')['controls']; let i = index">
+              <input type="text" class="form-control" [formControlName]="i">
+            </div>
+          </div>
+          <div formArrayName="tasks">
+            <h4>Please enter study tasks</h4>
+            <button
+            class="btn btn-default"
+            type="button"
+            (click)="onAddTasks()">Add Task</button>
+            <div 
+            class="form-group"
+            *ngFor="let taskControl of studyForm.get('tasks')['controls']; let i = index">
+              <input type="text" class="form-control" [formControlName]="i">
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <ng-template #loading>
+      <p>Condition is false ...</p>
+  </ng-template>
+  </div>

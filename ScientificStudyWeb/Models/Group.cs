@@ -11,5 +11,7 @@ namespace ScientificStudyWeb.Models
         public string Name { get; set; }
 
         public ICollection<StudyGroup> StudyGroups { get; set; }
+
+        public ICollection<TestSubject> TestSubjects { get; set; }
     }
 }

@@ -22,9 +22,15 @@ namespace ScientificStudyWeb.Models
         [MaxLength(256)]
         public string Comment { get; set; }
 
-        public ICollection<Experiment> Experiments { get; set; }
+        public int StudyId { get; set; }
 
-        public ICollection<StudyTestSubject> StudyTestSubjects { get; set; }
+        public Study Study { get; set; }
+
+        public int GroupId { get; set; }
+
+        public Group Group { get; set; }
+
+        public ICollection<Experiment> Experiments { get; set; }
 
     }
 }

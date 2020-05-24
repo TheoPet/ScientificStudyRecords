@@ -5,11 +5,8 @@ namespace ScientificStudyWeb.Data
 {
     public class ScientificStudiesRecordDbContext:DbContext
     {
-        public ScientificStudiesRecordDbContext(DbContextOptions<ScientificStudiesRecordDbContext> options) : base(options)
-        {
-
-        }
-
+        public ScientificStudiesRecordDbContext(DbContextOptions options):base(options)
+        {}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StudyGroup>()
@@ -25,21 +22,6 @@ namespace ScientificStudyWeb.Data
                 .HasOne(ssg => ssg.Group)
                 .WithMany(g => g.StudyGroups)
                 .HasForeignKey(ssg => ssg.GroupId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<StudyTestSubject>()
-                .HasKey(ssg => new { ssg.StudyId, ssg.TestSubjectId });
-            
-            modelBuilder.Entity<StudyTestSubject>()
-                .HasOne(ssg => ssg.Study)
-                .WithMany(ts => ts.StudyTestSubjects)
-                .HasForeignKey(ssg => ssg.StudyId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<StudyTestSubject>()
-                .HasOne(ssg => ssg.TestSubject)
-                .WithMany(ts => ts.StudyTestSubjects)
-                .HasForeignKey(ssg => ssg.TestSubjectId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Task>()
@@ -60,10 +42,17 @@ namespace ScientificStudyWeb.Data
             .HasForeignKey(t =>t.StudyId)
             .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Study>()
+            .HasMany<TestSubject>(s => s.TestSubjects)
+            .WithOne(t => t.Study)
+            .HasForeignKey(t =>t.StudyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
 
         }
 
-        public DbSet<Study> Studies {get; set;}
+        public DbSet<Study> Studies { get; set; }
         public DbSet<Group> Groups {get; set;}
         public DbSet<Task> Tasks {get; set;}
         public DbSet<TestSubject> TestSubjects {get; set;}
