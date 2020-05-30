@@ -34,7 +34,13 @@ namespace ScientificStudyWeb.Controllers
             return Ok(data);
         }
 
-       
+        [HttpGet]
+        public async Task<IActionResult> GetStudies()
+        {
+            var studies = await _unitOfWork.studyRepository.GetAll();
+            var studiesToReturn = _mapper.Map<IEnumerable<Study>,IEnumerable<StudyData>>(studies);
+            return Ok(studiesToReturn);
+        }       
         [HttpPost("Save")]
         public async Task<IActionResult> Save(StudyData data)
 

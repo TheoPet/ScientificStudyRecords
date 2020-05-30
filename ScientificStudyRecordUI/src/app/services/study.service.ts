@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Injectable()
 export class StudyService {
     private Study = new Study(' ', [], []);
+    private studies: Study[] = [];
     constructor(private httpClient: HttpClient,
                 private route: ActivatedRoute,
                 private router: Router) { }
@@ -35,6 +36,18 @@ export class StudyService {
         ));
     }
 
+    getStudies() {
+        return this.httpClient.get<[Study]>('http://localhost:5000/study')
+        .pipe(map(
+            data => {
+                data.forEach(element => {
+                    this.studies.push(element);
+                });
+                return this.studies;
+            }
+        )
+        );
+    }
     deleteStudy(id: number) {
          this.httpClient.delete(`http://localhost:5000/study/${id}`)
          .subscribe(

@@ -10,5 +10,7 @@ namespace ScientificStudiesRecord.DataObjects
         public IEnumerable<string> Tasks { get; set; }
 
         public IEnumerable<string> Groups { get; set; }
+
+        public int? Id { get; set; }
     }
 }

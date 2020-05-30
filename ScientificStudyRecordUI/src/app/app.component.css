@@ -1,10 +1,10 @@
 body
 {
-    background-image: url('../styles/images/books-768125.jpg');
-
-    /*height: 100%;*/
-
-    background-position: center;
+    /*background-image: url('../styles/images/books-old-book-knowledge-bookstore-34592.jpg');
+*/
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover;
+    background-attachment: fixed;
+
 }

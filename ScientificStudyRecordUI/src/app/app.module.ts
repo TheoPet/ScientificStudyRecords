@@ -17,6 +17,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
+import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
+import { HomeComponent } from './home/home.component';
+import { TestSubjectStartComponent } from './test-subject/test-subject-start/test-subject-start.component';
+import { StudyHomeComponent } from './study/study-home/study-home.component';
+import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-subject-home.component';
 
 
 @NgModule({
@@ -26,8 +32,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     StudyEditComponent,
     HeaderComponent,
     StudyStartComponent,
-    ModalComponent
-  ],
+    ModalComponent,
+    TestSubjectViewComponent,
+    TestSubjectEditComponent,
+    HomeComponent,
+    TestSubjectStartComponent,
+    StudyHomeComponent,
+    TestSubjectHomeComponent
+    ],
   imports: [
     BrowserModule,
     HttpClientModule,

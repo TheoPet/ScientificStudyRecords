@@ -1,1 +1,9 @@
+<div class=container>
+    <ul class="list-group"
+    *ngFor="let study of loadedStudies">
+        <li class="list-group-item list-group-item-action">
+            <a routerLink='/study/{{study.id}}'>{{study.name}}</a>
+        </li>
+    </ul>
+</div>
 <router-outlet></router-outlet>
