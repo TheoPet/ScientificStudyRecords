@@ -27,7 +27,7 @@ export class StudyEditComponent implements OnInit, OnDestroy {
       .subscribe(
         (params: Params) => {
           this.id = +params.id;
-          this.editMode = this.id != null;
+          this.editMode = !isNaN(this.id);
           this.initForm();
         }
       );
