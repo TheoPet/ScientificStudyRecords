@@ -22,8 +22,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
-  constructor(private http: HttpClient,
-              private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private router: Router,
               private studyService: StudyService,
               public matDialog: MatDialog) {

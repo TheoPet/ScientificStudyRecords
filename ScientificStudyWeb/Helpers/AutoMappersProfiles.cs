@@ -22,6 +22,23 @@ namespace ScientificStudyWeb.Helpers
             opt => opt.MapFrom<StudyGroupResolver>());
 
             CreateMap<Task, TaskData>();
+
+            CreateMap<TestSubjectData, TestSubject>()
+            .ForPath(dest => dest.Study.Name,
+            opt => opt.MapFrom(src => src.Study))
+            .ForPath(dest => dest.Study.Id,
+            opt => opt.MapFrom(src => src.StudyId))
+            .ForPath(dest => dest.Group.Name,
+            opt => opt.MapFrom(src => src.Group))
+            .ForPath(dest => dest.GroupId,
+            opt => opt.MapFrom(src => src.GroupId))
+            .ForMember(dest => dest.Experiments,
+            opt => opt.MapFrom<TestSubjectExperimentResolver>())
+            .ReverseMap()
+            .ForMember(dest => dest.Study,
+            opt => opt.MapFrom(src => src.Study.Name))
+            .ForMember(dest => dest.Group,
+            opt => opt.MapFrom(dest => dest.Group.Name));
         }
     }
 }

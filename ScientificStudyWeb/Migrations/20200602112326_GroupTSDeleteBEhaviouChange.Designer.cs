@@ -10,8 +10,8 @@ using ScientificStudyWeb.Data;
 namespace ScientificStudiesRecord.Migrations
 {
     [DbContext(typeof(ScientificStudiesRecordDbContext))]
-    [Migration("20200209193246_OneToManyGroupTestSubject")]
-    partial class OneToManyGroupTestSubject
+    [Migration("20200602112326_GroupTSDeleteBEhaviouChange")]
+    partial class GroupTSDeleteBEhaviouChange
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,6 +79,9 @@ namespace ScientificStudiesRecord.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Studies");
                 });
 
@@ -132,7 +135,7 @@ namespace ScientificStudiesRecord.Migrations
                     b.Property<DateTime>("EntryTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -140,7 +143,7 @@ namespace ScientificStudiesRecord.Migrations
                         .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("StudyId")
+                    b.Property<int?>("StudyId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Surname")
@@ -220,16 +223,14 @@ namespace ScientificStudiesRecord.Migrations
             modelBuilder.Entity("ScientificStudyWeb.Models.TestSubject", b =>
                 {
                     b.HasOne("ScientificStudyWeb.Models.Group", "Group")
-                        .WithMany()
+                        .WithMany("TestSubjects")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ScientificStudyWeb.Models.Study", "Study")
                         .WithMany("TestSubjects")
                         .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

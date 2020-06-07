@@ -48,10 +48,6 @@ namespace ScientificStudyWeb.Controllers
             var study = _mapper.Map<Study>(data);
 
             _unitOfWork.studyRepository.Add(study);
-            _unitOfWork.taskRepository.AddRange(study.Tasks);
-            foreach(var group in study.StudyGroups)
-                _unitOfWork.groupRepository.Add(group.Group);
-
             await _unitOfWork.SaveChangesAsync();
 
             return CreatedAtRoute("GetStudy", new { id = study.Id }, study.Id);

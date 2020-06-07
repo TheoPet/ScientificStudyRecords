@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using ScientificStudiesRecord.DataObjects;
+using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
 
 public class StudyTaskResolver : IValueResolver<StudyData, Study, ICollection<Task>>
@@ -37,5 +38,15 @@ public class StudyGroupResolver : IValueResolver<StudyData, Study, ICollection<S
             });
         }
         return destGroups;
+    }
+}
+
+public class TestSubjectExperimentResolver : IValueResolver<TestSubjectData, TestSubject, ICollection<Experiment>>
+
+{
+    public ICollection<Experiment> Resolve(TestSubjectData source, TestSubject destination, ICollection<Experiment> destMember, ResolutionContext context)
+    {
+        var destExperiments = new List<Experiment> ();
+        return destExperiments;
     }
 }

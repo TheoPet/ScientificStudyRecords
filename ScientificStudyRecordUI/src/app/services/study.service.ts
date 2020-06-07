@@ -37,7 +37,7 @@ export class StudyService {
     }
 
     getStudies() {
-        return this.httpClient.get<[Study]>('http://localhost:5000/study')
+        return this.httpClient.get<[Study]>('http://localhost:5000/study/')
         .pipe(map(
             data => {
                 data.forEach(element => {

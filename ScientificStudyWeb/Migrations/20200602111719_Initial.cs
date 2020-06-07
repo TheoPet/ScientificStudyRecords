@@ -103,17 +103,24 @@ namespace ScientificStudiesRecord.Migrations
                     Surname = table.Column<string>(maxLength: 50, nullable: false),
                     EntryTime = table.Column<DateTime>(nullable: false),
                     Comment = table.Column<string>(maxLength: 256, nullable: true),
-                    StudyId = table.Column<int>(nullable: false)
+                    StudyId = table.Column<int>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestSubjects", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_TestSubjects_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_TestSubjects_Studies_StudyId",
                         column: x => x.StudyId,
                         principalTable: "Studies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,6 +162,12 @@ namespace ScientificStudiesRecord.Migrations
                 column: "TestSubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Studies_Name",
+                table: "Studies",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudyGroup_GroupId",
                 table: "StudyGroup",
                 column: "GroupId");
@@ -163,6 +176,11 @@ namespace ScientificStudiesRecord.Migrations
                 name: "IX_Tasks_StudyId",
                 table: "Tasks",
                 column: "StudyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSubjects_GroupId",
+                table: "TestSubjects",
+                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestSubjects_StudyId",

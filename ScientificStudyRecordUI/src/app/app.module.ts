@@ -23,6 +23,7 @@ import { HomeComponent } from './home/home.component';
 import { TestSubjectStartComponent } from './test-subject/test-subject-start/test-subject-start.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-subject-home.component';
+import { TestSubjectService } from './services/test-subject.service';
 
 
 @NgModule({
@@ -38,8 +39,8 @@ import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-
     HomeComponent,
     TestSubjectStartComponent,
     StudyHomeComponent,
-    TestSubjectHomeComponent
-    ],
+    TestSubjectHomeComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -49,11 +50,10 @@ import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-
     NgbModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatDialogModule
-    ],
-  providers: [StudyService],
+    MatDialogModule,
+  ],
+  providers: [StudyService, TestSubjectService],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent]
-
+  entryComponents: [ModalComponent],
 })
-export class AppModule { }
+export class AppModule {}

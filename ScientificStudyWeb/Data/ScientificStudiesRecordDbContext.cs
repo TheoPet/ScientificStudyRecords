@@ -46,10 +46,17 @@ namespace ScientificStudyWeb.Data
             .HasMany<TestSubject>(s => s.TestSubjects)
             .WithOne(t => t.Study)
             .HasForeignKey(t =>t.StudyId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Study>()
+            .HasIndex("Name")
+            .IsUnique();
 
-
+            modelBuilder.Entity<Group>()
+            .HasMany<TestSubject>(s => s.TestSubjects)
+            .WithOne(g => g.Group)
+            .HasForeignKey(g => g.GroupId)
+            .OnDelete(DeleteBehavior.SetNull);
         }
 
         public DbSet<Study> Studies { get; set; }

@@ -10,7 +10,7 @@ using ScientificStudyWeb.Data;
 namespace ScientificStudiesRecord.Migrations
 {
     [DbContext(typeof(ScientificStudiesRecordDbContext))]
-    [Migration("20200209190548_Initial")]
+    [Migration("20200602111719_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,9 @@ namespace ScientificStudiesRecord.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Studies");
                 });
 
@@ -132,12 +135,15 @@ namespace ScientificStudiesRecord.Migrations
                     b.Property<DateTime>("EntryTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("StudyId")
+                    b.Property<int?>("StudyId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Surname")
@@ -146,6 +152,8 @@ namespace ScientificStudiesRecord.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("StudyId");
 
@@ -214,11 +222,14 @@ namespace ScientificStudiesRecord.Migrations
 
             modelBuilder.Entity("ScientificStudyWeb.Models.TestSubject", b =>
                 {
+                    b.HasOne("ScientificStudyWeb.Models.Group", "Group")
+                        .WithMany("TestSubjects")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("ScientificStudyWeb.Models.Study", "Study")
                         .WithMany("TestSubjects")
                         .HasForeignKey("StudyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

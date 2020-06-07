@@ -10,6 +10,11 @@ namespace ScientificStudyWeb.DataObjects
         public string Comment { get; set; }
 
         public string Study { get; set; }
+
+        public int? StudyId { get; set; }
+
         public string Group { get; set; }
+        public int? GroupId { get; set; }
+
     }
 }

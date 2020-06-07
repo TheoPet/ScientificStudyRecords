@@ -6,44 +6,53 @@ using ScientificStudyWeb.Data.Interfaces;
 using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
 using System.Linq;
+using AutoMapper;
 
 namespace ScientificStudyWeb.Controllers
 {
-    [Route("master/[controller]")]
+    [Route("[controller]")]
     [ApiController]
 
     public class TestSubjectController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
 
-        private IUnitOfWork unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
-        public TestSubjectController(ScientificStudiesRecordDbContext context)
+        private readonly IMapper _mapper;
+
+        public TestSubjectController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
-            this.unitOfWork = new UnitOfWork(_context); 
+            _unitOfWork = new UnitOfWork(_context);
+            _mapper = mapper;
         }
 
-        [HttpPost("save")]
-        public async Task<IActionResult> SaveTestSubject(TestSubjectData data)
+        [HttpGet("{id}", Name ="GetTestSubject")]
+        public async Task<IActionResult> GetTestSubject(int id)
         {
-            //studija i grupa moraju postojati u bazi!
-            var study = await unitOfWork.studyRepository.Get(s => s.Name.Equals(data.Study));
-            var group = await unitOfWork.groupRepository.Get(g => g.Name.Equals(data.Group));
-
-            var testSubject = new TestSubject
-            {
-                Name = data.Name,
-                Surname = data.Surname,
-                EntryTime = DateTime.Now,
-                Comment = data.Comment,
-                Study = study,
-                Group = group
-            };
-
-            unitOfWork.testSubjectRepository.Add(testSubject);
-            await unitOfWork.SaveChangesAsync();
-            return Ok();
+            var testSubject = await _unitOfWork.testSubjectRepository.Get(id);
+            var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
+            return Ok(dataToReturn);
         }
+        [HttpPost("Save")]
+        public async Task<IActionResult> Save(TestSubjectData data)
+        {         
+            var testSubject = _mapper.Map<TestSubject>(data);
+            testSubject.Study = null;
+            testSubject.Group = null;
+            testSubject.EntryTime = DateTime.Now;
+            _unitOfWork.testSubjectRepository.Add(testSubject);
+            await _unitOfWork.SaveChangesAsync();
+            return CreatedAtRoute("GetTestSubject", new { id = testSubject.Id }, testSubject.Id);
+        }
+
+
+        /*[HttpPatch("Update")]
+        public async Task<IActionResult> Update()
+        {
+
+        }*/
+
     }
 }

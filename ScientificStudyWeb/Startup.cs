@@ -32,7 +32,10 @@ namespace ScientificStudiesRecord
             services.AddCors();
             services.AddAutoMapper(typeof(StudyRepository).Assembly);
             services.AddControllers();
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
             
             services.AddDbContext<ScientificStudiesRecordDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
