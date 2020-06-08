@@ -14,7 +14,6 @@ export class StudyStartComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(private studyService: StudyService) { }
-
   ngOnInit() {
     this.getStudies();
   }

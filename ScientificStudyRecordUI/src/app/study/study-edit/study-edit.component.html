@@ -5,11 +5,11 @@
         <form 
         [formGroup]="studyForm" (ngSubmit)= "onSubmit(studyForm.value)">
           <div class="form-group">
-            <label for="study">Study</label>
+            <label for="name">Study</label>
             <input
               type="text"
-              id="study"
-              formControlName="study"
+              id="name"
+              formControlName="name"
               class="form-control">
           </div>
           <div formArrayName="groups">

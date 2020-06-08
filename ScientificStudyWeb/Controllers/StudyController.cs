@@ -41,7 +41,7 @@ namespace ScientificStudyWeb.Controllers
             var studiesToReturn = _mapper.Map<IEnumerable<Study>,IEnumerable<StudyData>>(studies);
             return Ok(studiesToReturn);
         }       
-        [HttpPost("Save")]
+        [HttpPost]
         public async Task<IActionResult> Save(StudyData data)
 
         {

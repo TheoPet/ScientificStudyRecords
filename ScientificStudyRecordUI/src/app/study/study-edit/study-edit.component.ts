@@ -44,8 +44,11 @@ export class StudyEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.studyService.updateStudy(this.id, this.studyForm.value);
-    this.onCancel();
+    if (this.editMode) {
+      this.studyService.updateStudy(this.id, this.studyForm.value);
+    } else {
+      this.studyService.addStudy(this.studyForm.value).subscribe(() => this.onCancel());
+    }
   }
 
   onCancel() {
@@ -57,7 +60,7 @@ export class StudyEditComponent implements OnInit, OnDestroy {
     const grps = new FormArray([]);
     this.studyForm = new FormGroup(
       {
-        study: new FormControl('', Validators.required),
+        name: new FormControl('', Validators.required),
         tasks: tsks,
         groups: grps
       }
@@ -77,7 +80,7 @@ export class StudyEditComponent implements OnInit, OnDestroy {
 
         return new FormGroup(
           {
-            study: new FormControl(data.name, Validators.required),
+            name: new FormControl(data.name, Validators.required),
             tasks: tsks,
             groups: grps
           }
