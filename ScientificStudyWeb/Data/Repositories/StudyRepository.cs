@@ -25,7 +25,6 @@ namespace ScientificStudyWeb.Data
             .ThenInclude( g=> g.Group)
             .Include(s=>s.TestSubjects).FirstOrDefaultAsync();           
         }
-
         public override  bool Remove (int Id)
         {
             var studyToDelete = _scientificStudiesContext.Studies

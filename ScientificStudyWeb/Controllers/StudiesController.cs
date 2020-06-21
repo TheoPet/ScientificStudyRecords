@@ -1,46 +1,63 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using ScientificStudyWeb.Models;
 using ScientificStudyWeb.Data;
 using ScientificStudyWeb.Data.Interfaces;
 using System.Collections.Generic;
-using ScientificStudiesRecord.DataObjects;
-using System;
 using AutoMapper;
+using ScientificStudyWeb.DataObjects;
+using System.Linq;
 
 namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class StudyController : ControllerBase
+    public class StudiesController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
         private readonly IMapper _mapper;
         private IUnitOfWork _unitOfWork;
 
-        public StudyController(ScientificStudiesRecordDbContext context, IMapper mapper)
+        public StudiesController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
             _unitOfWork = new UnitOfWork(_context); 
         }
 
-        [HttpGet("{id}", Name = "GetStudy")]
-        public async Task<IActionResult> GetStudy(int Id)
+        [HttpGet]
+        public async Task<IActionResult> GetStudies(bool simplified)
         {
-            var study = await _unitOfWork.studyRepository.Get(Id);
+            var studies = await _unitOfWork.studyRepository.GetAll();
+
+            if (simplified)
+            {
+
+                var reducedStudiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<BasicStudyData>>(studies);
+                return Ok(reducedStudiesToReturn);
+            }
+
+            var studiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<StudyData>>(studies);
+            return Ok(studiesToReturn);
+        }
+
+        [HttpGet("{id}", Name = "GetStudy")]
+        public async Task<IActionResult> GetStudy(int id)
+        {
+            var study = await _unitOfWork.studyRepository.Get(id);
             var data = _mapper.Map<StudyData>(study);
             return Ok(data);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStudies()
+        [HttpGet("{id:int}/groups")]
+        public async Task<IActionResult> GetStudyGroups(int id)
         {
-            var studies = await _unitOfWork.studyRepository.GetAll();
-            var studiesToReturn = _mapper.Map<IEnumerable<Study>,IEnumerable<StudyData>>(studies);
-            return Ok(studiesToReturn);
-        }       
+            var study = await _unitOfWork.studyRepository.Get(id);
+            var groups = study.StudyGroups;
+            var groupsToReturn = _mapper.Map<IEnumerable<StudyGroup>, IEnumerable<BasicGroupData>>(groups);
+            return Ok(groupsToReturn);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Save(StudyData data)
 
@@ -54,7 +71,7 @@ namespace ScientificStudyWeb.Controllers
 
         }
     
-        [HttpDelete("{id}", Name = "Delete")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             if(_unitOfWork.studyRepository.Remove(Id))

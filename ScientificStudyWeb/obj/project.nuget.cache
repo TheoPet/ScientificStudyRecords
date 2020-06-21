@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9d18v8DJn74lIcys8jntgImukCUfgXVB7Ch4+El86lM/K515L8dOoGt37NCMLCYDWn44kv3qzK0I4bRh5kF20g==",
+  "dgSpecHash": "A4h3UPuTKtP8A980R48WahaKqbNG+twra4aZ6Y4sPKggnEBD7yrvZba1zj5gsZC2gWV/Wm2b3JmpSY+MW/+INA==",
   "success": true,
   "projectFilePath": "/home/teo/Projects/Master_rad/ScientificStudyRecords/ScientificStudyWeb/ScientificStudiesRecord.csproj",
   "expectedPackageFiles": [
@@ -128,7 +128,8 @@
     "/usr/share/dotnet/sdk/NuGetFallbackFolder/system.threading.timer/4.3.0/system.threading.timer.4.3.0.nupkg.sha512",
     "/usr/share/dotnet/sdk/NuGetFallbackFolder/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
     "/usr/share/dotnet/sdk/NuGetFallbackFolder/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
-    "/usr/share/dotnet/sdk/NuGetFallbackFolder/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512"
+    "/usr/share/dotnet/sdk/NuGetFallbackFolder/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512",
+    "/home/teo/.nuget/packages/microsoft.aspnetcore.app.ref/3.1.2/microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": []
 }

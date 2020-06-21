@@ -16,7 +16,7 @@ const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   {
-    path: 'study', component: StudyHomeComponent, children: [
+    path: 'studies', component: StudyHomeComponent, children: [
       { path: '', component: StudyStartComponent },
       { path: 'new', component: StudyEditComponent },
       { path: ':id', component: StudyViewComponent },
@@ -24,7 +24,7 @@ const appRoutes: Routes = [
     ],
   },
   {
-    path: 'test-subject', component: TestSubjectHomeComponent, children: [
+    path: 'testsubjects', component: TestSubjectHomeComponent, children: [
       { path: '', component: TestSubjectStartComponent },
       { path: 'new', component: TestSubjectEditComponent },
       { path: ':id', component: TestSubjectViewComponent },

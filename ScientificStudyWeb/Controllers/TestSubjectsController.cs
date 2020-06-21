@@ -7,13 +7,14 @@ using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
 using System.Linq;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
 
-    public class TestSubjectController : ControllerBase
+    public class TestSubjectsController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
 
@@ -21,7 +22,7 @@ namespace ScientificStudyWeb.Controllers
 
         private readonly IMapper _mapper;
 
-        public TestSubjectController(ScientificStudiesRecordDbContext context, IMapper mapper)
+        public TestSubjectsController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
             _unitOfWork = new UnitOfWork(_context);
@@ -35,18 +36,25 @@ namespace ScientificStudyWeb.Controllers
             var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
             return Ok(dataToReturn);
         }
-        [HttpPost("Save")]
+
+        [HttpPost]
         public async Task<IActionResult> Save(TestSubjectData data)
         {         
             var testSubject = _mapper.Map<TestSubject>(data);
             testSubject.Study = null;
             testSubject.Group = null;
-            testSubject.EntryTime = DateTime.Now;
             _unitOfWork.testSubjectRepository.Add(testSubject);
             await _unitOfWork.SaveChangesAsync();
             return CreatedAtRoute("GetTestSubject", new { id = testSubject.Id }, testSubject.Id);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var testSubjects = await _unitOfWork.testSubjectRepository.GetAll();
+            var testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<TestSubjectData>>(testSubjects);
+            return Ok(testSubjectsToReturn);
+        }
 
         /*[HttpPatch("Update")]
         public async Task<IActionResult> Update()

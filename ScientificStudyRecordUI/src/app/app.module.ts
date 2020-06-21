@@ -17,6 +17,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
 import { HomeComponent } from './home/home.component';
@@ -24,6 +29,8 @@ import { TestSubjectStartComponent } from './test-subject/test-subject-start/tes
 import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-subject-home.component';
 import { TestSubjectService } from './services/test-subject.service';
+import { CustomDatePipe } from './shared/custom/datepipe';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -40,6 +47,7 @@ import { TestSubjectService } from './services/test-subject.service';
     TestSubjectStartComponent,
     StudyHomeComponent,
     TestSubjectHomeComponent,
+    CustomDatePipe
   ],
   imports: [
     BrowserModule,
@@ -51,8 +59,17 @@ import { TestSubjectService } from './services/test-subject.service';
     BrowserAnimationsModule,
     MatButtonModule,
     MatDialogModule,
+    FontAwesomeModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatAutocompleteModule
+    ],
+  providers: [StudyService,
+    TestSubjectService,
+    MatDatepickerModule
   ],
-  providers: [StudyService, TestSubjectService],
   bootstrap: [AppComponent],
   entryComponents: [ModalComponent],
 })

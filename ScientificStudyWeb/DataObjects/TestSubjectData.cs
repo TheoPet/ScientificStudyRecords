@@ -6,15 +6,12 @@ namespace ScientificStudyWeb.DataObjects
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public DateTime EntryTime { get; set; }
+        public string EntryTime { get; set; }
         public string Comment { get; set; }
 
-        public string Study { get; set; }
+        public BasicStudyData Study { get; set; }
 
-        public int? StudyId { get; set; }
-
-        public string Group { get; set; }
-        public int? GroupId { get; set; }
+        public BasicGroupData Group { get; set; }
 
     }
 }

@@ -8,20 +8,35 @@ import { TestSubject } from '../test-subject/test-subject-view/test-subject-view
 
 @Injectable()
 export class TestSubjectService {
-    constructor(private httpClient: HttpClient,
-                private route: ActivatedRoute,
-                private router: Router) { }
+  constructor(
+    private httpClient: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-    getSubject(id: number) {
-        return this.httpClient.get<TestSubject>(`http://localhost:5000/testsubject/${id}`)
-            .pipe(map(
-                data => {
-                    return new TestSubject(data.name,
-                        data.surname,
-                        data.entryTime,
-                        data.comment,
-                        id);
-                }
-            ));
-    }
+  getTestSubject(id: number) {
+    return this.httpClient
+      .get<TestSubject>(`http://localhost:5000/testsubjects/${id}`)
+      .pipe(
+        map((data) => {
+          return new TestSubject(
+            data.name,
+            data.surname,
+            data.entryTime,
+            data.comment,
+            data.study,
+            data.studyId,
+            data.group,
+            data.groupId,
+            id
+          );
+        })
+      );
+  }
+
+  updateTestSubject(id: number, data: TestSubject) {}
+
+  addTestSubject(data: TestSubject) {
+     return this.httpClient.post<number>('http://localhost:5000/testsubjects', data) ;
+  }
 }

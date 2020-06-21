@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using ScientificStudyWeb.DataObjects;
 
-namespace ScientificStudiesRecord.DataObjects
+namespace ScientificStudyWeb.DataObjects
 {
     public class StudyData
     {

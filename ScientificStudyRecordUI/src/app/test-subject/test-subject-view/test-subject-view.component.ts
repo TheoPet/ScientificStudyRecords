@@ -13,7 +13,7 @@ import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dia
 
 export class TestSubjectViewComponent implements OnInit {
 
-  loadedSubject = new TestSubject('', '', '', '');
+  loadedSubject = new TestSubject('', '', '', '', '', 0, '', 0);
   subscription: Subscription;
 
   constructor(private route: ActivatedRoute,
@@ -29,7 +29,7 @@ export class TestSubjectViewComponent implements OnInit {
   }
 
   getTestSubject(id: number) {
-    this.subscription = this.service.getSubject(id).subscribe(testSubject =>
+    this.subscription = this.service.getTestSubject(id).subscribe(testSubject =>
       this.loadedSubject = testSubject);
   }
 }
