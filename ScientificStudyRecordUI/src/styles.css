@@ -11,6 +11,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
     box-sizing: border-box;
   }
 
+  input.ng-invalid.ng-touched {
+    border-color: #FF0000;
+  }
 /*mat-dialog-container#modal-component {
     border: 3px solid #262626;
     border-radius: 11px;

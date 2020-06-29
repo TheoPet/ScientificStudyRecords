@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestSubject } from '../test-subject/test-subject-view/test-subject-view.model';
+import { BasicStudy } from '../shared/models/basic-study.model';
 
 @Injectable()
 export class TestSubjectService {
@@ -25,16 +26,17 @@ export class TestSubjectService {
             data.entryTime,
             data.comment,
             data.study,
-            data.studyId,
             data.group,
-            data.groupId,
             id
           );
         })
       );
   }
 
-  updateTestSubject(id: number, data: TestSubject) {}
+  updateTestSubject(id: number, data: TestSubject) {
+    data.id = id;
+    return this.httpClient.put<any>(`http://localhost:5000/testsubjects/${id}`, data);
+  }
 
   addTestSubject(data: TestSubject) {
      return this.httpClient.post<number>('http://localhost:5000/testsubjects', data) ;

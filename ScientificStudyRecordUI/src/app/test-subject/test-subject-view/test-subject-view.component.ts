@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TestSubjectService } from 'src/app/services/test-subject.service';
 import { TestSubject } from './test-subject-view.model';
@@ -8,28 +8,31 @@ import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dia
 @Component({
   selector: 'app-test-subject-view',
   templateUrl: './test-subject-view.component.html',
-  styleUrls: ['./test-subject-view.component.css']
+  styleUrls: ['./test-subject-view.component.css'],
 })
-
-export class TestSubjectViewComponent implements OnInit {
-
-  loadedSubject = new TestSubject('', '', '', '', '', 0, '', 0);
+export class TestSubjectViewComponent implements OnInit, OnDestroy {
+  loadedSubject = new TestSubject('', '', '', '', null, null);
   subscription: Subscription;
 
-  constructor(private route: ActivatedRoute,
-              private service: TestSubjectService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private service: TestSubjectService
+  ) {}
 
   ngOnInit() {
-    this.route.params
-    .subscribe(
-      (params: Params) => {
-        this.loadedSubject.id = +params.id;
-        this.getTestSubject(this.loadedSubject.id);
-      });
+    this.route.params.subscribe((params: Params) => {
+      this.loadedSubject.id = +params.id;
+      this.getTestSubject(this.loadedSubject.id);
+    });
   }
 
   getTestSubject(id: number) {
-    this.subscription = this.service.getTestSubject(id).subscribe(testSubject =>
-      this.loadedSubject = testSubject);
+    this.subscription = this.service
+      .getTestSubject(id)
+      .subscribe((testSubject) => (this.loadedSubject = testSubject));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

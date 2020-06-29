@@ -56,11 +56,31 @@ namespace ScientificStudyWeb.Controllers
             return Ok(testSubjectsToReturn);
         }
 
-        /*[HttpPatch("Update")]
-        public async Task<IActionResult> Update()
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromBody]TestSubjectData data)
         {
+            var testSubject = _mapper.Map<TestSubject>(data);
+            var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id);
+            
+            //Teo: dodaj validaciju
+            if(testSubjectToUpdate == null)
+                return Ok("Element does not exist");
+            testSubjectToUpdate.Name = testSubject.Name;
+            testSubjectToUpdate.Surname = testSubject.Surname;
+            testSubjectToUpdate.Comment = testSubject.Comment;
+            testSubjectToUpdate.EntryTime = testSubject.EntryTime;
 
-        }*/
+            testSubjectToUpdate.Study = testSubject.Study;
+            testSubjectToUpdate.StudyId = testSubject.StudyId;
+
+            testSubjectToUpdate.Group = testSubject.Group;
+            testSubjectToUpdate.GroupId = testSubject.GroupId;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+
+        }
 
     }
 }

@@ -70,7 +70,20 @@ namespace ScientificStudyWeb.Controllers
             return CreatedAtRoute("GetStudy", new { id = study.Id }, study.Id);
 
         }
-    
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(StudyData data)
+        {
+            var study =  _mapper.Map<Study>(data);
+            var studyToUpdate = await _unitOfWork.studyRepository.Get(study.Id);
+
+            studyToUpdate.Name = study.Name;
+            _unitOfWork.studyRepository.UpdateTasks(studyToUpdate.Tasks,study.Tasks);
+            _unitOfWork.studyRepository.UpdateStudyGroups(studyToUpdate.StudyGroups, study.StudyGroups);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int Id)
         {

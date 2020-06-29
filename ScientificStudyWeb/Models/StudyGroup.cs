@@ -9,5 +9,6 @@ namespace ScientificStudyWeb.Models
 
         public int StudyId { get; set; }
         public Study Study { get; set; }
+
     }
 }

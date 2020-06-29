@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TestSubjectService } from 'src/app/services/test-subject.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Subscription, Observable, Subject } from 'rxjs';
-import { map, startWith, filter, switchMap, debounceTime } from 'rxjs/operators';
+import { map, startWith, filter, switchMap, debounceTime, tap } from 'rxjs/operators';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { isString } from 'util';
@@ -45,49 +45,64 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
         this.id = +params.id;
         this.editMode = !isNaN(this.id);
         this.initForm();
+
       }
     );
+    this.filterStudies();
+    this.filterGroups();
+    // this.filteredOptions = this.testSubjectForm.get('study').valueChanges
+    //   .pipe(
+    //     startWith(''),
+    //     tap(
+    //       data => console.log('bilo sta')
+    //     ),
+    //     debounceTime(300),
+    //     switchMap(value => {
+    //       console.log(value);
+    //       if (isString(value)) {
+    //         console.log(value);
+    //         return this._filterGeneric({name: value}, this.studyService.getStudiesLookup());
+    //       }
 
-    this.filteredOptions = this.testSubjectForm.get('study').valueChanges
-      .pipe(
-        startWith(''),
-        debounceTime(300),
-        switchMap(value => {
-          if (isString(value)) {
-            return this._filterGeneric({name: value}, this.studyService.getStudiesLookup());
-          }
+    //       this.selectedStudy.next(value);
 
-          this.selectedStudy.next(value);
+    //       return this._filterGeneric(value, this.studyService.getStudiesLookup());
+    //     })
+    //   );
 
-          return this._filterGeneric(value, this.studyService.getStudiesLookup());
-        })
-      );
-
-    this.selectedStudy.subscribe( study => {
-         this.filteredGroupOptions = this.testSubjectForm.get('group').valueChanges
-         .pipe(
-           startWith(''),
-           debounceTime(300),
-           switchMap(value => {
-             if (isString(value)) {
-               return this._filterGeneric({name: value}, this.studyService.getGroupsLookup(study.id));
-             }
-             console.log(value);
-             return this._filterGeneric(value, this.studyService.getGroupsLookup(study.id));
-           })
-         );
-       }
-      );
+    // this.selectedStudy.subscribe( study => {
+    //      this.filteredGroupOptions = this.testSubjectForm
+    //        .get('group')
+    //        .valueChanges.pipe(
+    //          startWith(''),
+    //          debounceTime(300),
+    //          switchMap((value) => {
+    //            if (isString(value)) {
+    //              console.log(value);
+    //              return this._filterGeneric(
+    //                { name: value },
+    //                this.studyService.getGroupsLookup(study.id)
+    //              );
+    //            }
+    //            console.log(value);
+    //            return this._filterGeneric(
+    //              value,
+    //              this.studyService.getGroupsLookup(study.id)
+    //            );
+    //          })
+    //        );
+    //    }
+    //   );
   }
 
   onSubmit() {
     if (this.editMode) {
-      this.service.updateTestSubject(this.id, this.testSubjectForm.value);
+      this.service.updateTestSubject(this.id, this.testSubjectForm.value)
+      .subscribe(() => this.onCancel);
     } else {
-      // this.service
-      //   .addTestSubject(this.testSubjectForm.value)
-      //   .subscribe(() => this.onCancel());
-      console.log(this.testSubjectForm);
+      this.service
+        .addTestSubject(this.testSubjectForm.value)
+        .subscribe(() => this.onCancel());
     }
   }
 
@@ -118,7 +133,11 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
           study: new FormControl(data.study, [Validators.required, RequireMatch]),
           group: new FormControl(data.group, [Validators.required, RequireMatch])
         });
-      })).subscribe(form => this.testSubjectForm = form);
+      })).subscribe(form => {
+        this.testSubjectForm = form;
+        this.filterStudies();
+        this.filterGroups();
+      });
     }
   }
 
@@ -135,6 +154,54 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  filterStudies() {
+    let startWithString: string;
+    if (this.editMode) {
+      startWithString = this.testSubjectForm.get('study').value;
+    } else {
+      startWithString = '';
+    }
+    this.filteredOptions = this.testSubjectForm.get('study').valueChanges
+    .pipe(
+      startWith(startWithString),
+      debounceTime(300),
+      switchMap(value => {
+        console.log(value);
+        if (isString(value)) {
+          return this._filterGeneric({name: value}, this.studyService.getStudiesLookup());
+        }
+
+        this.selectedStudy.next(value);
+
+        return this._filterGeneric(value, this.studyService.getStudiesLookup());
+      })
+    );
+  }
+
+  filterGroups() {
+    this.selectedStudy.subscribe((study) => {
+      this.filteredGroupOptions = this.testSubjectForm
+        .get('group')
+        .valueChanges.pipe(
+          startWith(''),
+          debounceTime(300),
+          switchMap((value) => {
+            if (isString(value)) {
+              console.log(value);
+              return this._filterGeneric(
+                { name: value },
+                this.studyService.getGroupsLookup(study.id)
+              );
+            }
+            console.log(value);
+            return this._filterGeneric(
+              value,
+              this.studyService.getGroupsLookup(study.id)
+            );
+          })
+        );
+    });
+  }
   ngOnDestroy() {
     if (this.subscription) {
     this.subscription.unsubscribe();

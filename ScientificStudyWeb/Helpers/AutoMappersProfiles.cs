@@ -21,8 +21,6 @@ namespace ScientificStudyWeb.Helpers
             .ForMember(dest => dest.StudyGroups,
             opt => opt.MapFrom<StudyGroupResolver>());
 
-            CreateMap<Task, TaskData>();
-
             CreateMap<TestSubjectData, TestSubject>()
             .ForPath(dest => dest.Study.Name,
             opt => opt.MapFrom(src => src.Study.Name))
@@ -30,6 +28,8 @@ namespace ScientificStudyWeb.Helpers
             opt => opt.MapFrom(src => src.Study.Id))
             .ForPath(dest => dest.Group.Name,
             opt => opt.MapFrom(src => src.Group.Name))
+            .ForPath(dest=> dest.Group.Id,
+            opt => opt.MapFrom(src => src.Group.Id))
             .ForPath(dest => dest.GroupId,
             opt => opt.MapFrom(src => src.Group.Id))
             .ForMember(dest => dest.EntryTime,
@@ -40,7 +40,7 @@ namespace ScientificStudyWeb.Helpers
             .ForPath(dest => dest.Study.Name,
             opt => opt.MapFrom(src => src.Study.Name))
             .ForPath(dest => dest.Group.Name,
-            opt => opt.MapFrom(dest => dest.Group.Name))
+            opt => opt.MapFrom(src => src.Group.Name))
             .ForPath(dest => dest.Group.Id,
             opt => opt.MapFrom(src => src.GroupId));
 
