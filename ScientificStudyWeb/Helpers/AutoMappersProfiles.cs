@@ -11,10 +11,10 @@ namespace ScientificStudyWeb.Helpers
         public AutoMappersProfiles()
         {
             CreateMap<Study, StudyData>()
-            .ForMember(dest => dest.Tasks,
-            opt => opt.MapFrom(src => src.Tasks.Select(task => task.Name)))
+            .ForMember( dest => dest.Tasks,
+            opt => opt.MapFrom<StudyBasicTaskResolver>())
             .ForMember(dest => dest.Groups,
-            opt => opt.MapFrom(src => src.StudyGroups.Select(group => group.Group.Name)))
+            opt => opt.MapFrom<StudyBasicGroupResolver>())
             .ReverseMap()
             .ForMember(dest => dest.Tasks,
             opt => opt.MapFrom<StudyTaskResolver>())
@@ -51,6 +51,24 @@ namespace ScientificStudyWeb.Helpers
             opt => opt.MapFrom(src => src.Group.Name))
             .ForMember(dest => dest.Id,
             opt => opt.MapFrom(src => src.GroupId));
+
+            CreateMap<TestSubject, BasicTestSubject>()
+            .ForPath(dest => dest.StudyId,
+            opt => opt.MapFrom(src => src.StudyId.Value));
+
+
+            CreateMap<ExperimentData, Experiment>()
+            .ReverseMap();
+
+            CreateMap<TaskData, Task>()
+            .ForMember(dest => dest.Study,
+            opt => opt.MapFrom(src => src.Study.Name))
+            .ForMember(dest => dest.StudyId,
+            opt => opt.MapFrom(src => src.Study.Id))
+            .ForMember(dest => dest.Experiments,
+            opt => opt.MapFrom<TaskExperimentResolver>());
+
+            CreateMap<Task, BasicTaskData>();
         }
     }
 }

@@ -84,7 +84,25 @@ namespace ScientificStudyWeb.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{studyId:int}/{Id:int}")]
+        public async Task<IActionResult> DeleteGroup(int studyId, int Id, bool deleteGroup){
+
+            var studyToUpdate = await _unitOfWork.studyRepository.Get(studyId);
+            if (deleteGroup)
+            {
+                var groupToDelete = studyToUpdate.StudyGroups.FirstOrDefault(g => g.GroupId.Equals(Id));
+                studyToUpdate.StudyGroups.Remove(groupToDelete);
+            }else
+            {
+                var taskToDelete = studyToUpdate.Tasks.FirstOrDefault(t => t.Id.Equals(Id));
+                studyToUpdate.Tasks.Remove(taskToDelete);
+            }
+            
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
             if(_unitOfWork.studyRepository.Remove(Id))

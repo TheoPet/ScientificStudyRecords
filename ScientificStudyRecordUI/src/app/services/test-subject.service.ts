@@ -5,9 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestSubject } from '../test-subject/test-subject-view/test-subject-view.model';
-import { BasicStudy } from '../shared/models/basic-study.model';
 
-@Injectable()
+@Injectable({  providedIn: 'root' })
 export class TestSubjectService {
   constructor(
     private httpClient: HttpClient,

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TestSubjectService } from 'src/app/services/test-subject.service';
 import { TestSubject } from './test-subject-view.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 @Component({
@@ -10,9 +10,9 @@ import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dia
   templateUrl: './test-subject-view.component.html',
   styleUrls: ['./test-subject-view.component.css'],
 })
-export class TestSubjectViewComponent implements OnInit, OnDestroy {
+export class TestSubjectViewComponent implements OnInit {
   loadedSubject = new TestSubject('', '', '', '', null, null);
-  subscription: Subscription;
+  loadedSubject$: Observable<TestSubject>;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,18 +21,12 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.loadedSubject.id = +params.id;
-      this.getTestSubject(this.loadedSubject.id);
+      this.getTestSubject(+params.id);
     });
   }
 
   getTestSubject(id: number) {
-    this.subscription = this.service
-      .getTestSubject(id)
-      .subscribe((testSubject) => (this.loadedSubject = testSubject));
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.loadedSubject$ = this.service
+      .getTestSubject(id);
   }
 }

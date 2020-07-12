@@ -14,5 +14,7 @@ namespace ScientificStudyWeb.DataObjects
 
         public BasicGroupData Group { get; set; }
 
+        //public ICollection<ExperimentData> Experiments { get; set; }
+
     }
 }

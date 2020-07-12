@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,12 @@ namespace ScientificStudyWeb.Data
             .Where(s => s.Id == Id)
             .Include(s => s.Study)
             .Include(g => g.Group).FirstOrDefaultAsync();           
+        }
+
+        public new async Task<IEnumerable<TestSubject>> GetAll()
+        {
+            return await _scientificStudiesContext.TestSubjects
+            .Include(s => s.Study).ToListAsync();
         }
     }
 }

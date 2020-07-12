@@ -10,11 +10,15 @@ import { HomeComponent } from './home/home.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { TestSubjectStartComponent } from './test-subject/test-subject-start/test-subject-start.component';
 import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-subject-home.component';
+import { ExperimentStartComponent } from './experiment/experiment-start/experiment-start.component';
+import { ExperimentEditComponent } from './experiment/experiment-edit/experiment-edit.component';
+import { ExperimentViewComponent } from './experiment/experiment-view/experiment-view.component';
 
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  // { path: '', redirectTo: '/home', pathMatch: 'full' },
+  // { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/studies', pathMatch: 'full' },
   {
     path: 'studies', component: StudyHomeComponent, children: [
       { path: '', component: StudyStartComponent },
@@ -29,6 +33,14 @@ const appRoutes: Routes = [
       { path: 'new', component: TestSubjectEditComponent },
       { path: ':id', component: TestSubjectViewComponent },
       { path: ':id/edit', component: TestSubjectEditComponent },
+    ],
+  },
+  {
+    path: 'experiments', component: ExperimentStartComponent, children: [
+      { path: '', component: ExperimentStartComponent },
+      { path: 'new', component: ExperimentEditComponent },
+      { path: ':id', component: ExperimentViewComponent },
+      { path: ':id/edit', component: ExperimentEditComponent}
     ],
   }
 ];

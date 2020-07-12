@@ -1,43 +1,52 @@
-<div class>
+<div class="row">
+  <div class="container">
+    <h1 class="text-center">{{ loadedStudy.name }}</h1>
+  </div>
+</div>
+<div class="container">
   <div class="row">
-    <div class="col-xs-12">
-      <div class="container">
-        <h1>Study {{ loadedStudy.name }}</h1>
+    <div class="col">
+      <h2 class="text-center">Groups</h2>
+      <div class="row">
+        <button type="button" (click)="openGroupModal()" class="btn btn-primary btn-lg btn-block">Add group</button>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-nav-list>
+            <ng-container *ngFor="let group of loadedStudy.groups">
+              <mat-list-item>
+                <a matLine routerLink='/studies/'>{{group.name}}</a>
+                <button mat-icon-button (click)="onDeleteGroup(group.id)">
+                  <mat-icon>clear</mat-icon>
+                </button>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+            </ng-container>       
+          </mat-nav-list>
+        </div>
       </div>
     </div>
-
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="container">
-        <h2>Study groups </h2>
-      <ul class="list-group list-group-flush">
-        <li
-          class="list-group-item d-flex justify-content-between"
-          *ngFor="let group of loadedStudy.groups">
-          {{ group }}
-        </li>
-      </ul>
-    </div>
-  </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="container">
-        <h2>Study tasks</h2>
-        <ul class="list-group list-group-flush">
-          <li
-            class="list-group-item d-flex justify-content-between"
-            *ngFor="let task of loadedStudy.tasks">
-            {{ task }}
-          </li>
-        </ul>
+    <div class="col">
+      <h2 class="text-center">Tasks</h2>
+      <div class="row">
+        <button type="button" (click)="openTaskModal()" class="btn btn-primary btn-lg btn-block">Add task</button>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-nav-list>
+            <ng-container *ngFor="let task of loadedStudy.tasks">
+              <mat-list-item>
+                <a matLine routerLink='/studies/'>{{task.name}}</a>
+                <button mat-icon-button (click)="onDelete(task.id)">
+                  <mat-icon>clear</mat-icon>
+                </button>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+            </ng-container>       
+          </mat-nav-list>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="container">
-      <button btn-primary (click)="openModal()">Delete</button>
-    </div>
-  </div>
+  <!-- <button class="btn btn-primary" (click)="openModal()">Add group</button> -->
 </div>

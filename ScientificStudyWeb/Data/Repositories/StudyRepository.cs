@@ -82,6 +82,7 @@ namespace ScientificStudyWeb.Data
 
             foreach(var groupToAdd in groupsToAdd)
                 modelGroups.Add(groupToAdd);
+
         }
     }
 }

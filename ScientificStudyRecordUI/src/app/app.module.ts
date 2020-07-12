@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
@@ -31,6 +31,14 @@ import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-
 import { TestSubjectService } from './services/test-subject.service';
 import { CustomDatePipe } from './shared/custom/datepipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ExperimentViewComponent } from './experiment/experiment-view/experiment-view.component';
+import { ExperimentEditComponent } from './experiment/experiment-edit/experiment-edit.component';
+import { ExperimentStartComponent } from './experiment/experiment-start/experiment-start.component';
+import { ExperimentService } from './services/experiment-service';
+import { TaskService } from './services/task.service';
+import { FilterService } from './shared/filter/filter-service';
+import { TableOverviewExampleComponent } from './test/table-overview-example/table-overview-example.component';
+import { DialogInputComponent } from './shared/modal/dialog-input/dialog-input.component';
 
 
 @NgModule({
@@ -47,7 +55,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TestSubjectStartComponent,
     StudyHomeComponent,
     TestSubjectHomeComponent,
-    CustomDatePipe
+    CustomDatePipe,
+    ExperimentViewComponent,
+    ExperimentEditComponent,
+    ExperimentStartComponent,
+    TableOverviewExampleComponent,
+    DialogInputComponent
   ],
   imports: [
     BrowserModule,
@@ -61,16 +74,23 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatDialogModule,
     FontAwesomeModule,
     MatFormFieldModule,
+    MatPaginatorModule,
     MatInputModule,
+    MatTableModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatListModule,
+    MatIconModule
     ],
   providers: [StudyService,
     TestSubjectService,
+    ExperimentService,
+    TaskService,
+    FilterService,
     MatDatepickerModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent],
+  entryComponents: [ModalComponent, DialogInputComponent],
 })
 export class AppModule {}

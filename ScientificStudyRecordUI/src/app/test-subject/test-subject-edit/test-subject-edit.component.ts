@@ -12,6 +12,8 @@ import { BasicSearch } from 'src/app/shared/models/basic-search.model';
 import { BasicStudy } from 'src/app/shared/models/basic-study.model';
 import { BasicGroup } from 'src/app/shared/models/basic-group.model';
 import { RequireMatch } from 'src/app/shared/validators/require-match.validator';
+import { FilterUtils } from 'src/app/shared/filter/filter-util';
+import { FilterService } from 'src/app/shared/filter/filter-service';
 
 @Component({
   selector: 'app-test-subject-edit',
@@ -32,6 +34,7 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
   constructor(
     private service: TestSubjectService,
     private studyService: StudyService,
+    private filterService: FilterService,
     private route: ActivatedRoute,
     private router: Router,
     public matDialog: MatDialog
@@ -50,49 +53,6 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
     );
     this.filterStudies();
     this.filterGroups();
-    // this.filteredOptions = this.testSubjectForm.get('study').valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     tap(
-    //       data => console.log('bilo sta')
-    //     ),
-    //     debounceTime(300),
-    //     switchMap(value => {
-    //       console.log(value);
-    //       if (isString(value)) {
-    //         console.log(value);
-    //         return this._filterGeneric({name: value}, this.studyService.getStudiesLookup());
-    //       }
-
-    //       this.selectedStudy.next(value);
-
-    //       return this._filterGeneric(value, this.studyService.getStudiesLookup());
-    //     })
-    //   );
-
-    // this.selectedStudy.subscribe( study => {
-    //      this.filteredGroupOptions = this.testSubjectForm
-    //        .get('group')
-    //        .valueChanges.pipe(
-    //          startWith(''),
-    //          debounceTime(300),
-    //          switchMap((value) => {
-    //            if (isString(value)) {
-    //              console.log(value);
-    //              return this._filterGeneric(
-    //                { name: value },
-    //                this.studyService.getGroupsLookup(study.id)
-    //              );
-    //            }
-    //            console.log(value);
-    //            return this._filterGeneric(
-    //              value,
-    //              this.studyService.getGroupsLookup(study.id)
-    //            );
-    //          })
-    //        );
-    //    }
-    //   );
   }
 
   onSubmit() {
@@ -141,17 +101,8 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _filterGeneric<T extends BasicSearch>(value: {name: string}, objectsLookup: Observable<T[]>): Observable<T[]> {
-    const filterValue = value.name.toLowerCase();
-    return objectsLookup.pipe(
-      map(data => data.filter(it => it.name.toLowerCase().includes(filterValue)))
-    );
-}
-
   displayFunction(object: BasicSearch) {
-    if (object) {
-      return object.name;
-    }
+    return FilterUtils.displayFunction(object);
   }
 
   filterStudies() {
@@ -166,14 +117,13 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
       startWith(startWithString),
       debounceTime(300),
       switchMap(value => {
-        console.log(value);
         if (isString(value)) {
-          return this._filterGeneric({name: value}, this.studyService.getStudiesLookup());
+          return this.filterService.filterGeneric({name: value}, this.studyService.getStudiesLookup());
         }
 
         this.selectedStudy.next(value);
 
-        return this._filterGeneric(value, this.studyService.getStudiesLookup());
+        return this.filterService.filterGeneric(value, this.studyService.getStudiesLookup());
       })
     );
   }
@@ -187,14 +137,12 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
           debounceTime(300),
           switchMap((value) => {
             if (isString(value)) {
-              console.log(value);
-              return this._filterGeneric(
+              return this.filterService.filterGeneric(
                 { name: value },
                 this.studyService.getGroupsLookup(study.id)
               );
             }
-            console.log(value);
-            return this._filterGeneric(
+            return this.filterService.filterGeneric(
               value,
               this.studyService.getGroupsLookup(study.id)
             );

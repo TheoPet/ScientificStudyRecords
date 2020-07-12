@@ -30,14 +30,14 @@ namespace ScientificStudiesRecord.Migrations
                         .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<long>("Duration")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("TaskId")
                         .HasColumnType("integer");
 
                     b.Property<int>("TestSubjectId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

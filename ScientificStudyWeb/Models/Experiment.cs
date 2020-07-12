@@ -5,7 +5,8 @@ namespace ScientificStudyWeb.Models
     public class Experiment 
     {
         public int Id { get; set; }
-        public long Duration { get; set; }
+
+        public string Time { get; set; }
         
         [MaxLength(256)]
         public string Comment { get; set; }
