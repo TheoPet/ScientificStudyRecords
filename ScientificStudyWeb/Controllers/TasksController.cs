@@ -32,7 +32,7 @@ namespace ScientificStudyWeb.Controllers
         public async Task<IActionResult>GetTaskLookup(int studyId)
         {
             var tasks = await _unitOfWork.taskRepository.GetAll( t => t.StudyId.Equals(studyId));
-            var tasksToReturn = _mapper.Map<IEnumerable<BasicTaskData>>(tasks);
+            var tasksToReturn = _mapper.Map<IEnumerable<BasicData>>(tasks);
             return Ok(tasksToReturn);
         }
     }

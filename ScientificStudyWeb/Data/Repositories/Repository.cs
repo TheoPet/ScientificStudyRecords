@@ -31,7 +31,7 @@ namespace ScientificStudyWeb.Data
                 dbSet.Add(entity);
         }
         
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
              return await dbSet.ToListAsync();
         }

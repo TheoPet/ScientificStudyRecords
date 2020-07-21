@@ -5,8 +5,11 @@ namespace ScientificStudyWeb.Data.Interfaces
 {
     public interface IStudyRepository : IRepository<Study>
     {
-        void UpdateTasks(ICollection<Task> modelTasks, ICollection<Task> clientTasks);
-        void UpdateStudyGroups(ICollection<StudyGroup> modelGroups, ICollection<StudyGroup> clientGroups);
-         
+        void AddTask(string Name,Study Study);
+        void AddGroup(string name, Study study);
+
+        void RemoveTask(int TaskId, Study study);
+        void RemoveGroup(int GroupId, Study study);
+          
     }
 }

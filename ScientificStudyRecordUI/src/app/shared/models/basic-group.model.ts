@@ -1,3 +1,3 @@
-import { BasicSearch } from './basic-search.model';
+import { BasicData } from './basic-data.model';
 
-export class BasicGroup extends BasicSearch {}
+export class BasicGroup extends BasicData {}

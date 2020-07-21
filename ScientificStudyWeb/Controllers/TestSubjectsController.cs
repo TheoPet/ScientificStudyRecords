@@ -49,17 +49,29 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(bool simplified)
+        public async Task<IActionResult> GetAll(bool simplified, bool available)
         {
             var testSubjects = await _unitOfWork.testSubjectRepository.GetAll();
-            
+            var testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<TestSubjectData>>(testSubjects);
+
+
             if (simplified)
             {
-                var basicTestSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<BasicTestSubject>>(testSubjects);
-                return Ok(basicTestSubjectsToReturn);
+                if(available)
+                {
+                    var availableTestSubjects = testSubjects.Where(t=> t.StudyId == null);
+                    testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<TestSubjectData>>(availableTestSubjects);
+
+                    return Ok(testSubjectsToReturn);
+                }
+                else
+                {
+                    var basicTestSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<BasicTestSubject>>(testSubjects);
+                    return Ok(basicTestSubjectsToReturn);
+                }
+
             }
             
-            var testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<TestSubjectData>>(testSubjects);
             return Ok(testSubjectsToReturn);
         }
 

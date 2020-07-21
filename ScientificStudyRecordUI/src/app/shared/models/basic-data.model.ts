@@ -1,4 +1,4 @@
-export class BasicSearch {
+export class BasicData {
          name: string;
          id?: number;
          constructor(name: string, id?: number) {

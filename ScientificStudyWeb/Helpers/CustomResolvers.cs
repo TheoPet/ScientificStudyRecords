@@ -4,16 +4,16 @@ using ScientificStudiesRecord.DataObjects;
 using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
 
-public class StudyBasicTaskResolver : IValueResolver<Study, StudyData, ICollection<BasicTaskData>>
+public class StudyBasicTaskResolver : IValueResolver<Study, StudyData, ICollection<BasicData>>
 {
-    public ICollection<BasicTaskData> Resolve(Study source, StudyData destination, ICollection<BasicTaskData> destMember, ResolutionContext context)
+    public ICollection<BasicData> Resolve(Study source, StudyData destination, ICollection<BasicData> destMember, ResolutionContext context)
     {
-        var destinationTasks = new List<BasicTaskData>();
+        var destinationTasks = new List<BasicData>();
         if (source.Tasks == null)
             return destinationTasks;
 
         foreach (var task in source.Tasks)
-            destinationTasks.Add(new BasicTaskData()
+            destinationTasks.Add(new BasicData()
             {
                 Name = task.Name,
                 Id = task.Id
@@ -23,19 +23,19 @@ public class StudyBasicTaskResolver : IValueResolver<Study, StudyData, ICollecti
     }
 }
 
-public class StudyBasicGroupResolver : IValueResolver<Study, StudyData, ICollection<BasicGroupData>>
+public class StudyBasicGroupResolver : IValueResolver<Study, StudyData, ICollection<BasicData>>
 {
-    public ICollection<BasicGroupData> Resolve(Study source, StudyData destination, ICollection<BasicGroupData> destMember, ResolutionContext context)
+    public ICollection<BasicData> Resolve(Study source, StudyData destination, ICollection<BasicData> destMember, ResolutionContext context)
     {
-        var destinationGroups = new List<BasicGroupData>();
-        if (source.Tasks == null)
+        var destinationGroups = new List<BasicData>();
+        if (source.Groups == null)
             return destinationGroups;
 
-        foreach (var group in source.StudyGroups)
+        foreach (var group in source.Groups)
         {
-            destinationGroups.Add( new BasicGroupData(){
-                Name = group.Group.Name,
-                Id = group.GroupId 
+            destinationGroups.Add( new BasicData(){
+                Name = group.Name,
+                Id = group.Id
             });
         }
 
@@ -68,33 +68,27 @@ public class StudyTaskResolver : IValueResolver<StudyData, Study, ICollection<Ta
         return destTasks;
     }
 }
-public class StudyGroupResolver : IValueResolver<StudyData, Study, ICollection<StudyGroup>>
+public class StudyGroupResolver : IValueResolver<StudyData, Study, ICollection<Group>>
 {
-    public ICollection<StudyGroup> Resolve(StudyData source, Study destination, ICollection<StudyGroup> destMember, ResolutionContext context)
+    public ICollection<Group> Resolve(StudyData source, Study destination, ICollection<Group> destMember, ResolutionContext context)
     {
-        var destGroups = new List<StudyGroup>();
+        var destGroups = new List<Group>();
 
         if (source.Groups == null)
             return destGroups;
 
-        foreach (var group in source.Groups)
+          foreach (var group in source.Groups)
         {
-            var groupToAdd = new Group()
+            var newGroup = new Group()
             {
                 Name = group.Name
             };
 
-            var studyGroupToAdd = new StudyGroup();
-
             if (group.Id != null)
-            {
-                groupToAdd.Id = group.Id.Value;
-                studyGroupToAdd.GroupId = group.Id.Value;
-            }
+                newGroup.Id = group.Id.Value;
 
-            studyGroupToAdd.Group = groupToAdd;
+            destGroups.Add(newGroup);
 
-            destGroups.Add(studyGroupToAdd);
         }
         return destGroups;
     }
@@ -133,4 +127,27 @@ public class TaskExperimentResolver : IValueResolver<TaskData, Task, ICollection
         }
         return destExperiments;
     } 
+}
+
+public class GroupTestSubjectResolver : IValueResolver<Group, GroupData, ICollection<BasicTestSubject>>
+{
+    public ICollection<BasicTestSubject> Resolve(Group source, GroupData destination, ICollection<BasicTestSubject> destMember, ResolutionContext context)
+    {
+        var destinationTestSubjects = new List<BasicTestSubject>();
+
+        if (source.TestSubjects == null)
+            return destinationTestSubjects;
+
+        foreach(var subject in source.TestSubjects)
+        {
+            destinationTestSubjects.Add( new BasicTestSubject() {
+                Name = subject.Name,
+                Surname = subject.Surname,
+                StudyId = subject.StudyId,
+                Id = subject.Id
+            });
+        }
+
+        return destinationTestSubjects;    
+    }
 }

@@ -1,6 +1,6 @@
-import { BasicSearch } from './basic-search.model';
+import { BasicData } from './basic-data.model';
 
-export class BasicStudy extends BasicSearch {
+export class BasicStudy extends BasicData {
          constructor(name: string, id?: number, ) {
            super(name, id);
          }

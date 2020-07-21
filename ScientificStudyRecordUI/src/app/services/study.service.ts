@@ -7,21 +7,22 @@ import { Study } from '../study/study-view/study-view.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BasicStudy } from '../shared/models/basic-study.model';
 import { BasicGroup } from '../shared/models/basic-group.model';
+import { BasicData } from '../shared/models/basic-data.model';
 
 @Injectable({ providedIn: 'root' })
 export class StudyService {
-  private Study = new Study(' ', [], []);
   constructor(
     private httpClient: HttpClient,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
-  updateStudy(id: number, study: Study) {
-    return this.httpClient.put<number>(
-      `http://localhost:5000/studies/${id}`,
-      study
-    );
+  addGroupOrTask(studyId: number, dataToAdd: BasicData, addGroup = false) {
+    if (addGroup) {
+      return this.httpClient.put<Study>(`http://localhost:5000/studies/${studyId}?addGroup=true`, dataToAdd);
+    } else {
+      return this.httpClient.put<Study>(`http://localhost:5000/studies/${studyId}`, dataToAdd);
+    }
   }
 
   addStudy(study: Study) {
@@ -56,11 +57,12 @@ export class StudyService {
 
   deleteGroupOrTask(studyId: number, id: number, deleteGroup = false) {
     if (deleteGroup) {
-      return this.httpClient.delete(`http://localhost:5000/studies/${studyId}/${id}?deleteGroup=true`);
+      return this.httpClient.delete<Study>(`http://localhost:5000/studies/${studyId}/${id}?deleteGroup=true`);
     } else {
-      return this.httpClient.delete(`http://localhost:5000/studies/${studyId}/${id}`);
+      return this.httpClient.delete<Study>(`http://localhost:5000/studies/${studyId}/${id}`);
     }
   }
+
   deleteStudy(id: number) {
     this.httpClient.delete(`http://localhost:5000/studies/${id}`).subscribe(
       (val) => {

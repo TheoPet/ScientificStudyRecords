@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class="container">
+            <h1 class="text-center">{{loadedGroup.name}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center">Test subjects</h2>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" (click)="openDialog()" 
+                    class="btn btn-primary btn-lg btn-block">Add test subject</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="openAssignDialog()"
+                    class="btn btn-primary btn-lg btn-block">Assign test subject</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-nav-list>
+                        <ng-container *ngFor="let subject of loadedGroup.testSubjects">
+                            <mat-list-item>
+                                <a matLine routerLink='/testsubjects/{{subject.id}}'>{{subject.name}} {{subject.surname}}</a>
+                                <button mat-icon-button (click)="onRemove(subject.id)">                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        </ng-container>
+                    </mat-nav-list>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -15,7 +15,7 @@
           <mat-nav-list>
             <ng-container *ngFor="let group of loadedStudy.groups">
               <mat-list-item>
-                <a matLine routerLink='/studies/'>{{group.name}}</a>
+                <a matLine routerLink='/groups/{{group.id}}'>{{group.name}}</a>
                 <button mat-icon-button (click)="onDeleteGroup(group.id)">
                   <mat-icon>clear</mat-icon>
                 </button>

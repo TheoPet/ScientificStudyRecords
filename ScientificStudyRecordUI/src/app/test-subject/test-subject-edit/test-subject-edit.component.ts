@@ -8,12 +8,13 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { isString } from 'util';
 import { StudyService } from 'src/app/services/study.service';
-import { BasicSearch } from 'src/app/shared/models/basic-search.model';
+import { BasicData } from 'src/app/shared/models/basic-data.model';
 import { BasicStudy } from 'src/app/shared/models/basic-study.model';
 import { BasicGroup } from 'src/app/shared/models/basic-group.model';
 import { RequireMatch } from 'src/app/shared/validators/require-match.validator';
 import { FilterUtils } from 'src/app/shared/filter/filter-util';
 import { FilterService } from 'src/app/shared/filter/filter-service';
+import { conditionalValidator } from 'src/app/shared/validators/conditional-require.validator';
 
 @Component({
   selector: 'app-test-subject-edit',
@@ -71,16 +72,17 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.testSubjectForm = new FormGroup(
-      {
-        name: new FormControl('', Validators.required),
-        surname: new FormControl('', Validators.required),
-        entryTime: new FormControl(new Date(), Validators.required),
-        comment: new FormControl(''),
-        study: new FormControl(null, [Validators.required, RequireMatch]),
-        group: new FormControl(null, [Validators.required, RequireMatch])
-      }
-    );
+    this.testSubjectForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      surname: new FormControl('', Validators.required),
+      entryTime: new FormControl(new Date(), Validators.required),
+      comment: new FormControl(''),
+      study: new FormControl(null, RequireMatch),
+      group: new FormControl(null, [
+        RequireMatch,
+        conditionalValidator(() => this.testSubjectForm.get('study').value),
+      ]),
+    });
 
     if (this.editMode) {
       this.subscription = this.service.getTestSubject(this.id)
@@ -90,8 +92,8 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
           surname: new FormControl(data.surname, Validators.required),
           entryTime: new FormControl(new Date(data.entryTime), Validators.required),
           comment: new FormControl(data.comment),
-          study: new FormControl(data.study, [Validators.required, RequireMatch]),
-          group: new FormControl(data.group, [Validators.required, RequireMatch])
+          study: new FormControl(data.study),
+          group: new FormControl(data.group, RequireMatch)
         });
       })).subscribe(form => {
         this.testSubjectForm = form;
@@ -101,7 +103,7 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayFunction(object: BasicSearch) {
+  displayFunction(object: BasicData) {
     return FilterUtils.displayFunction(object);
   }
 

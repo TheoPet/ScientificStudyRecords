@@ -8,8 +8,7 @@
   </form>
   </div>
   <div mat-dialog-actions>
-    <button mat-button 
-    [mat-dialog-close]="dialogForm.get('name').value"
+    <button mat-button (click)="onSubmit()"
     [disabled]="dialogForm.invalid || dialogForm.untouched"
     >Ok</button>
 </div>

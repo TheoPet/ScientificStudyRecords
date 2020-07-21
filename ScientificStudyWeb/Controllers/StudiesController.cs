@@ -6,7 +6,6 @@ using ScientificStudyWeb.Data.Interfaces;
 using System.Collections.Generic;
 using AutoMapper;
 using ScientificStudyWeb.DataObjects;
-using System.Linq;
 
 namespace ScientificStudyWeb.Controllers
 {
@@ -33,7 +32,7 @@ namespace ScientificStudyWeb.Controllers
             if (simplified)
             {
 
-                var reducedStudiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<BasicStudyData>>(studies);
+                var reducedStudiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<BasicData>>(studies);
                 return Ok(reducedStudiesToReturn);
             }
 
@@ -53,8 +52,7 @@ namespace ScientificStudyWeb.Controllers
         public async Task<IActionResult> GetStudyGroups(int id)
         {
             var study = await _unitOfWork.studyRepository.Get(id);
-            var groups = study.StudyGroups;
-            var groupsToReturn = _mapper.Map<IEnumerable<StudyGroup>, IEnumerable<BasicGroupData>>(groups);
+            var groupsToReturn = _mapper.Map<IEnumerable<Group>, IEnumerable<BasicData>>(study.Groups);
             return Ok(groupsToReturn);
         }
 
@@ -72,34 +70,45 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(StudyData data)
+        public async Task<IActionResult> AddGroupOrTask(BasicData data, int id, bool addGroup)
         {
-            var study =  _mapper.Map<Study>(data);
-            var studyToUpdate = await _unitOfWork.studyRepository.Get(study.Id);
+            var study = await _unitOfWork.studyRepository.Get(id);
 
-            studyToUpdate.Name = study.Name;
-            _unitOfWork.studyRepository.UpdateTasks(studyToUpdate.Tasks,study.Tasks);
-            _unitOfWork.studyRepository.UpdateStudyGroups(studyToUpdate.StudyGroups, study.StudyGroups);
-            await _unitOfWork.SaveChangesAsync();
-            return Ok();
-        }
-
-        [HttpDelete("{studyId:int}/{Id:int}")]
-        public async Task<IActionResult> DeleteGroup(int studyId, int Id, bool deleteGroup){
-
-            var studyToUpdate = await _unitOfWork.studyRepository.Get(studyId);
-            if (deleteGroup)
+            if(addGroup)
             {
-                var groupToDelete = studyToUpdate.StudyGroups.FirstOrDefault(g => g.GroupId.Equals(Id));
-                studyToUpdate.StudyGroups.Remove(groupToDelete);
+                _unitOfWork.studyRepository.AddGroup(data.Name, study);
             }else
             {
-                var taskToDelete = studyToUpdate.Tasks.FirstOrDefault(t => t.Id.Equals(Id));
-                studyToUpdate.Tasks.Remove(taskToDelete);
+                _unitOfWork.studyRepository.AddTask(data.Name, study);
             }
             
             await _unitOfWork.SaveChangesAsync();
-            return Ok();
+            
+            var studyToReturn = _mapper.Map<StudyData>(study);
+            
+            return Ok(studyToReturn);
+        }
+
+        [HttpDelete("{studyid:int}/{id:int}")]
+        public async Task<IActionResult> DeleteGroupOrTask(int studyId, int id, bool deleteGroup)
+        {
+
+            var study = await _unitOfWork.studyRepository.Get(studyId);
+            if (deleteGroup)
+            {
+                _unitOfWork.studyRepository.RemoveGroup(id, study);
+
+            }
+            else
+            {
+                _unitOfWork.studyRepository.RemoveTask(id, study);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var studyToReturn = _mapper.Map<StudyData>(study);
+
+            return Ok(studyToReturn);
         }
 
         [HttpDelete("{id:int}")]

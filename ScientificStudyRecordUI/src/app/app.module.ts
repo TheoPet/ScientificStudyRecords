@@ -39,6 +39,9 @@ import { TaskService } from './services/task.service';
 import { FilterService } from './shared/filter/filter-service';
 import { TableOverviewExampleComponent } from './test/table-overview-example/table-overview-example.component';
 import { DialogInputComponent } from './shared/modal/dialog-input/dialog-input.component';
+import { GroupComponent } from './group/group.component';
+import { DialogSubjectInputComponent } from './shared/modal/dialog-subject-input/dialog-subject-input.component';
+import { DialogSubjectListComponent } from './shared/modal/dialog-subject-list/dialog-subject-list.component';
 
 
 @NgModule({
@@ -60,7 +63,10 @@ import { DialogInputComponent } from './shared/modal/dialog-input/dialog-input.c
     ExperimentEditComponent,
     ExperimentStartComponent,
     TableOverviewExampleComponent,
-    DialogInputComponent
+    DialogInputComponent,
+    GroupComponent,
+    DialogSubjectInputComponent,
+    DialogSubjectListComponent
   ],
   imports: [
     BrowserModule,
@@ -91,6 +97,9 @@ import { DialogInputComponent } from './shared/modal/dialog-input/dialog-input.c
     MatDatepickerModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent, DialogInputComponent],
+  entryComponents: [ModalComponent,
+    DialogInputComponent,
+    DialogSubjectInputComponent,
+  DialogSubjectListComponent],
 })
 export class AppModule {}

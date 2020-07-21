@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BasicSearch } from '../models/basic-search.model';
+import { BasicData } from '../models/basic-data.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class FilterService {
-  filterGeneric<T extends BasicSearch>(
+  filterGeneric<T extends BasicData>(
     value: { name: string },
     objectsLookup: Observable<T[]>
   ): Observable<T[]> {

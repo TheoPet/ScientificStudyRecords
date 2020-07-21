@@ -45,7 +45,7 @@ export class StudyEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.editMode) {
-      this.studyService.updateStudy(this.id, this.studyForm.value);
+      // this.studyService.updateStudy(this.id, this.studyForm.value);
     } else {
       this.studyService.addStudy(this.studyForm.value).subscribe(() => this.onCancel());
     }

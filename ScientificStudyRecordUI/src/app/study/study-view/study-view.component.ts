@@ -1,17 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
-import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { MatDialogModule, MatDialogConfig, MatDialog } from '@angular/material/dialog';
-
-import { ModalComponent } from '../../shared/modal/modal.component';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 
 import { Study } from './study-view.model';
 import { StudyService } from '../../services/study.service';
 import { Subscription, Observable } from 'rxjs';
 import { DialogInputComponent } from 'src/app/shared/modal/dialog-input/dialog-input.component';
-import { BasicGroup } from 'src/app/shared/models/basic-group.model';
-import { BasicTask } from 'src/app/shared/models/basic-task.model';
 
 
 @Component({
@@ -21,14 +15,15 @@ import { BasicTask } from 'src/app/shared/models/basic-task.model';
 })
 export class StudyViewComponent implements OnInit, OnDestroy {
   loadedStudy = new Study(' ', [], []);
-  addedGroupOrTask: string;
 
   subscription: Subscription;
   groupDialogSubscription: Subscription;
   taskDialogSubscription: Subscription;
-  updateStudySubscription: Subscription;
+  addTaskSubscription: Subscription;
+  addGroupSubscription: Subscription;
   deleteGroupOrTaskSubscription: Subscription;
-  groupDialogClosed$: Observable<any>;
+  groupDialogClosedSubscription: Subscription;
+  taskDialogClosedSubscription: Subscription;
   taskDialogClosed$: Observable<any>;
 
   constructor(
@@ -54,28 +49,35 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   openGroupModal() {
     const dialogConfig = this.configureMatDailogConfig(
       'Add new group',
-      'Group name'
+      'Group name',
+      this.loadedStudy.id,
+      true
     );
     const modalDialog = this.matDialog.open(DialogInputComponent, dialogConfig);
 
-    this.groupDialogClosed$ = modalDialog.afterClosed();
-
-    this.onAddGroup();
+    this.groupDialogClosedSubscription = modalDialog.afterClosed().subscribe((data) => {
+      if (data !== undefined) {
+        this.loadedStudy = data;
+      }
+    });
   }
 
   openTaskModal() {
     const dialogConfig = this.configureMatDailogConfig(
       'Add new task',
-      'Task name'
+      'Task name',
+      this.loadedStudy.id
     );
     const modalDialog = this.matDialog.open(DialogInputComponent, dialogConfig);
 
-    this.taskDialogClosed$ = modalDialog.afterClosed();
-
-    this.onAddTask();
+    this.taskDialogClosedSubscription = modalDialog.afterClosed().subscribe((data) => {
+      if (data !== undefined) {
+        this.loadedStudy = data;
+      }
+    });
   }
 
-  configureMatDailogConfig(title: string, description: string) {
+  configureMatDailogConfig(title: string, description: string, studyId: number, group = false) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '250px';
@@ -83,43 +85,32 @@ export class StudyViewComponent implements OnInit, OnDestroy {
     dialogConfig.data = {
       title,
       description,
+      studyId,
+      group
     };
     return dialogConfig;
   }
 
-  onAddGroup() {
-    this.groupDialogSubscription = this.groupDialogClosed$.subscribe(
-      (result) => {
-        this.loadedStudy.groups.push(new BasicGroup(result));
-        this.studyService
-          .updateStudy(this.loadedStudy.id, this.loadedStudy)
-          .subscribe();
-      }
-    );
-  }
-  onAddTask() {
-    this.taskDialogSubscription = this.taskDialogClosed$.subscribe((result) => {
-      this.loadedStudy.tasks.push(new BasicTask(result));
-      this.studyService
-        .updateStudy(this.loadedStudy.id, this.loadedStudy)
-        .subscribe();
-    });
-  }
+  // onAddTask() {
+  //   this.taskDialogSubscription = this.taskDialogClosed$.subscribe((result) => {
+  //     this.addTaskSubscription = this.studyService
+  //       .addGroupOrTask(this.loadedStudy.id, new BasicTask(result))
+  //       .subscribe((data) => {
+  //         this.loadedStudy = data;
+  //       });
+  //   });
+  // }
 
   onDeleteGroup(id: number) {
-    const index = this.loadedStudy.groups.findIndex((g) => g.id === id);
-    this.loadedStudy.groups.splice(index, 1);
     this.onDelete(id, true);
   }
 
   onDelete(id: number, deleteGroup = false) {
-    if (!deleteGroup) {
-      const index = this.loadedStudy.tasks.findIndex((t) => t.id === id);
-      this.loadedStudy.tasks.splice(index, 1);
-    }
     this.deleteGroupOrTaskSubscription = this.studyService
       .deleteGroupOrTask(this.loadedStudy.id, id, deleteGroup)
-      .subscribe();
+      .subscribe(data => {
+        this.loadedStudy = data;
+      });
   }
 
   ngOnDestroy(): void {
@@ -135,12 +126,24 @@ export class StudyViewComponent implements OnInit, OnDestroy {
       this.taskDialogSubscription.unsubscribe();
     }
 
-    if (this.updateStudySubscription) {
-      this.updateStudySubscription.unsubscribe();
+    if (this.addTaskSubscription) {
+      this.addTaskSubscription.unsubscribe();
+    }
+
+    if (this.addGroupSubscription) {
+      this.addGroupSubscription.unsubscribe();
     }
 
     if (this.deleteGroupOrTaskSubscription) {
       this.deleteGroupOrTaskSubscription.unsubscribe();
+    }
+
+    if (this.taskDialogClosedSubscription) {
+      this.taskDialogClosedSubscription.unsubscribe();
+    }
+
+    if (this.groupDialogClosedSubscription) {
+      this.groupDialogClosedSubscription.unsubscribe();
     }
   }
 }

@@ -6,9 +6,9 @@ namespace ScientificStudyWeb.DataObjects
     {
         public string Name { get; set; }
 
-        public ICollection<BasicTaskData> Tasks { get; set; }
+        public ICollection<BasicData> Tasks { get; set; }
 
-        public ICollection<BasicGroupData> Groups { get; set; }
+        public ICollection<BasicData> Groups { get; set; }
 
         public int? Id { get; set; }
     }

@@ -18,14 +18,14 @@ namespace ScientificStudyWeb.Helpers
             .ReverseMap()
             .ForMember(dest => dest.Tasks,
             opt => opt.MapFrom<StudyTaskResolver>())
-            .ForMember(dest => dest.StudyGroups,
+            .ForMember(dest => dest.Groups,
             opt => opt.MapFrom<StudyGroupResolver>());
 
             CreateMap<TestSubjectData, TestSubject>()
             .ForPath(dest => dest.Study.Name,
             opt => opt.MapFrom(src => src.Study.Name))
             .ForPath(dest => dest.Study.Id,
-            opt => opt.MapFrom(src => src.Study.Id))
+            opt => opt.MapFrom(src => src.Study.Id.Value))
             .ForPath(dest => dest.Group.Name,
             opt => opt.MapFrom(src => src.Group.Name))
             .ForPath(dest=> dest.Group.Id,
@@ -44,13 +44,10 @@ namespace ScientificStudyWeb.Helpers
             .ForPath(dest => dest.Group.Id,
             opt => opt.MapFrom(src => src.GroupId));
 
-            CreateMap<Study, BasicStudyData>();
+            CreateMap<Study, BasicData>();
 
-            CreateMap<StudyGroup, BasicGroupData>()
-            .ForMember(dest => dest.Name,
-            opt => opt.MapFrom(src => src.Group.Name))
-            .ForMember(dest => dest.Id,
-            opt => opt.MapFrom(src => src.GroupId));
+            CreateMap<Group, BasicData>();
+           
 
             CreateMap<TestSubject, BasicTestSubject>()
             .ForPath(dest => dest.StudyId,
@@ -68,7 +65,12 @@ namespace ScientificStudyWeb.Helpers
             .ForMember(dest => dest.Experiments,
             opt => opt.MapFrom<TaskExperimentResolver>());
 
-            CreateMap<Task, BasicTaskData>();
+            CreateMap<Task, BasicData>();
+
+            CreateMap<Group, GroupData>()
+            .ForMember( dest => dest.TestSubjects,
+            opt => opt.MapFrom<GroupTestSubjectResolver>());
+
         }
     }
 }

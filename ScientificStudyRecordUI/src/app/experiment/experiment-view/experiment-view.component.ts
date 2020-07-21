@@ -6,7 +6,7 @@ import { Subscription, Observable, Subject } from 'rxjs';
 import { faTshirt } from '@fortawesome/free-solid-svg-icons';
 import { FormControl } from '@angular/forms';
 import {  FilterService } from 'src/app/shared/filter/filter-service';
-import { BasicSearch } from 'src/app/shared/models/basic-search.model';
+import { BasicData } from 'src/app/shared/models/basic-data.model';
 import { BasicTask } from 'src/app/shared/models/basic-task.model';
 import { TaskService } from 'src/app/services/task.service';
 import { startWith, debounceTime, switchMap, map } from 'rxjs/operators';
@@ -77,7 +77,7 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
       .getTestSubject(id);
   }
 
-  displayFunction(object: BasicSearch) {
+  displayFunction(object: BasicData) {
     return FilterUtils.displayFunction(object);
   }
 
