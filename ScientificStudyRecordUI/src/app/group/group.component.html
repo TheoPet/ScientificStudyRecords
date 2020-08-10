@@ -22,7 +22,7 @@
                     <mat-nav-list>
                         <ng-container *ngFor="let subject of loadedGroup.testSubjects">
                             <mat-list-item>
-                                <a matLine routerLink='/testsubjects/{{subject.id}}'>{{subject.name}} {{subject.surname}}</a>
+                                <a matLine routerLink='/testsubjects/{{subject.id}}/groups/{{loadedGroup.id}}'>{{subject.name}} {{subject.surname}}</a>
                                 <button mat-icon-button (click)="onRemove(subject.id)">                                    <mat-icon>clear</mat-icon>
                                 </button>
                             </mat-list-item>

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, Params} from '@angular/router';
 import { StudyService } from '../../services/study.service';
 import { Study } from '../study-view/study-view.model';
 import { Subscription, Observable } from 'rxjs';
-import { tap, takeLast, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-study-edit',
@@ -56,13 +56,13 @@ export class StudyEditComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    const tsks = new FormArray([]);
-    const grps = new FormArray([]);
+    const tasks = new FormArray([]);
+    const groups = new FormArray([]);
     this.studyForm = new FormGroup(
       {
         name: new FormControl('', Validators.required),
-        tasks: tsks,
-        groups: grps
+        tasks,
+        groups
       }
     );
 
@@ -71,18 +71,18 @@ export class StudyEditComponent implements OnInit, OnDestroy {
       .pipe(map(data => {
 
         for (const t of data.tasks) {
-          tsks.push(new FormControl(t));
+          tasks.push(new FormControl(t));
         }
 
         for (const g of data.groups) {
-          grps.push(new FormControl(g));
+          groups.push(new FormControl(g));
         }
 
         return new FormGroup(
           {
             name: new FormControl(data.name, Validators.required),
-            tasks: tsks,
-            groups: grps
+            tasks,
+            groups
           }
         );
       })).subscribe(form => this.studyForm = form);

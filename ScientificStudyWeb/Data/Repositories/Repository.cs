@@ -22,7 +22,7 @@ namespace ScientificStudyWeb.Data
 
         public void Add(TEntity entity)
         {
-            dbSet.Add(entity);
+             dbSet.Add(entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)

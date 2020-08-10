@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>{{ modalData.title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="dialogForm">
+    <mat-form-field>
+      <mat-label>Study</mat-label>
+      <input matInput formControlName="study" cdkFocusInitial />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Group</mat-label>
+      <input matInput formControlName="group" />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input
+        type="text"
+        placeholder="Choose task"
+        aria-label="Number"
+        matInput
+        formControlName="task"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFunction">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <ngx-mat-timepicker formControlName="time"></ngx-mat-timepicker>
+    <mat-form-field>
+      <label for="comment">Comment</label>
+      <textarea
+        matInput
+        class="form-control"
+        id="comment"
+        formControlName="comment"
+        rows="3"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-button
+    (click)="onSubmit()"
+    [disabled]="dialogForm.invalid || dialogForm.untouched"
+  >
+    Add experiment
+  </button>
+</div>

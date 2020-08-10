@@ -29,7 +29,7 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpGet("{studyId:int}")]
-        public async Task<IActionResult>GetTaskLookup(int studyId)
+        public async Task<IActionResult> GetTaskLookup(int studyId)
         {
             var tasks = await _unitOfWork.taskRepository.GetAll( t => t.StudyId.Equals(studyId));
             var tasksToReturn = _mapper.Map<IEnumerable<BasicData>>(tasks);

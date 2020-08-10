@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ScientificStudyWeb.DataObjects
 {
@@ -14,7 +15,7 @@ namespace ScientificStudyWeb.DataObjects
 
         public BasicData Group { get; set; }
 
-        //public ICollection<ExperimentData> Experiments { get; set; }
+        public ICollection<ExperimentData> Experiments { get; set; }
 
     }
 }

@@ -100,10 +100,54 @@ public class TestSubjectExperimentResolver : IValueResolver<TestSubjectData, Tes
     public ICollection<Experiment> Resolve(TestSubjectData source, TestSubject destination, ICollection<Experiment> destMember, ResolutionContext context)
     {
         var destExperiments = new List<Experiment>();
+        
+        foreach (var experiment in source.Experiments)
+        {
+            var experimentToAdd = new Experiment()
+            {
+                Time = experiment.Time,
+                Comment = experiment.Comment,
+                TestSubjectId = experiment.TestSubjectId,
+                GroupId = experiment.GroupId,
+                TaskId = experiment.Task.Id.Value
+            };
+
+            if (experiment.Id != null)
+                experimentToAdd.Id = experiment.Id.Value;
+
+            destExperiments.Add(experimentToAdd);
+        }
         return destExperiments;
     }
 }
+public class TestSubjectDataExperimentResolver : IValueResolver<TestSubject, TestSubjectData, ICollection<ExperimentData>>
 
+{
+    public ICollection<ExperimentData> Resolve(TestSubject source, TestSubjectData destination, ICollection<ExperimentData> destMember, ResolutionContext context)
+    {
+        var destExperiments = new List<ExperimentData>();
+        
+        foreach (var experiment in source.Experiments)
+        {
+            var experimentToAdd = new ExperimentData()
+            {
+                Id = experiment.Id,
+                Time = experiment.Time,
+                Comment = experiment.Comment,
+                TestSubjectId = experiment.TestSubjectId,
+                GroupId = experiment.GroupId,
+                Task = new BasicData()
+                {
+                    Name = experiment.Task.Name,
+                    Id = experiment.TaskId
+                }
+            };
+
+            destExperiments.Add(experimentToAdd);
+        }
+        return destExperiments;
+    }
+}
 public class TaskExperimentResolver : IValueResolver<TaskData, Task, ICollection<Experiment>>
 {
     public ICollection<Experiment> Resolve(TaskData source, Task destination, ICollection<Experiment> destMember, ResolutionContext context)
@@ -117,7 +161,8 @@ public class TaskExperimentResolver : IValueResolver<TaskData, Task, ICollection
                 Time = experiment.Time,
                 Comment = experiment.Comment,
                 TestSubjectId = experiment.TestSubjectId,
-                TaskId = experiment.TaskId
+                GroupId = experiment.GroupId,
+                TaskId = experiment.Task.Id.Value
             };
 
             if (experiment.Id != null)

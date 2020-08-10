@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScientificStudyWeb.Data;
 using ScientificStudyWeb.Data.Interfaces;
 using ScientificStudyWeb.DataObjects;
@@ -27,21 +28,39 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(IEnumerable<ExperimentData> data)
+        public async Task<IActionResult> Save(ExperimentData experiment)
         {
-            var dataToSave = _mapper.Map<IEnumerable<Experiment>>(data);
-            _unitOfWork.experimentRepository.AddRange(dataToSave);
+            var experimentToSave = _mapper.Map<Experiment>(experiment);
+            experimentToSave.Task = null;
+
+            _unitOfWork.experimentRepository.Add(experimentToSave);
             await _unitOfWork.SaveChangesAsync();
+
+            var experimentToReturn = _mapper.Map<ExperimentData>(experimentToSave);
+            experimentToReturn.Task.Id = experiment.Task.Id;
+            experimentToReturn.Task.Name = experiment.Task.Name;
+
+            return Ok(experimentToReturn);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(ExperimentData experiment)
+        {
+            var experimentToUpdate = await _unitOfWork.experimentRepository.Get(experiment.Id.Value);
+            experimentToUpdate.Time = experiment.Time;
+            experimentToUpdate.Comment = experiment.Comment;
+
+            await _unitOfWork.SaveChangesAsync();
+
             return Ok();
         }
-
-        [HttpGet("{taskId:int}")]
-        public async Task<IActionResult> GetExperimentsLookup(int taskId)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetExperiment(int id)
         {
-            var experiments = await _unitOfWork.experimentRepository.GetAll(e => e.TaskId.Equals(taskId));
-            var experimentsToReturn = _mapper.Map<IEnumerable<ExperimentData>>(experiments);
+            var experiment = await _unitOfWork.experimentRepository.Get(id);
+            var experimentToReturn = _mapper.Map<ExperimentData>(experiment);
 
-            return Ok (experimentsToReturn);
+            return Ok(experimentToReturn);
         }
-    } 
+    }
 }

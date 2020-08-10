@@ -24,7 +24,6 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   deleteGroupOrTaskSubscription: Subscription;
   groupDialogClosedSubscription: Subscription;
   taskDialogClosedSubscription: Subscription;
-  taskDialogClosed$: Observable<any>;
 
   constructor(
     private route: ActivatedRoute,
@@ -90,16 +89,6 @@ export class StudyViewComponent implements OnInit, OnDestroy {
     };
     return dialogConfig;
   }
-
-  // onAddTask() {
-  //   this.taskDialogSubscription = this.taskDialogClosed$.subscribe((result) => {
-  //     this.addTaskSubscription = this.studyService
-  //       .addGroupOrTask(this.loadedStudy.id, new BasicTask(result))
-  //       .subscribe((data) => {
-  //         this.loadedStudy = data;
-  //       });
-  //   });
-  // }
 
   onDeleteGroup(id: number) {
     this.onDelete(id, true);

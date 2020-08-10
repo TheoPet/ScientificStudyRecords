@@ -1,12 +1,10 @@
 <div class=container>
-        <ul class="list-group" *ngFor="let study of loadedStudies">
-            <li class="list-group-item list-group-item-action">
-                <a routerLink='/studies/{{study.id}}'>{{study.name}}</a>
-            </li>
-        </ul>
-    </div>
+    <mat-nav-list>
+        <a mat-list-item routerLink='/studies/{{study.id}}' *ngFor="let study of loadedStudies"> {{ study.name }} </a>
+    </mat-nav-list>
+</div>
 <div class="row">
-    <button>
+    <button mat-flat-button>
         <a routerLink='/studies/new'>
             Add study
         </a>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BasicTask } from '../shared/models/basic-task.model';
 import { HttpClient } from '@angular/common/http';
+import { Experiment } from '../experiment/experiment-view.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {

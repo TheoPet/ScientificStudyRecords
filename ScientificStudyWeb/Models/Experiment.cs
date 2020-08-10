@@ -17,5 +17,7 @@ namespace ScientificStudyWeb.Models
         public int TaskId { get; set; }
         public Task Task { get; set; }
 
+        public int GroupId { get; set; }
+
     }
 }

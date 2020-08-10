@@ -29,10 +29,20 @@ namespace ScientificStudyWeb.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}", Name ="GetTestSubject")]
-        public async Task<IActionResult> GetTestSubject(int id)
+        [HttpGet("{id:int}", Name="GetTestSubject")]
+         public async Task<IActionResult> GetTestSubject(int id, int groupId)
         {
             var testSubject = await _unitOfWork.testSubjectRepository.Get(id);
+                        
+            var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
+            return Ok(dataToReturn);
+        }
+
+        [HttpGet("{id:int}/groups/{groupId:int}", Name ="GetTestSubjectWithFilteredExperiments")]
+        public async Task<IActionResult> GetTestSubjectWithFilteredExperiments(int id, int groupId)
+        {
+            var testSubject = await _unitOfWork.testSubjectRepository.GetWithFilteredExperiments(id, groupId);
+                        
             var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
             return Ok(dataToReturn);
         }

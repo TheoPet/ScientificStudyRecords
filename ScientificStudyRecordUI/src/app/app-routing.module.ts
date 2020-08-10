@@ -36,7 +36,7 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: TestSubjectStartComponent },
       { path: 'new', component: TestSubjectEditComponent },
-      { path: ':id', component: TestSubjectViewComponent },
+      { path: ':id/groups/:groupId', component: TestSubjectViewComponent },
       { path: ':id/edit', component: TestSubjectEditComponent },
     ],
   },

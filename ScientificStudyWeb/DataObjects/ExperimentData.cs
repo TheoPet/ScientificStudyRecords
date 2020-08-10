@@ -6,9 +6,11 @@ namespace ScientificStudyWeb.DataObjects
         public string Comment { get; set; }
 
         public int TestSubjectId { get; set; }
-        
-        public int TaskId { get; set; }
 
-        public int? Id;
+        public int GroupId { get; set; }
+        
+        public BasicData Task { get; set; }
+
+        public int? Id { get; set; }
     }
 }

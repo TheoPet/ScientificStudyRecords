@@ -26,6 +26,26 @@ export class TestSubjectService {
             data.comment,
             data.study,
             data.group,
+            data.experiments,
+            id
+          );
+        })
+      );
+  }
+
+  getTestSubjectWithFilteredExperiment(id: number, groupId: number) {
+    return this.httpClient
+      .get<TestSubject>(`http://localhost:5000/testsubjects/${id}/groups/${groupId}`)
+      .pipe(
+        map((data) => {
+          return new TestSubject(
+            data.name,
+            data.surname,
+            data.entryTime,
+            data.comment,
+            data.study,
+            data.group,
+            data.experiments,
             id
           );
         })

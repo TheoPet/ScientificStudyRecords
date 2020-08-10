@@ -1,31 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { TestSubjectService } from 'src/app/services/test-subject.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { TestSubject } from 'src/app/test-subject/test-subject-view/test-subject-view.model';
-import { Subscription, Observable, Subject } from 'rxjs';
-import { faTshirt } from '@fortawesome/free-solid-svg-icons';
-import { FormControl } from '@angular/forms';
-import {  FilterService } from 'src/app/shared/filter/filter-service';
-import { BasicData } from 'src/app/shared/models/basic-data.model';
-import { BasicTask } from 'src/app/shared/models/basic-task.model';
-import { TaskService } from 'src/app/services/task.service';
-import { startWith, debounceTime, switchMap, map } from 'rxjs/operators';
-import { isString } from 'util';
-import { Experiment } from '../experiment-view.model';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
+import { Route } from '@angular/compiler/src/core';
 import { ExperimentService } from 'src/app/services/experiment-service';
+import { TestSubjectService } from 'src/app/services/test-subject.service';
+import { Subscription, Subject, Observable } from 'rxjs';
+import { TestSubject } from 'src/app/test-subject/test-subject-view/test-subject-view.model';
+import { map, tap, switchMap } from 'rxjs/operators';
+import { BasicData } from 'src/app/shared/models/basic-data.model';
 import { FilterUtils } from 'src/app/shared/filter/filter-util';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-}
-
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
+import { Experiment } from '../experiment-view.model';
 
 @Component({
   selector: 'app-experiment-view',
@@ -33,70 +21,73 @@ const NAMES: string[] = [
   styleUrls: ['./experiment-view.component.css'],
 })
 export class ExperimentViewComponent implements OnInit, OnDestroy {
-  loadedSubject$: Observable<TestSubject>;
-  subscription: Subscription;
-  displayedColumns: string[] = ['id', 'name', 'progress'];
-  dataSource: MatTableDataSource<UserData>;
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  experimentForm: FormGroup;
+  experimentSubscription: Subscription;
+  loadedTestSubject: TestSubject;
+  experimentId: number;
 
   constructor(
-    private testSubjectService: TestSubjectService,
+    private route: ActivatedRoute,
     private experimentService: ExperimentService,
-    private taskService: TaskService,
-    private filterService: FilterService,
-    private route: ActivatedRoute
-  ) {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-  }
+    private testSubjectService: TestSubjectService
+  ) {}
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
     this.route.params.subscribe((params: Params) => {
-      this.getTestSubject(+params.id);
+      this.experimentId = +params.id;
+      this.initForm(this.experimentId);
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  initForm(id: number) {
+    this.experimentForm = new FormGroup({
+      task: new FormControl(null, Validators.required),
+      time: new FormControl(null, Validators.required),
+      comment: new FormControl(''),
+    });
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.experimentSubscription = this.experimentService
+      .getExperiment(id)
+      .pipe(
+        switchMap(data => {
+          this.experimentForm = new FormGroup({
+            task: new FormControl( {value: data.task, disabled: true}),
+            time: new FormControl(new Date(data.time), Validators.required),
+            comment: new FormControl(data.comment),
+          });
+          return this.testSubjectService
+          .getTestSubject(data.testSubjectId);
+        })
+      ).subscribe(subject => {
+        this.loadedTestSubject =  new TestSubject(
+          subject.name,
+          subject.surname,
+          subject.entryTime,
+          subject.comment,
+          subject.study,
+          subject.group,
+          subject.experiments,
+          subject.id
+        );
+      });
   }
-
-  getTestSubject(id: number) {
-    this.loadedSubject$ = this.testSubjectService
-      .getTestSubject(id);
-  }
-
-  displayFunction(object: BasicData) {
-    return FilterUtils.displayFunction(object);
-  }
-
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.experimentSubscription) {
+      this.experimentSubscription.unsubscribe();
     }
   }
-}
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
 
-  return {
-    id: id.toString(),
-    name,
-    progress: Math.round(Math.random() * 100).toString()
-  };
+  onSubmit() {
+    const experiment = new Experiment(
+      this.experimentForm.get('time').value,
+      this.experimentForm.get('comment').value,
+      this.loadedTestSubject.id,
+      this.experimentForm.get('task').value,
+      this.loadedTestSubject.group.id,
+      this.experimentId
+    );
 
+    this.experimentService.updateExperiment(experiment).subscribe();
+  }
 }

@@ -19,9 +19,27 @@ namespace ScientificStudyWeb.Data
          public override async Task<TestSubject> Get(int Id)
         {
             return await _scientificStudiesContext.TestSubjects
-            .Where(s => s.Id == Id)
+            .Where(t => t.Id == Id)
             .Include(s => s.Study)
-            .Include(g => g.Group).FirstOrDefaultAsync();           
+            .Include(g => g.Group)
+            .Include(t => t.Experiments)
+                .ThenInclude(e => e.Task)
+            .FirstOrDefaultAsync();
+        }
+
+        public async Task<TestSubject> GetWithFilteredExperiments(int id, int groupId)
+        {
+          var testSubject =  await _scientificStudiesContext.TestSubjects
+            .Where(t => t.Id == id)
+            .Include(s => s.Study)
+            .Include(g => g.Group)
+            .Include(t => t.Experiments)
+                .ThenInclude(e => e.Task)
+            .FirstOrDefaultAsync();
+
+            var filteredExperiments = testSubject.Experiments.Where(e => e.GroupId == groupId).ToList();
+            testSubject.Experiments = filteredExperiments;
+            return testSubject;
         }
 
         public new async Task<IEnumerable<TestSubject>> GetAll()

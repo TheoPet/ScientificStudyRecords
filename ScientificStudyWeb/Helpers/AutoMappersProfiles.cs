@@ -30,8 +30,6 @@ namespace ScientificStudyWeb.Helpers
             opt => opt.MapFrom(src => src.Group.Name))
             .ForPath(dest=> dest.Group.Id,
             opt => opt.MapFrom(src => src.Group.Id))
-            .ForPath(dest => dest.GroupId,
-            opt => opt.MapFrom(src => src.Group.Id))
             .ForMember(dest => dest.EntryTime,
             opt => opt.MapFrom(src => src.EntryTime))
             .ForMember(dest => dest.Experiments,
@@ -42,7 +40,9 @@ namespace ScientificStudyWeb.Helpers
             .ForPath(dest => dest.Group.Name,
             opt => opt.MapFrom(src => src.Group.Name))
             .ForPath(dest => dest.Group.Id,
-            opt => opt.MapFrom(src => src.GroupId));
+            opt => opt.MapFrom(src => src.GroupId))
+            .ForMember(dest => dest.Experiments,
+            opt => opt.MapFrom<TestSubjectDataExperimentResolver>());
 
             CreateMap<Study, BasicData>();
 
@@ -55,7 +55,15 @@ namespace ScientificStudyWeb.Helpers
 
 
             CreateMap<ExperimentData, Experiment>()
-            .ReverseMap();
+            .ForPath(dest => dest.Task.Id,
+            opt => opt.MapFrom(src => src.Task.Id))
+            .ForPath(dest => dest.Task.Name,
+            opt => opt.MapFrom(src => src.Task.Name))
+            .ReverseMap()
+            .ForPath(dest => dest.Task.Id,
+            opt => opt.MapFrom(src => src.Task.Id))
+            .ForPath(dest => dest.Task.Name,
+            opt => opt.MapFrom(src => src.Task.Name));
 
             CreateMap<TaskData, Task>()
             .ForMember(dest => dest.Study,

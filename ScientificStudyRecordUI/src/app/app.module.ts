@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule } from '@angular/material';
+import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule, MatCardModule, MatToolbarModule } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
@@ -37,11 +37,12 @@ import { ExperimentStartComponent } from './experiment/experiment-start/experime
 import { ExperimentService } from './services/experiment-service';
 import { TaskService } from './services/task.service';
 import { FilterService } from './shared/filter/filter-service';
-import { TableOverviewExampleComponent } from './test/table-overview-example/table-overview-example.component';
 import { DialogInputComponent } from './shared/modal/dialog-input/dialog-input.component';
 import { GroupComponent } from './group/group.component';
 import { DialogSubjectInputComponent } from './shared/modal/dialog-subject-input/dialog-subject-input.component';
 import { DialogSubjectListComponent } from './shared/modal/dialog-subject-list/dialog-subject-list.component';
+import { DialogExperimentInputComponent } from './shared/modal/dialog-experiment-input/dialog-experiment-input.component';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 
 @NgModule({
@@ -62,11 +63,11 @@ import { DialogSubjectListComponent } from './shared/modal/dialog-subject-list/d
     ExperimentViewComponent,
     ExperimentEditComponent,
     ExperimentStartComponent,
-    TableOverviewExampleComponent,
     DialogInputComponent,
     GroupComponent,
     DialogSubjectInputComponent,
-    DialogSubjectListComponent
+    DialogSubjectListComponent,
+    DialogExperimentInputComponent
   ],
   imports: [
     BrowserModule,
@@ -86,10 +87,16 @@ import { DialogSubjectListComponent } from './shared/modal/dialog-subject-list/d
     MatDatepickerModule,
     MatMomentDateModule,
     MatAutocompleteModule,
+    MatCardModule,
+    MatToolbarModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule
     ],
-  providers: [StudyService,
+  providers: [
+    StudyService,
     TestSubjectService,
     ExperimentService,
     TaskService,
@@ -97,9 +104,12 @@ import { DialogSubjectListComponent } from './shared/modal/dialog-subject-list/d
     MatDatepickerModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent,
+  entryComponents: [
+    ModalComponent,
     DialogInputComponent,
     DialogSubjectInputComponent,
-  DialogSubjectListComponent],
+    DialogSubjectListComponent,
+    DialogExperimentInputComponent
+  ],
 })
 export class AppModule {}

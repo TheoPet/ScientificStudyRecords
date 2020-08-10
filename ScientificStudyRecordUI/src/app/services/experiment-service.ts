@@ -12,8 +12,16 @@ export class ExperimentService {
     private router: Router
   ) {}
 
-  getExperiments(taskId: number) {
-    return this.httpClient.get<Experiment[]>(`http://localhost:5000/experiments/${taskId}`);
+  saveExperiment(data: Experiment) {
+    return this.httpClient.post('http://localhost:5000/experiments', data);
+  }
+
+  updateExperiment(data: Experiment) {
+    return this.httpClient.put('http://localhost:5000/experiments', data);
+  }
+
+  getExperiment(id: number) {
+    return this.httpClient.get<Experiment>(`http://localhost:5000/experiments/${id}`);
   }
 
 }
