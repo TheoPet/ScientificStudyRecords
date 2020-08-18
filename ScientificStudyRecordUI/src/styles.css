@@ -1,18 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'styles/bootstrap/dist/css/bootstrap.min.css';
+/* @import 'styles/bootstrap/dist/css/bootstrap.min.css'; */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+input.ng-invalid.ng-touched {
+  border-color: #ff0000;
+}
+.filler {
+  flex: 1 1 auto;
+}
 
+.component-margin-top {
+  margin-top: 2%;
+}
 
-
-/*html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
-
-* {
-    box-sizing: border-box;
-  }
-
-  input.ng-invalid.ng-touched {
-    border-color: #FF0000;
-  }
-
+tr {
+  cursor: pointer;
+}
+tr.mat-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}

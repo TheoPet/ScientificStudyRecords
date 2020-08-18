@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 
 import { Study } from './study-view.model';
 import { StudyService } from '../../services/study.service';
 import { Subscription, Observable } from 'rxjs';
 import { DialogInputComponent } from 'src/app/shared/modal/dialog-input/dialog-input.component';
-
+import { DialogStudyInputComponent } from 'src/app/shared/modal/dialog-study-input/dialog-study-input.component';
+import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
 
 @Component({
   selector: 'app-study-view',
@@ -24,6 +25,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   deleteGroupOrTaskSubscription: Subscription;
   groupDialogClosedSubscription: Subscription;
   taskDialogClosedSubscription: Subscription;
+  editStudyDialogClosedSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,11 +56,13 @@ export class StudyViewComponent implements OnInit, OnDestroy {
     );
     const modalDialog = this.matDialog.open(DialogInputComponent, dialogConfig);
 
-    this.groupDialogClosedSubscription = modalDialog.afterClosed().subscribe((data) => {
-      if (data !== undefined) {
-        this.loadedStudy = data;
-      }
-    });
+    this.groupDialogClosedSubscription = modalDialog
+      .afterClosed()
+      .subscribe((data) => {
+        if (data !== undefined) {
+          this.loadedStudy = data;
+        }
+      });
   }
 
   openTaskModal() {
@@ -69,25 +73,71 @@ export class StudyViewComponent implements OnInit, OnDestroy {
     );
     const modalDialog = this.matDialog.open(DialogInputComponent, dialogConfig);
 
-    this.taskDialogClosedSubscription = modalDialog.afterClosed().subscribe((data) => {
-      if (data !== undefined) {
-        this.loadedStudy = data;
-      }
-    });
+    this.taskDialogClosedSubscription = modalDialog
+      .afterClosed()
+      .subscribe((data) => {
+        if (data !== undefined) {
+          this.loadedStudy = data;
+        }
+      });
   }
 
-  configureMatDailogConfig(title: string, description: string, studyId: number, group = false) {
+  configureMatDailogConfig(
+    title: string,
+    description: string,
+    studyId: number,
+    group = false
+  ) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '250px';
-    dialogConfig.disableClose = true;
     dialogConfig.data = {
       title,
       description,
       studyId,
-      group
+      group,
     };
     return dialogConfig;
+  }
+
+  openEditStudyDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'modal-component';
+    dialogConfig.width = '250px';
+    dialogConfig.data = {
+      title: 'Edit study',
+      description: 'Please enter new study name',
+      editStudy: true,
+      study: this.loadedStudy,
+    };
+
+    const modalDialog = this.matDialog.open(
+      DialogStudyInputComponent,
+      dialogConfig
+    );
+    this.editStudyDialogClosedSubscription = modalDialog
+      .afterClosed()
+      .subscribe((data) => {
+        if (data !== undefined) {
+          this.loadedStudy = data;
+        }
+      });
+  }
+
+  openDeleteStudyDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'dialog-delete-component';
+    dialogConfig.width = '300px';
+    dialogConfig.data = {
+      title: this.loadedStudy.name,
+      deleteMethodName: 'deleteStudy',
+      data: this.loadedStudy,
+    };
+
+    const modalDialog = this.matDialog.open(
+      DialogDeleteComponent,
+      dialogConfig
+    );
   }
 
   onDeleteGroup(id: number) {
@@ -97,7 +147,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   onDelete(id: number, deleteGroup = false) {
     this.deleteGroupOrTaskSubscription = this.studyService
       .deleteGroupOrTask(this.loadedStudy.id, id, deleteGroup)
-      .subscribe(data => {
+      .subscribe((data) => {
         this.loadedStudy = data;
       });
   }
@@ -133,6 +183,10 @@ export class StudyViewComponent implements OnInit, OnDestroy {
 
     if (this.groupDialogClosedSubscription) {
       this.groupDialogClosedSubscription.unsubscribe();
+    }
+
+    if (this.editStudyDialogClosedSubscription) {
+      this.editStudyDialogClosedSubscription.unsubscribe();
     }
   }
 }

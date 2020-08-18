@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -21,5 +22,10 @@ namespace ScientificStudyWeb.Data
             .Include(g => g.TestSubjects).FirstOrDefaultAsync();
         }
         
+        public new async Task<IEnumerable<Group>> GetAll()
+        {
+            return await _scientificStudiesContext.Groups
+            .Include(g => g.Study).ToListAsync();
+        }
     }
 }

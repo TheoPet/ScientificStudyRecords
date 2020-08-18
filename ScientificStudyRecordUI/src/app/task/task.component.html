@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<mat-toolbar *ngIf="loadedTask" color="primary">
+  <div style="padding: 8px 0 0 10px; flex: 1;">
+    <span class="mat-title" style="margin-bottom: 2px;"> Task</span>
+    <div class="mat-subheading-2" style="line-height: 0.6rem;">
+      {{ loadedTask.name }} ({{ loadedTask.study.name }})
+    </div>
+  </div>
+  <span class="filler"></span>
+  <button
+    mat-button
+    aria-label="Add experiment"
+    (click)="openAddExperimentDialog()"
+  >
+    Add Experiment
+  </button>
+  <button mat-button [matMenuTriggerFor]="Menu">More...</button>
+  <mat-menu #Menu="matMenu" yPosition="below">
+    <button mat-menu-item (click)="openDeleteTaskDialog()">
+      Delete task
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<div *ngIf="loadedTask" class="container">
+  <div *ngIf="dataSource.data.length === 0">
+    <p>Experiments for this task have not been conducted.</p>
+  </div>
+
+  <ng-container *ngIf="dataSource.data.length > 0">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Search"
+        #input
+      />
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Test subject Column -->
+      <ng-container matColumnDef="testSubject">
+        <th mat-header-cell *matHeaderCellDef>Test subject</th>
+        <td mat-cell *matCellDef="let experiment">
+          {{ experiment.testSubject.name }} {{experiment.testSubject.surname}}
+        </td>
+      </ng-container>
+
+      <!--Experiment Time Column -->
+      <ng-container matColumnDef="experimentTime">
+        <th mat-header-cell *matHeaderCellDef>Experiment time</th>
+        <td mat-cell *matCellDef="let experiment">
+          {{ experiment.time | date: "hh:mm" }}
+        </td>
+      </ng-container>
+
+      <!--Experiment Comment Column -->
+      <ng-container matColumnDef="experimentComment">
+        <th mat-header-cell *matHeaderCellDef>Experiment comment</th>
+        <td mat-cell *matCellDef="let experiment">{{ experiment.comment }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </ng-container>
+</div>

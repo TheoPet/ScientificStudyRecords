@@ -3,6 +3,6 @@ export class BasicTestSubject {
            public name: string,
            public surname: string,
            public id: number,
-           public studyId?: number
+           public groupId?: number
          ) {}
        }

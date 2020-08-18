@@ -17,9 +17,9 @@ namespace ScientificStudyWeb.Controllers
         private readonly ScientificStudiesRecordDbContext _context;
 
         private readonly IMapper _mapper;
-        
+
         private IUnitOfWork _unitOfWork;
-        
+
         public GroupsController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
@@ -27,10 +27,19 @@ namespace ScientificStudyWeb.Controllers
             _unitOfWork = new UnitOfWork(_context);
         }
 
-        [HttpGet("{groupId:int}/testSubjects")]
-        public async Task<IActionResult> GetTestSubjects(int groupId)
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            var testSubjects = await _unitOfWork.testSubjectRepository.GetAll(g => g.GroupId.Equals(groupId));
+            var groups = await _unitOfWork.groupRepository.GetAll();
+            var groupsToReturn = _mapper.Map<IEnumerable<GroupData>>(groups); 
+
+            return Ok(groupsToReturn);
+        }
+
+        [HttpGet("{id:int}/testSubjects")]
+        public async Task<IActionResult> GetTestSubjects(int id)
+        {
+            var testSubjects = await _unitOfWork.testSubjectRepository.GetAll(g => g.GroupId.Equals(id));
             var testSubjectsToReturn = _mapper.Map<IEnumerable<BasicTestSubject>>(testSubjects);
             return Ok(testSubjectsToReturn);
         }
@@ -39,8 +48,8 @@ namespace ScientificStudyWeb.Controllers
         public async Task<IActionResult> GetGroup(int id)
         {
             var group = await _unitOfWork.groupRepository.Get(id);
-            var groupToReturn = _mapper.Map<GroupData>(group); 
-            
+            var groupToReturn = _mapper.Map<GroupData>(group);
+
             return Ok(groupToReturn);
         }
 
@@ -54,11 +63,47 @@ namespace ScientificStudyWeb.Controllers
 
             var group = await _unitOfWork.groupRepository.Get(groupId);
             var groupToReturn = _mapper.Map<GroupData>(group);
-            
+
             return Ok(groupToReturn);
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (_unitOfWork.groupRepository.Remove(id))
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
+            }
+
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
+        }
+
         [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateGroup(GroupData data)
+        {
+            var groupToUpdate = await _unitOfWork.groupRepository.Get(data.Id);
+            groupToUpdate.Name = data.Name;
+            await _unitOfWork.SaveChangesAsync();
+
+            var groupToReturn = _mapper.Map<GroupData>(groupToUpdate);
+            return Ok(groupToReturn);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(GroupData group)
+        {
+            var groupToAdd = _mapper.Map<Group>(group);
+            groupToAdd.Study = null;
+            _unitOfWork.groupRepository.Add(groupToAdd);
+            await _unitOfWork.SaveChangesAsync();
+            
+            var groupToReturn = _mapper.Map<GroupData>(groupToAdd);
+            groupToReturn.Study = group.Study;
+            return Ok(groupToReturn);
+        }
+
+        [HttpPatch("{id:int}")]
         public async Task<IActionResult> AddTestSubject(int id, TestSubjectData data)
         {
             var group = await _unitOfWork.groupRepository.Get(id);

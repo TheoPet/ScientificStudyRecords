@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BasicStudy } from '../shared/models/basic-study.model';
 import { BasicGroup } from '../shared/models/basic-group.model';
 import { BasicData } from '../shared/models/basic-data.model';
+import { BasicTask } from '../shared/models/basic-task.model';
 
 @Injectable({ providedIn: 'root' })
 export class StudyService {
@@ -19,14 +20,18 @@ export class StudyService {
 
   addGroupOrTask(studyId: number, dataToAdd: BasicData, addGroup = false) {
     if (addGroup) {
-      return this.httpClient.put<Study>(`http://localhost:5000/studies/${studyId}?addGroup=true`, dataToAdd);
+      return this.httpClient.patch<Study>(`http://localhost:5000/studies/${studyId}?addGroup=true`, dataToAdd);
     } else {
-      return this.httpClient.put<Study>(`http://localhost:5000/studies/${studyId}`, dataToAdd);
+      return this.httpClient.patch<Study>(`http://localhost:5000/studies/${studyId}`, dataToAdd);
     }
   }
 
   addStudy(study: Study) {
-    return this.httpClient.post<number>('http://localhost:5000/studies', study);
+    return this.httpClient.post<Study>('http://localhost:5000/studies', study);
+  }
+
+  editStudy(study: Study) {
+    return this.httpClient.put<Study>(`http://localhost:5000/studies/${study.id}`, study);
   }
 
   getStudy(id: number) {
@@ -54,6 +59,12 @@ export class StudyService {
       `http://localhost:5000/studies/${id}/groups`
     );
   }
+
+  getTaskLookup(id: number) {
+    return this.httpClient.get<BasicTask[]>(
+      `http://localhost:5000/studies/${id}/tasks`
+    );
+}
 
   deleteGroupOrTask(studyId: number, id: number, deleteGroup = false) {
     if (deleteGroup) {

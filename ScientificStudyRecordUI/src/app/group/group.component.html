@@ -1,37 +1,52 @@
-<div class="container">
-    <div class="row">
-        <div class="container">
-            <h1 class="text-center">{{loadedGroup.name}}</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <h2 class="text-center">Test subjects</h2>
-            <div class="row">
-                <div class="col-6">
-                    <button type="button" (click)="openDialog()" 
-                    class="btn btn-primary btn-lg btn-block">Add test subject</button>
-                </div>
-                <div class="col-6">
-                    <button type="button" (click)="openAssignDialog()"
-                    class="btn btn-primary btn-lg btn-block">Assign test subject</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <mat-nav-list>
-                        <ng-container *ngFor="let subject of loadedGroup.testSubjects">
-                            <mat-list-item>
-                                <a matLine routerLink='/testsubjects/{{subject.id}}/groups/{{loadedGroup.id}}'>{{subject.name}} {{subject.surname}}</a>
-                                <button mat-icon-button (click)="onRemove(subject.id)">                                    <mat-icon>clear</mat-icon>
-                                </button>
-                            </mat-list-item>
-                            <mat-divider></mat-divider>
-                        </ng-container>
-                    </mat-nav-list>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+<mat-toolbar color="primary" [class.hidden]="toggleSearch">
+  <span class="text-center">{{ loadedGroup.name }} </span>
+  <span class="filler"></span>
+  <button mat-icon-button aria-label="Export group data">
+    <mat-icon>save_alt</mat-icon>
+  </button>
+  <button
+    mat-button
+    aria-label="Add test subject button"
+    (click)="openAddTestSubjectDialog()"
+  >
+    Add test subject
+  </button>
+  <button
+    mat-button
+    aria-label="Assign test subject button"
+    (click)="openAssignTestSubjectDialog()"
+  >
+    Assign test subject to group
+  </button>
+  <button mat-button [matMenuTriggerFor]="Menu">More...</button>
+  <mat-menu #Menu="matMenu" yPosition="below">
+    <button mat-menu-item (click)="openEditGroupDialog()">
+      Edit group
+    </button>
+    <button mat-menu-item (click)="openDeleteGroupDialog()">
+      Delete group
+    </button>
+  </mat-menu>
+  <button mat-icon-button  (click)="openSearch()">
+    <mat-icon>search</mat-icon>
+</button>
+</mat-toolbar>
+<div class="component-margin-top">
+  <mat-nav-list>
+    <ng-container *ngFor="let subject of loadedGroup.testSubjects">
+      <mat-list-item>
+        <a
+          matLine
+          routerLink="/testsubjects/{{ subject.id }}/groups/{{
+            loadedGroup.id
+          }}"
+          >{{ subject.name }} {{ subject.surname }}</a
+        >
+        <button mat-icon-button (click)="onRemove(subject.id)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-nav-list>
 </div>

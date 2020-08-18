@@ -45,7 +45,8 @@ namespace ScientificStudyWeb.Data
         public new async Task<IEnumerable<TestSubject>> GetAll()
         {
             return await _scientificStudiesContext.TestSubjects
-            .Include(s => s.Study).ToListAsync();
+            .Include(s => s.Study)
+            .Include(g => g.Group).ToListAsync();
         }
     }
 }

@@ -1,19 +1,21 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TestSubjectService } from 'src/app/services/test-subject.service';
 import { TestSubject } from './test-subject-view.model';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogConfig, MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { DialogExperimentInputComponent } from 'src/app/shared/modal/dialog-experiment-input/dialog-experiment-input.component';
 import { Experiment } from 'src/app/experiment/experiment-view.model';
-import { filter } from 'rxjs/operators';
+import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
+import { DialogSubjectInputComponent } from 'src/app/shared/modal/dialog-subject-input/dialog-subject-input.component';
 
 @Component({
   selector: 'app-test-subject-view',
   templateUrl: './test-subject-view.component.html',
   styleUrls: ['./test-subject-view.component.css'],
 })
+
 export class TestSubjectViewComponent implements OnInit, OnDestroy {
   loadedSubject: TestSubject;
   loadedSubjectSubscription: Subscription;
@@ -30,6 +32,7 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private service: TestSubjectService,
     public matDialog: MatDialog
   ) {}
@@ -38,7 +41,6 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params: Params) => {
       this.getTestSubject(+params.id, +params.groupId);
     });
-
   }
 
   getTestSubject(id: number, groupId: number) {
@@ -68,7 +70,7 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
     };
   }
 
-  onAddExperiment() {
+  openAddExperimentDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '350px';
@@ -76,6 +78,7 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
     dialogConfig.data = {
       title: 'Add experiment',
       testSubject: this.loadedSubject,
+      editExperiment: false,
     };
 
     const modalDialog = this.matDialog.open(
@@ -92,9 +95,48 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  openExperiment(rowData: Experiment) {
+  openExperiment(experiment: Experiment) {
+    this.router.navigate(['../experiments', experiment.id]);
   }
 
+  openEditTestSubjectDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'modal-component';
+    dialogConfig.width = '300px';
+    dialogConfig.data = {
+      title: 'Edit test subject',
+      testSubject: this.loadedSubject,
+      editTestSubject: true
+    };
+
+    const modalDialog = this.matDialog.open(
+      DialogSubjectInputComponent,
+      dialogConfig
+    );
+    this.afterClosedSubscription = modalDialog
+      .afterClosed()
+      .subscribe((data) => {
+        if (data !== undefined) {
+          this.loadedSubject = data;
+        }
+      });
+  }
+
+  openDeleteTestSubjectDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'dialog-delete-component';
+    dialogConfig.width = '300px';
+    dialogConfig.data = {
+      title: this.loadedSubject.name,
+      deleteMethodName: 'deleteTestSubject',
+      data: this.loadedSubject,
+    };
+
+    const modalDialog = this.matDialog.open(
+      DialogDeleteComponent,
+      dialogConfig
+    );
+  }
   ngOnDestroy() {
     if (this.loadedSubjectSubscription) {
       this.loadedSubjectSubscription.unsubscribe();

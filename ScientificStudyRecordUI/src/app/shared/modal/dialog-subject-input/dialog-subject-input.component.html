@@ -1,30 +1,58 @@
-<h1 mat-dialog-title>{{modalData.title}}</h1>
+<h1 mat-dialog-title>{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
+      <input matInput formControlName="name" />
     </mat-form-field>
     <mat-form-field>
-        <mat-label>Surname</mat-label>
-        <input matInput formControlName="surname">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname" />
     </mat-form-field>
     <mat-form-field>
-        <input matInput [matDatepicker]="myDatepicker" 
-        formControlName = "entryTime"
+      <input
+        matInput
+        [matDatepicker]="myDatepicker"
+        formControlName="entryTime"
         id="entryTime"
-        class="form-controls">
-        <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #myDatepicker></mat-datepicker>
+        class="form-controls"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="myDatepicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #myDatepicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
-        <label for="comment">Comment</label>
-        <textarea matInput class="form-control" id="comment" formControlName="comment" rows="2"></textarea>
-      </mat-form-field>
+      <label for="comment">Comment</label>
+      <textarea
+        matInput
+        class="form-control"
+        id="comment"
+        formControlName="comment"
+        rows="3"
+      ></textarea>
+    </mat-form-field>
   </form>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-button (click)="onSubmit(dialogForm.value)"
-    [disabled]="dialogForm.invalid || dialogForm.untouched"
-    >Add</button>
+</div>
+<div mat-dialog-actions>
+  <ng-container *ngIf="this.modalData.editTestSubject">
+    <button
+      mat-button
+      (click)="onSubmit(dialogForm.value)"
+      [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+      Save
+    </button>
+  </ng-container>
+  <ng-container>
+    <button
+      *ngIf="!this.modalData.editTestSubject"
+      mat-button
+      (click)="onSubmit(dialogForm.value)"
+      [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+      Add
+    </button>
+  </ng-container>
 </div>

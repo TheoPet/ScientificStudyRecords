@@ -7,19 +7,19 @@ import { StudyStartComponent } from './study/study-start/study-start.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { HomeComponent } from './home/home.component';
-import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { TestSubjectStartComponent } from './test-subject/test-subject-start/test-subject-start.component';
 import { TestSubjectHomeComponent } from './test-subject/test-subject-home/test-subject-home.component';
 import { ExperimentStartComponent } from './experiment/experiment-start/experiment-start.component';
-import { ExperimentEditComponent } from './experiment/experiment-edit/experiment-edit.component';
 import { ExperimentViewComponent } from './experiment/experiment-view/experiment-view.component';
 import { GroupComponent } from './group/group.component';
-
+import { TaskComponent } from './task/task.component';
+import { GroupHomeComponent } from './group-home/group-home.component';
+import { GroupStartComponent } from './group-start/group-start.component';
+import { StudyHomeComponent } from './study/study-home/study-home.component';
 
 const appRoutes: Routes = [
-  // { path: '', redirectTo: '/home', pathMatch: 'full' },
-  // { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: '/studies', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   {
     path: 'studies',
     component: StudyHomeComponent,
@@ -41,24 +41,26 @@ const appRoutes: Routes = [
     ],
   },
   {
-    path: 'groups/:id', component: GroupComponent,
+    path: 'groups',
+    component: GroupHomeComponent,
+    children: [
+      { path: '', component: GroupStartComponent},
+      { path: ':id', component: GroupComponent },
+    ],
   },
   {
     path: 'experiments',
     component: ExperimentStartComponent,
     children: [
       { path: '', component: ExperimentStartComponent },
-      { path: 'new', component: ExperimentEditComponent },
       { path: ':id', component: ExperimentViewComponent },
-      { path: ':id/edit', component: ExperimentEditComponent },
     ],
   },
+  { path: 'tasks/:id', component: TaskComponent },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
-    exports: [RouterModule]
-  })
-  export class AppRoutingModule {
-
-  }
+  imports: [RouterModule.forRoot(appRoutes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}

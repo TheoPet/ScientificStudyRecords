@@ -1,0 +1,23 @@
+mat-toolbar {
+    --default-height: 50px;
+  }
+  
+  mat-toolbar[color="primary"] {
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; /* Sets the sticky toolbar to be on top */
+    z-index: 1000
+  }
+
+  mat-grid-list {
+      top: 50px
+  }
+
+table {
+    width: 100%;
+  }
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  

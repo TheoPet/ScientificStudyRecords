@@ -32,13 +32,15 @@ namespace ScientificStudyWeb.Controllers
         {
             var experimentToSave = _mapper.Map<Experiment>(experiment);
             experimentToSave.Task = null;
+            experimentToSave.TestSubject = null;
+
 
             _unitOfWork.experimentRepository.Add(experimentToSave);
             await _unitOfWork.SaveChangesAsync();
 
             var experimentToReturn = _mapper.Map<ExperimentData>(experimentToSave);
-            experimentToReturn.Task.Id = experiment.Task.Id;
-            experimentToReturn.Task.Name = experiment.Task.Name;
+            experimentToReturn.Task = experiment.Task;
+            experimentToReturn.TestSubject = experiment.TestSubject;
 
             return Ok(experimentToReturn);
         }
@@ -52,15 +54,29 @@ namespace ScientificStudyWeb.Controllers
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok();
+            var experimentToReturn = _mapper.Map<ExperimentData>(experimentToUpdate);
+            return Ok(experimentToReturn);
         }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetExperiment(int id)
         {
             var experiment = await _unitOfWork.experimentRepository.Get(id);
             var experimentToReturn = _mapper.Map<ExperimentData>(experiment);
-
+            
             return Ok(experimentToReturn);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            if (_unitOfWork.experimentRepository.Remove(Id))
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
+            }
+
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
         }
     }
 }

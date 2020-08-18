@@ -1,19 +1,52 @@
 <!DOCTYPE html>
-<div *ngIf="loadedTestSubject" class="container">
-  <div class="row">
-    <div class="container">
-      <h1 class="text-center">
-        {{ loadedTestSubject.name }} {{ loadedTestSubject.surname }}
-      </h1>
+<mat-toolbar *ngIf="loadedTestSubject" color="primary">
+  <div style="padding: 8px 0 0 10px; flex: 1;">
+    <span class="mat-title" style="margin-bottom: 2px;"
+      > Experiment</span
+    >
+    <div class="mat-subheading-2" style="line-height: 0.6rem;">
+      {{ loadedTestSubject.study.name }} ({{ loadedTestSubject.group.name }})
     </div>
   </div>
-  <div class="row">
-    <div class="container">
-      <h2 class="text-center">
-        {{ loadedTestSubject.study.name }} ({{ loadedTestSubject.group.name }})
-      </h2>
-    </div>
+  <span class="filler"></span>
+  <button mat-icon-button aria-label="Export group data">
+    <mat-icon>save_alt</mat-icon>
+  </button>
+
+  <button mat-button [matMenuTriggerFor]="Menu">More...</button>
+  <mat-menu #Menu="matMenu" yPosition="below">
+    <button mat-menu-item (click)="openEditExperimentDialog()">
+      Edit experiment
+    </button>
+    <button mat-menu-item (click)="openDeleteExperimentDialog()">
+      Delete experiment
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<div>
+  <div *ngIf="loadedTestSubject">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ loadedTestSubject.name }} {{ loadedTestSubject.surname }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-grid-list class ="header-text" cols="3" rowHeight="50px">
+          <mat-grid-tile>Task</mat-grid-tile>
+          <mat-grid-tile>Time</mat-grid-tile>
+          <mat-grid-tile>Comment</mat-grid-tile>
+        </mat-grid-list>
+        <mat-divider></mat-divider>
+        <mat-grid-list cols="3" rowHeight="50px">
+          <mat-grid-tile>{{loadedExperiment.task.name}}</mat-grid-tile>
+          <mat-grid-tile>{{loadedExperiment.time | date:'hh:mm'}}</mat-grid-tile>
+          <mat-grid-tile>{{loadedExperiment.comment}}</mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </mat-card>
   </div>
+</div>
+
+<!-- <div *ngIf="loadedTestSubject" class="container">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
@@ -48,17 +81,8 @@
               ></textarea>
             </mat-form-field>
           </div>
-          <div mat-dialog-actions>
-            <button
-              mat-button
-              (click)="onSubmit()"
-              [disabled]="experimentForm.invalid || experimentForm.untouched || !experimentForm.dirty"
-            >
-              Save
-            </button>
-          </div>
         </form>
       </div>
     </div>
   </div>
-</div>
+</div> -->

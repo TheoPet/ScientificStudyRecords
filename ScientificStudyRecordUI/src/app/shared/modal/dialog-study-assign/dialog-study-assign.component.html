@@ -1,0 +1,63 @@
+<h1 mat-dialog-title>{{ modalData.title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="dialogForm">
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          placeholder="Choose study"
+          aria-label="Study"
+          matInput
+          formControlName="study"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="displayFunction"
+        >
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="form-group" *ngIf="filteredGroupOptions">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          placeholder="Choose group"
+          aria-label="Group"
+          matInput
+          formControlName="group"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="displayFunction"
+        >
+          <mat-option
+            *ngFor="let option of filteredGroupOptions | async"
+            [value]="option"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <ng-container>
+    <button
+      mat-button
+      (click)="onSubmit(dialogForm.value)"
+      [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+      Assign
+    </button>
+  </ng-container>
+</div>

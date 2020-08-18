@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{modalData.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="dialogForm">
+    <mat-form-field>
+      <mat-label>{{modalData.description}}</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </form>
+  </div>
+  <div mat-dialog-actions style="justify-content: center;">
+    <button mat-icon-button color="primary" (click)="onSubmit(dialogForm.value)"
+    [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+    <mat-icon>add_box</mat-icon>
+</button>
+</div>

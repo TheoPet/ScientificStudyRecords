@@ -21,7 +21,7 @@ namespace ScientificStudyWeb.Controllers
         {
             _context = context;
             _mapper = mapper;
-            _unitOfWork = new UnitOfWork(_context); 
+            _unitOfWork = new UnitOfWork(_context);
         }
 
         [HttpGet]
@@ -56,6 +56,13 @@ namespace ScientificStudyWeb.Controllers
             return Ok(groupsToReturn);
         }
 
+        [HttpGet("{id:int}/tasks")]
+        public async Task<IActionResult> GetStudyTasks(int id)
+        {
+            var study = await _unitOfWork.studyRepository.Get(id);
+            var tasksToReturn = _mapper.Map<IEnumerable<Models.Task>, IEnumerable<BasicData>>(study.Tasks);
+            return Ok(tasksToReturn);
+        }
         [HttpPost]
         public async Task<IActionResult> Save(StudyData data)
 
@@ -65,27 +72,45 @@ namespace ScientificStudyWeb.Controllers
             _unitOfWork.studyRepository.Add(study);
             await _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtRoute("GetStudy", new { id = study.Id }, study.Id);
+            var studyToReturn = _mapper.Map<StudyData>(study);
 
+            return Ok(studyToReturn);
         }
 
         [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateStudy(StudyData data)
+        {
+            var studyToUpdate = await _unitOfWork.studyRepository.Get(data.Id.Value);
+
+            if (!string.IsNullOrEmpty(data.Name))
+            {
+                studyToUpdate.Name = data.Name;
+                await _unitOfWork.SaveChangesAsync();
+                var studyToReturn = _mapper.Map<StudyData>(studyToUpdate);
+                return Ok(studyToReturn);
+            }
+
+            return Ok();
+        }
+
+        [HttpPatch("{id:int}")]
         public async Task<IActionResult> AddGroupOrTask(BasicData data, int id, bool addGroup)
         {
             var study = await _unitOfWork.studyRepository.Get(id);
 
-            if(addGroup)
+            if (addGroup)
             {
                 _unitOfWork.studyRepository.AddGroup(data.Name, study);
-            }else
+            }
+            else
             {
                 _unitOfWork.studyRepository.AddTask(data.Name, study);
             }
-            
+
             await _unitOfWork.SaveChangesAsync();
-            
+
             var studyToReturn = _mapper.Map<StudyData>(study);
-            
+
             return Ok(studyToReturn);
         }
 
@@ -114,7 +139,7 @@ namespace ScientificStudyWeb.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            if(_unitOfWork.studyRepository.Remove(Id))
+            if (_unitOfWork.studyRepository.Remove(Id))
             {
                 await _unitOfWork.SaveChangesAsync();
                 return Ok();

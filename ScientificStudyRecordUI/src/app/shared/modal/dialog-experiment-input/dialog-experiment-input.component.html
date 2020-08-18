@@ -9,35 +9,58 @@
       <mat-label>Group</mat-label>
       <input matInput formControlName="group" />
     </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <input
-        type="text"
-        placeholder="Choose task"
-        aria-label="Number"
-        matInput
-        formControlName="task"
-        [matAutocomplete]="auto"
-      />
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFunction">
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
+    <ng-container *ngIf="this.modalData.editExperiment">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          aria-label="Task"
+          matInput
+          formControlName="task"
+          [value]="this.dialogForm.get('task').value.name"
+      /></mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="!this.modalData.editExperiment">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          placeholder="Choose task"
+          aria-label="Number"
+          matInput
+          formControlName="task"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="displayFunction"
         >
-          {{ option.name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <ngx-mat-timepicker formControlName="time"></ngx-mat-timepicker>
-    <mat-form-field>
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </ng-container>
+    <div>
+      <label for="time">Time</label>
+      <ngx-mat-timepicker
+        formControlName="time"
+        [showSpinners]="false"
+      ></ngx-mat-timepicker>
+    </div>
+    <div>
       <label for="comment">Comment</label>
-      <textarea
-        matInput
-        class="form-control"
-        id="comment"
-        formControlName="comment"
-        rows="3"
-      ></textarea>
-    </mat-form-field>
+      <mat-form-field>
+        <textarea
+          matInput
+          class="form-control"
+          id="comment"
+          formControlName="comment"
+          rows="3"
+        ></textarea>
+      </mat-form-field>
+    </div>
   </form>
 </div>
 <div mat-dialog-actions>

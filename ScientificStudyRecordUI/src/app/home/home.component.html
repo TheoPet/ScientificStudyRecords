@@ -1,1 +1,95 @@
-<p>home works!</p>
+<mat-toolbar color="primary">
+  <div style="padding: 8px 0 0 10px; flex: 1;">
+    <span class="mat-title" style="margin-bottom: 2px;">Experiments</span>
+  </div>
+  <span class="filler"></span>
+  <button mat-icon-button aria-label="Export data">
+    <mat-icon>save_alt</mat-icon>
+  </button>
+  <!-- <button
+    mat-button
+    aria-label="Add experiment button"
+    (click)="addExperiment()"
+  >
+    Add experiment
+  </button> -->
+</mat-toolbar>
+<div class="container" style="margin-top: 3%;">
+  <form></form>
+  <mat-grid-list cols="4" rowHeight="80px">
+      <form [formGroup]="searchForm">
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <mat-label>Study</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="studySearch"
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayFunction"
+              >
+                <mat-option
+                  *ngFor="let option of filteredStudyOptions | async"
+                  [value]="option"
+                >
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <mat-label>Group</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="groupSearch"
+                [matAutocomplete]="auto"
+              />
+               <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayFunction"
+              >
+                <mat-option
+                  *ngFor="let option of filteredGroupOptions | async"
+                  [value]="option"
+                >
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+      
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <mat-label>Test subject</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="testSubjectSearch"
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayFunction"
+              >
+                <mat-option
+                  *ngFor="let option of filteredTestSubjectOptions | async"
+                  [value]="option"
+                >
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+      </form>
+    
+    <mat-grid-tile>
+      <button mat-button>Search</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+

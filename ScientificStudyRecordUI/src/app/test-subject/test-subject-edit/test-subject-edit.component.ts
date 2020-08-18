@@ -57,14 +57,14 @@ export class TestSubjectEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.editMode) {
-      this.service.updateTestSubject(this.id, this.testSubjectForm.value)
-      .subscribe(() => this.onCancel);
-    } else {
+    // if (this.editMode) {
+    //   this.service.updateTestSubject(this.id, this.testSubjectForm.value)
+    //   .subscribe(() => this.onCancel);
+    // } else {
       this.service
         .addTestSubject(this.testSubjectForm.value)
         .subscribe(() => this.onCancel());
-    }
+    // }
   }
 
   onCancel() {

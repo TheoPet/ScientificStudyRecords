@@ -20,6 +20,7 @@ namespace ScientificStudyWeb.Data
             return await _scientificStudiesContext.Experiments
             .Where(e => e.Id == id)
             .Include(e => e.Task)
+            .Include(e => e.TestSubject)
             .FirstOrDefaultAsync();
         }
     }

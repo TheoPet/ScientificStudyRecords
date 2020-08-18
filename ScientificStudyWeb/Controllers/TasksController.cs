@@ -19,21 +19,34 @@ namespace ScientificStudyWeb.Controllers
 
         private IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper; 
+        private readonly IMapper _mapper;
 
         public TasksController(ScientificStudiesRecordDbContext context, IMapper mapper)
         {
             _context = context;
-            _unitOfWork = new UnitOfWork(_context); 
+            _unitOfWork = new UnitOfWork(_context);
             _mapper = mapper;
         }
 
-        [HttpGet("{studyId:int}")]
-        public async Task<IActionResult> GetTaskLookup(int studyId)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get(int id)
         {
-            var tasks = await _unitOfWork.taskRepository.GetAll( t => t.StudyId.Equals(studyId));
-            var tasksToReturn = _mapper.Map<IEnumerable<BasicData>>(tasks);
-            return Ok(tasksToReturn);
+            var task = await _unitOfWork.taskRepository.Get(id);
+            var taskToReturn = _mapper.Map<TaskData>(task);
+
+            return Ok(taskToReturn);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            if (_unitOfWork.taskRepository.Remove(Id))
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
+            }
+
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
         }
     }
 }

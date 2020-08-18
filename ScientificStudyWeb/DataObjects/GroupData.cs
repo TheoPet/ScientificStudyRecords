@@ -8,7 +8,7 @@ namespace ScientificStudyWeb.DataObjects
 
         public int Id { get; set; }
 
-        public int StudyId { get; set; }
+        public BasicData Study { get; set; }
 
         public ICollection<BasicTestSubject> TestSubjects { get; set; }
 

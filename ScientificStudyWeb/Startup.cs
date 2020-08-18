@@ -37,6 +37,8 @@ namespace ScientificStudiesRecord
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
             
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddDbContext<ScientificStudiesRecordDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 

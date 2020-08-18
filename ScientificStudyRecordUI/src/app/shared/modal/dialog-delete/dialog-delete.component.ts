@@ -4,20 +4,20 @@ import { ModalActionsService } from 'src/app/services/modal-actions.service';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  templateUrl: './dialog-delete.component.html',
+  styleUrls: ['./dialog-delete.component.css']
 })
-export class ModalComponent implements OnInit {
+export class DialogDeleteComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<ModalComponent>,
+    public dialogRef: MatDialogRef<DialogDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public modalData: any,
     private modalService: ModalActionsService) { }
 
   ngOnInit() {
   }
 
-  actionFunction() {
+  deleteData() {
     this.modalService.modalAction(this.modalData);
     this.closeModal();
   }

@@ -17,11 +17,23 @@ export class ExperimentService {
   }
 
   updateExperiment(data: Experiment) {
-    return this.httpClient.put('http://localhost:5000/experiments', data);
+    return this.httpClient.put<Experiment>('http://localhost:5000/experiments', data);
   }
 
   getExperiment(id: number) {
     return this.httpClient.get<Experiment>(`http://localhost:5000/experiments/${id}`);
+  }
+
+  deleteExperiment(experiment: Experiment) {
+     this.httpClient.delete(`http://localhost:5000/experiments/${experiment.id}`).subscribe(
+      (val) => {
+        console.log('DELETE call successful value returned in body', val);
+      },
+      (response) => {
+        console.log('DELETE call in error', response);
+      }
+    );
+     this.router.navigate(['../testsubjects', experiment.testSubject.id, 'groups', experiment.groupId], { relativeTo: this.route });
   }
 
 }

@@ -1,1 +1,68 @@
-<p>test-subject-start works!</p>
+<ng-container>
+    <mat-toolbar color="primary">
+        <span>Test subjects</span>
+        <span class="filler"></span>
+        <button
+          mat-button
+          aria-label="Add test subject button"
+          (click)="onAddTestSubject()"
+        >
+          Add test subject
+        </button>
+      </mat-toolbar>
+</ng-container>
+
+<ng-container *ngIf="dataSource.data.length > 0">
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="testSubject">
+      <th mat-header-cell *matHeaderCellDef>Test subject</th>
+      <td mat-cell *matCellDef="let testSubject">
+        {{ testSubject.name }} {{ testSubject.surname }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="entryTime">
+        <th mat-header-cell *matHeaderCellDef>Entry time</th>
+        <td mat-cell *matCellDef="let testSubject">{{ testSubject.entryTime }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="comment">
+        <th mat-header-cell *matHeaderCellDef>Comment</th>
+        <td mat-cell *matCellDef="let testSubject">{{ testSubject.comment }}</td>
+      </ng-container>
+
+    <ng-container matColumnDef="study">
+      <th mat-header-cell *matHeaderCellDef>Study</th>
+      <td mat-cell *matCellDef="let testSubject">{{ testSubject.study.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+        <th mat-header-cell *matHeaderCellDef>Group</th>
+        <td mat-cell *matCellDef="let testSubject">{{ testSubject.group.name }}</td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="openTestSubject(row)"
+    ></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr mat-row *matNoDataRow>
+      <td mat-cell colspan="4">
+        No data matching the filter "{{ input.value }}"
+      </td>
+    </tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+  ></mat-paginator>
+</ng-container>
+<router-outlet></router-outlet>

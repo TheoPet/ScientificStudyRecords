@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{modalData.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="dialogForm">
+    <mat-form-field>
+      <mat-label>{{modalData.description}}</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <ng-container *ngIf="!this.modalData.editGroup" class="form-group">
+      <mat-form-field class="example-full-width">
+        <input
+          type="text"
+          placeholder="Choose study"
+          aria-label="Study"
+          matInput
+          formControlName="study"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="displayFunction"
+        >
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </ng-container>
+  </form>
+  </div>
+  <div mat-dialog-actions style="justify-content: center;">
+    <button mat-button color="primary" (click)="onSubmit(dialogForm.value)"
+    [disabled]="dialogForm.invalid || dialogForm.untouched"
+    > Add group
+</button>
+</div>

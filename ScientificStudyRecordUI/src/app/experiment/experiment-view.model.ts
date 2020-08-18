@@ -1,10 +1,11 @@
 import { BasicTask } from '../shared/models/basic-task.model';
+import { BasicTestSubject } from '../shared/models/basic-test-subject.model';
 
 export class Experiment {
     constructor(
       public time: string,
       public comment: string,
-      public testSubjectId: number,
+      public testSubject: BasicTestSubject,
       public task: BasicTask,
       public groupId: number,
       public id?: number

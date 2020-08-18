@@ -1,5 +1,13 @@
+
 .container {
     margin-top: 2%;
+  }
+
+  header{
+    position: fixed;
+    top: 0;
+    z-index: 11;
+    /* transition: all 250ms ease-in-out; */
   }
   
 .centered{

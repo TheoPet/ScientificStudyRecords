@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <app-header></app-header>
 <div class="container">
   <div class="row">
@@ -6,6 +6,19 @@
       <router-outlet></router-outlet>
     </div>
   </div>
-</div>
-
-
+</div> -->
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #drawer mode="side" opened role="navigation">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive>Home</a>
+      <a mat-list-item routerLink="/studies">Studies</a>
+      <a mat-list-item routerLink="/groups">Groups</a>
+      <a mat-list-item routerLink="/testsubjects">Test Subjects</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 88vh;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

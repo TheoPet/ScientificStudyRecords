@@ -1,19 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-} from '@angular/forms';
-import { Route } from '@angular/compiler/src/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExperimentService } from 'src/app/services/experiment-service';
 import { TestSubjectService } from 'src/app/services/test-subject.service';
-import { Subscription, Subject, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { TestSubject } from 'src/app/test-subject/test-subject-view/test-subject-view.model';
-import { map, tap, switchMap } from 'rxjs/operators';
-import { BasicData } from 'src/app/shared/models/basic-data.model';
-import { FilterUtils } from 'src/app/shared/filter/filter-util';
+import { switchMap } from 'rxjs/operators';
 import { Experiment } from '../experiment-view.model';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
+import { DialogExperimentInputComponent } from 'src/app/shared/modal/dialog-experiment-input/dialog-experiment-input.component';
+import { BasicTestSubject } from 'src/app/shared/models/basic-test-subject.model';
 
 @Component({
   selector: 'app-experiment-view',
@@ -24,12 +21,15 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
   experimentForm: FormGroup;
   experimentSubscription: Subscription;
   loadedTestSubject: TestSubject;
+  loadedExperiment: Experiment;
+  afterClosedSubscription: Subscription;
   experimentId: number;
 
   constructor(
     private route: ActivatedRoute,
     private experimentService: ExperimentService,
-    private testSubjectService: TestSubjectService
+    private testSubjectService: TestSubjectService,
+    public matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -49,17 +49,18 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
     this.experimentSubscription = this.experimentService
       .getExperiment(id)
       .pipe(
-        switchMap(data => {
+        switchMap((data) => {
+          this.loadedExperiment = data;
           this.experimentForm = new FormGroup({
-            task: new FormControl( {value: data.task, disabled: true}),
+            task: new FormControl({ value: data.task, disabled: true }),
             time: new FormControl(new Date(data.time), Validators.required),
             comment: new FormControl(data.comment),
           });
-          return this.testSubjectService
-          .getTestSubject(data.testSubjectId);
+          return this.testSubjectService.getTestSubject(data.testSubject.id);
         })
-      ).subscribe(subject => {
-        this.loadedTestSubject =  new TestSubject(
+      )
+      .subscribe((subject) => {
+        this.loadedTestSubject = new TestSubject(
           subject.name,
           subject.surname,
           subject.entryTime,
@@ -72,17 +73,67 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  openEditExperimentDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'modal-component';
+    dialogConfig.width = '350px';
+    dialogConfig.panelClass = 'mat-dialog-experiments';
+    dialogConfig.data = {
+      title: 'Add experiment',
+      testSubject: this.loadedTestSubject,
+      experiment: this.loadedExperiment,
+      editExperiment: true,
+    };
+
+    const modalDialog = this.matDialog.open(
+      DialogExperimentInputComponent,
+      dialogConfig
+    );
+    this.afterClosedSubscription = modalDialog
+      .afterClosed()
+      .subscribe((data) => {
+        if (data !== undefined) {
+          this.loadedExperiment = data;
+        }
+      });
+  }
+
+  openDeleteExperimentDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'dialog-delete-component';
+    dialogConfig.width = '300px';
+    dialogConfig.data = {
+      title:
+        'experiment for ' +
+        this.loadedTestSubject.name +
+        ' ' +
+        this.loadedTestSubject.surname,
+      deleteMethodName: 'deleteExperiment',
+      data: this.loadedExperiment,
+    };
+
+  }
+
   ngOnDestroy() {
     if (this.experimentSubscription) {
       this.experimentSubscription.unsubscribe();
     }
+
+    if (this.afterClosedSubscription) {
+      this.afterClosedSubscription.unsubscribe();
+    }
   }
 
   onSubmit() {
+    const testSubject = new BasicTestSubject(
+      this.loadedTestSubject.name,
+      this.loadedTestSubject.surname,
+      this.loadedTestSubject.id
+    );
     const experiment = new Experiment(
       this.experimentForm.get('time').value,
       this.experimentForm.get('comment').value,
-      this.loadedTestSubject.id,
+      testSubject,
       this.experimentForm.get('task').value,
       this.loadedTestSubject.group.id,
       this.experimentId

@@ -29,33 +29,46 @@ namespace ScientificStudyWeb.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id:int}", Name="GetTestSubject")]
-         public async Task<IActionResult> GetTestSubject(int id, int groupId)
+        [HttpGet("{id}", Name = "GetTestSubject")]
+        public async Task<IActionResult> GetTestSubject(int id)
         {
             var testSubject = await _unitOfWork.testSubjectRepository.Get(id);
-                        
+
             var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
             return Ok(dataToReturn);
         }
 
-        [HttpGet("{id:int}/groups/{groupId:int}", Name ="GetTestSubjectWithFilteredExperiments")]
+        [HttpGet("{id:int}/groups/{groupId:int}", Name = "GetTestSubjectWithFilteredExperiments")]
         public async Task<IActionResult> GetTestSubjectWithFilteredExperiments(int id, int groupId)
         {
             var testSubject = await _unitOfWork.testSubjectRepository.GetWithFilteredExperiments(id, groupId);
-                        
+
             var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
             return Ok(dataToReturn);
         }
 
+        [HttpGet("studies/{studyId:int}")]
+        public async Task<IActionResult> GetTestSubjectsFromSameStudyGroup(int studyId)
+        {
+            var testSubjects = await _unitOfWork.testSubjectRepository.GetAll(t => t.StudyId == studyId);
+            var testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<BasicTestSubject>>(testSubjects);
+
+            return Ok(testSubjectsToReturn);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Save(TestSubjectData data)
-        {         
-            var testSubject = _mapper.Map<TestSubject>(data);
-            testSubject.Study = null;
-            testSubject.Group = null;
-            _unitOfWork.testSubjectRepository.Add(testSubject);
+        public async Task<IActionResult> Save(TestSubjectData testSubject)
+        {
+            var testSubjectToAdd = _mapper.Map<TestSubject>(testSubject);
+            testSubjectToAdd.Study = null;
+            testSubjectToAdd.Group = null;
+            _unitOfWork.testSubjectRepository.Add(testSubjectToAdd);
             await _unitOfWork.SaveChangesAsync();
-            return CreatedAtRoute("GetTestSubject", new { id = testSubject.Id }, testSubject.Id);
+
+            var testSubjectToReturn = _mapper.Map<TestSubjectData>(testSubjectToAdd);
+            testSubjectToReturn.Study = testSubject.Study;
+            testSubjectToReturn.Group = testSubject.Group;
+            return Ok(testSubjectToReturn);
         }
 
         [HttpGet]
@@ -67,9 +80,9 @@ namespace ScientificStudyWeb.Controllers
 
             if (simplified)
             {
-                if(available)
+                if (available)
                 {
-                    var availableTestSubjects = testSubjects.Where(t=> t.StudyId == null);
+                    var availableTestSubjects = testSubjects.Where(t => t.StudyId == null);
                     testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<TestSubjectData>>(availableTestSubjects);
 
                     return Ok(testSubjectsToReturn);
@@ -81,33 +94,58 @@ namespace ScientificStudyWeb.Controllers
                 }
 
             }
-            
+
             return Ok(testSubjectsToReturn);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update([FromBody]TestSubjectData data)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int Id)
         {
-            var testSubject = _mapper.Map<TestSubject>(data);
-            var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id);
-            
+            if (_unitOfWork.taskRepository.Remove(Id))
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
+            }
+
+            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(TestSubjectData testSubject)
+        {
+            var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id.Value);
+
             //Teo: dodaj validaciju
-            if(testSubjectToUpdate == null)
+            if (testSubjectToUpdate == null)
                 return Ok("Element does not exist");
+
             testSubjectToUpdate.Name = testSubject.Name;
             testSubjectToUpdate.Surname = testSubject.Surname;
             testSubjectToUpdate.Comment = testSubject.Comment;
-            testSubjectToUpdate.EntryTime = testSubject.EntryTime;
-
-            testSubjectToUpdate.Study = testSubject.Study;
-            testSubjectToUpdate.StudyId = testSubject.StudyId;
-
-            testSubjectToUpdate.Group = testSubject.Group;
-            testSubjectToUpdate.GroupId = testSubject.GroupId;
+            testSubjectToUpdate.EntryTime = Convert.ToDateTime(testSubject.EntryTime);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok();
+            var testSubjectToReturn = _mapper.Map<TestSubjectData>(testSubjectToUpdate);
+            return Ok(testSubjectToReturn);
+
+        }
+        
+        [HttpPut("{id:int}/assignStudyAndGroup")]
+        public async Task<IActionResult> AssignStudyAndGroup(TestSubjectData testSubject)
+        {
+            var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id.Value);
+
+            //Teo: dodaj validaciju
+            if (testSubjectToUpdate == null)
+                return Ok("Element does not exist");
+
+            testSubjectToUpdate.StudyId = testSubject.Study.Id;
+            testSubjectToUpdate.GroupId = testSubject.Group.Id;
+            await _unitOfWork.SaveChangesAsync();
+
+            var testSubjectToReturn = _mapper.Map<TestSubjectData>(testSubjectToUpdate);
+            return Ok(testSubjectToReturn);
 
         }
 

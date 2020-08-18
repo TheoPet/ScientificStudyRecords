@@ -13,11 +13,7 @@ public class StudyBasicTaskResolver : IValueResolver<Study, StudyData, ICollecti
             return destinationTasks;
 
         foreach (var task in source.Tasks)
-            destinationTasks.Add(new BasicData()
-            {
-                Name = task.Name,
-                Id = task.Id
-            });
+            destinationTasks.Add(new BasicData(task.Name, task.Id));
 
         return destinationTasks;
     }
@@ -32,12 +28,8 @@ public class StudyBasicGroupResolver : IValueResolver<Study, StudyData, ICollect
             return destinationGroups;
 
         foreach (var group in source.Groups)
-        {
-            destinationGroups.Add( new BasicData(){
-                Name = group.Name,
-                Id = group.Id
-            });
-        }
+            destinationGroups.Add(new BasicData(group.Name, group.Id));
+
 
         return destinationGroups;
     }
@@ -77,7 +69,7 @@ public class StudyGroupResolver : IValueResolver<StudyData, Study, ICollection<G
         if (source.Groups == null)
             return destGroups;
 
-          foreach (var group in source.Groups)
+        foreach (var group in source.Groups)
         {
             var newGroup = new Group()
             {
@@ -100,14 +92,17 @@ public class TestSubjectExperimentResolver : IValueResolver<TestSubjectData, Tes
     public ICollection<Experiment> Resolve(TestSubjectData source, TestSubject destination, ICollection<Experiment> destMember, ResolutionContext context)
     {
         var destExperiments = new List<Experiment>();
-        
+
+        if (source.Experiments == null)
+            return destExperiments;
+
         foreach (var experiment in source.Experiments)
         {
             var experimentToAdd = new Experiment()
             {
                 Time = experiment.Time,
                 Comment = experiment.Comment,
-                TestSubjectId = experiment.TestSubjectId,
+                TestSubjectId = experiment.TestSubject.Id.Value,
                 GroupId = experiment.GroupId,
                 TaskId = experiment.Task.Id.Value
             };
@@ -126,7 +121,10 @@ public class TestSubjectDataExperimentResolver : IValueResolver<TestSubject, Tes
     public ICollection<ExperimentData> Resolve(TestSubject source, TestSubjectData destination, ICollection<ExperimentData> destMember, ResolutionContext context)
     {
         var destExperiments = new List<ExperimentData>();
-        
+
+        if (source.Experiments == null)
+            return destExperiments;
+
         foreach (var experiment in source.Experiments)
         {
             var experimentToAdd = new ExperimentData()
@@ -134,13 +132,11 @@ public class TestSubjectDataExperimentResolver : IValueResolver<TestSubject, Tes
                 Id = experiment.Id,
                 Time = experiment.Time,
                 Comment = experiment.Comment,
-                TestSubjectId = experiment.TestSubjectId,
+                TestSubject = new BasicTestSubject(experiment.TestSubject.Name,
+                experiment.TestSubject.Surname,
+                experiment.TestSubject.Id),
                 GroupId = experiment.GroupId,
-                Task = new BasicData()
-                {
-                    Name = experiment.Task.Name,
-                    Id = experiment.TaskId
-                }
+                Task = new BasicData(experiment.Task.Name, experiment.TaskId)
             };
 
             destExperiments.Add(experimentToAdd);
@@ -148,30 +144,58 @@ public class TestSubjectDataExperimentResolver : IValueResolver<TestSubject, Tes
         return destExperiments;
     }
 }
-public class TaskExperimentResolver : IValueResolver<TaskData, Task, ICollection<Experiment>>
+public class TaskDataExperimentResolver : IValueResolver<TaskData, Task, ICollection<Experiment>>
 {
     public ICollection<Experiment> Resolve(TaskData source, Task destination, ICollection<Experiment> destMember, ResolutionContext context)
     {
         var destExperiments = new List<Experiment>();
+        if (source.Experiments == null)
+            return destExperiments;
 
-        foreach(var experiment in source.Experiments)
+        foreach (var experiment in source.Experiments)
         {
             var experimentToAdd = new Experiment()
             {
                 Time = experiment.Time,
                 Comment = experiment.Comment,
-                TestSubjectId = experiment.TestSubjectId,
+                TestSubjectId = experiment.TestSubject.Id.Value,
                 GroupId = experiment.GroupId,
                 TaskId = experiment.Task.Id.Value
             };
 
             if (experiment.Id != null)
                 experimentToAdd.Id = experiment.Id.Value;
-            
+
             destExperiments.Add(experimentToAdd);
         }
         return destExperiments;
-    } 
+    }
+}
+
+public class TaskExperimentResolver : IValueResolver<Task, TaskData, ICollection<ExperimentData>>
+{
+    public ICollection<ExperimentData> Resolve(Task source, TaskData destination, ICollection<ExperimentData> destMember, ResolutionContext context)
+    {
+        var destExperiments = new List<ExperimentData>();
+        if (source.Experiments == null)
+            return destExperiments;
+
+        foreach (var experiment in source.Experiments)
+        {
+            var experimentToAdd = new ExperimentData()
+            {
+                Time = experiment.Time,
+                Comment = experiment.Comment,
+                TestSubject = new BasicTestSubject(experiment.TestSubject.Name,
+                experiment.TestSubject.Surname, experiment.TestSubjectId),
+                GroupId = experiment.GroupId,
+                Task = new BasicData(experiment.Task.Name, experiment.Task.Id)
+            };
+
+            destExperiments.Add(experimentToAdd);
+        }
+        return destExperiments;
+    }
 }
 
 public class GroupTestSubjectResolver : IValueResolver<Group, GroupData, ICollection<BasicTestSubject>>
@@ -183,16 +207,11 @@ public class GroupTestSubjectResolver : IValueResolver<Group, GroupData, ICollec
         if (source.TestSubjects == null)
             return destinationTestSubjects;
 
-        foreach(var subject in source.TestSubjects)
+        foreach (var subject in source.TestSubjects)
         {
-            destinationTestSubjects.Add( new BasicTestSubject() {
-                Name = subject.Name,
-                Surname = subject.Surname,
-                StudyId = subject.StudyId,
-                Id = subject.Id
-            });
+            destinationTestSubjects.Add(new BasicTestSubject(subject.Name,subject.Surname,subject.Id));
         }
 
-        return destinationTestSubjects;    
+        return destinationTestSubjects;
     }
 }

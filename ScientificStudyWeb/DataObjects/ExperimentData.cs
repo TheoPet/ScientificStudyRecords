@@ -5,7 +5,7 @@ namespace ScientificStudyWeb.DataObjects
         public string Time { get; set; }
         public string Comment { get; set; }
 
-        public int TestSubjectId { get; set; }
+        public BasicTestSubject TestSubject { get; set; }
 
         public int GroupId { get; set; }
         
