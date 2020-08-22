@@ -8,6 +8,8 @@ using ScientificStudyWeb.Models;
 using System.Linq;
 using AutoMapper;
 using System.Collections.Generic;
+using ScientificStudyWeb.Helpers;
+using Newtonsoft.Json;
 
 namespace ScientificStudyWeb.Controllers
 {
@@ -45,6 +47,36 @@ namespace ScientificStudyWeb.Controllers
 
             var dataToReturn = _mapper.Map<TestSubjectData>(testSubject);
             return Ok(dataToReturn);
+        }
+
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetFilteredTestSubjects([FromQuery] int pageSize,
+                                                                 [FromQuery] int pageNumber,
+                                                                 [FromQuery] string searchTerm)
+        {
+            var term = (!string.IsNullOrEmpty(searchTerm)) ? searchTerm : string.Empty;
+
+            var parameters = new SearchParameters()
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                SearchTerm = term
+            };
+
+            var testSubjects = await _unitOfWork.testSubjectRepository.GetAllFiltered(parameters);
+            var testSubjectsToReturn = _mapper.Map<IEnumerable<TestSubject>, IEnumerable<BasicTestSubject>>(testSubjects);
+
+            var metadata = new
+            {
+                pageSize = testSubjects.PageSize,
+                pageNumber = testSubjects.CurrentPage,
+                totalCount = testSubjects.TotalCount
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
+
+            return Ok(testSubjectsToReturn);
         }
 
         [HttpGet("studies/{studyId:int}")]
@@ -130,7 +162,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(testSubjectToReturn);
 
         }
-        
+
         [HttpPut("{id:int}/assignStudyAndGroup")]
         public async Task<IActionResult> AssignStudyAndGroup(TestSubjectData testSubject)
         {

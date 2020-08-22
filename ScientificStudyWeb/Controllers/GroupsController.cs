@@ -7,6 +7,8 @@ using ScientificStudyWeb.Data.Interfaces;
 using ScientificStudyWeb.DataObjects;
 using System.Linq;
 using ScientificStudyWeb.Models;
+using ScientificStudyWeb.Helpers;
+using Newtonsoft.Json;
 
 namespace ScientificStudyWeb.Controllers
 {
@@ -28,10 +30,47 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll([FromQuery] bool lookup)
         {
             var groups = await _unitOfWork.groupRepository.GetAll();
-            var groupsToReturn = _mapper.Map<IEnumerable<GroupData>>(groups); 
+
+            if (lookup)
+            {
+                var groupsLookupToReturn = _mapper.Map<IEnumerable<BasicData>>(groups);
+                return Ok(groupsLookupToReturn);
+            }
+            
+            var groupsToReturn = _mapper.Map<IEnumerable<GroupData>>(groups);
+
+            return Ok(groupsToReturn);
+        }
+
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetFilteredPaginatedResults([FromQuery] int pageSize,
+                                                                    [FromQuery] int pageNumber,
+                                                                    [FromQuery] string searchTerm)
+        {
+            var term = (!string.IsNullOrEmpty(searchTerm)) ? searchTerm : string.Empty;
+
+            var parameters = new SearchParameters()
+            {
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                SearchTerm = term
+            };
+
+            var groups = await _unitOfWork.groupRepository.GetAllFiltered(parameters);
+            var groupsToReturn = _mapper.Map<IEnumerable<Group>, IEnumerable<BasicData>>(groups);
+
+            var metadata = new
+            {
+                pageSize = groups.PageSize,
+                pageNumber = groups.CurrentPage,
+                totalCount = groups.TotalCount
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
 
             return Ok(groupsToReturn);
         }
@@ -97,7 +136,7 @@ namespace ScientificStudyWeb.Controllers
             groupToAdd.Study = null;
             _unitOfWork.groupRepository.Add(groupToAdd);
             await _unitOfWork.SaveChangesAsync();
-            
+
             var groupToReturn = _mapper.Map<GroupData>(groupToAdd);
             groupToReturn.Study = group.Study;
             return Ok(groupToReturn);

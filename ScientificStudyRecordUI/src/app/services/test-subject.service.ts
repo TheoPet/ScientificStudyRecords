@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map } from 'rxjs/operators';
 
@@ -39,6 +39,7 @@ export class TestSubjectService {
       `http://localhost:5000/testsubjects/`
     );
   }
+
   getTestSubjectWithFilteredExperiment(id: number, groupId: number) {
     return this.httpClient
       .get<TestSubject>(
@@ -59,28 +60,40 @@ export class TestSubjectService {
         })
       );
   }
+
   getTestSubjectsFromSameStudy(studyId: number) {
     return this.httpClient.get<BasicTestSubject[]>(
       `http://localhost:5000/testsubjects/studies/${studyId}`
     );
   }
+
   getAvailableTestSubjects() {
     return this.httpClient.get<TestSubject[]>(
       'http://localhost:5000/testsubjects?simplified=true&available=true'
     );
   }
 
-  // updateTestSubject(id: number, data: TestSubject) {
-  //   data.id = id;
-  //   return this.httpClient.put<any>(
-  //     `http://localhost:5000/testsubjects/${id}`,
-  //     data
-  //   );
-  // }
   editTestSubject(testSubject: TestSubject) {
     return this.httpClient.put<TestSubject>(
       `http://localhost:5000/testsubjects/${testSubject.id}`,
       testSubject
+    );
+  }
+
+  getTestSubjectFiltered(
+    pageNumber: number = 1,
+    pageSize: number = 5,
+    filter: string = ''
+  ) {
+    return this.httpClient.get<BasicTestSubject[]>(
+      'http://localhost:5000/testsubjects/filtered',
+      {
+        observe: 'response',
+        params: new HttpParams()
+          .set('pageSize', pageSize.toString())
+          .set('pageNumber', pageNumber.toString())
+          .set('searchTerm', filter),
+      }
     );
   }
   assignStudyAndGroupToTestSubject(testSubject: TestSubject) {

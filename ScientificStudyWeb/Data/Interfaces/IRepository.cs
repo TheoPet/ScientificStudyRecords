@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ScientificStudyWeb.Helpers;
 
 namespace ScientificStudyWeb.Data.Interfaces
 {
@@ -18,6 +19,8 @@ namespace ScientificStudyWeb.Data.Interfaces
         Task<TEntity> Get(int id);
 
         Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
+
+        Task<IEnumerable<TEntity>> GetAll(QueryParameters parameters);
 
         Task<IEnumerable<TEntity>> GetAll();
         

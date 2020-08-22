@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ScientificStudyWeb.Data.Interfaces;
-
+using ScientificStudyWeb.Helpers;
 
 namespace ScientificStudyWeb.Data
 {
@@ -22,18 +22,18 @@ namespace ScientificStudyWeb.Data
 
         public void Add(TEntity entity)
         {
-             dbSet.Add(entity);
+            dbSet.Add(entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            foreach(var entity in entities)
+            foreach (var entity in entities)
                 dbSet.Add(entity);
         }
-        
+
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-             return await dbSet.ToListAsync();
+            return await dbSet.ToListAsync();
         }
 
         public virtual async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
@@ -42,16 +42,16 @@ namespace ScientificStudyWeb.Data
             return result.FirstOrDefault();
         }
 
-        public virtual async Task <IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             return await dbSet.Where(predicate).ToListAsync();
         }
 
         public virtual async Task<TEntity> Get(int id)
         {
-            return await dbSet.FindAsync(id);     
-        } 
-        
+            return await dbSet.FindAsync(id);
+        }
+
         public virtual bool Remove(TEntity entity)
         {
             dbSet.Remove(entity);
@@ -61,12 +61,17 @@ namespace ScientificStudyWeb.Data
         public virtual bool Remove(int id)
         {
             TEntity entityToDelete = dbSet.Find(id);
-            if(entityToDelete != null)
+            if (entityToDelete != null)
             {
                 dbSet.Remove(entityToDelete);
                 return true;
             }
             return false;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAll(QueryParameters parameters)
+        {
+            return await PagedList<TEntity>.ToPagedListAsync(dbSet, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

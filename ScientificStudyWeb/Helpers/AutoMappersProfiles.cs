@@ -2,6 +2,7 @@ using AutoMapper;
 using ScientificStudiesRecord.DataObjects;
 using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ScientificStudyWeb.Helpers

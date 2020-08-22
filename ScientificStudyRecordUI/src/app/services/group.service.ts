@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Group } from '../group/group.model';
 import { map } from 'rxjs/operators';
 import { TestSubject } from '../test-subject/test-subject-view/test-subject-view.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BasicGroup } from '../shared/models/basic-group.model';
 
 @Injectable({providedIn: 'root'})
 export class GroupService {
@@ -29,6 +30,21 @@ export class GroupService {
             })
         );
     }
+
+    getGroupsFiltered(
+        pageNumber: number = 1,
+        pageSize: number = 5,
+        filter: string = ''
+      ) {
+        return this.httpClient
+          .get<BasicGroup[]>('http://localhost:5000/groups/filtered', {
+            observe: 'response',
+            params: new HttpParams()
+              .set('pageSize', pageSize.toString())
+              .set('pageNumber', pageNumber.toString())
+              .set('searchTerm', filter),
+          });
+      }
 
     editGroup(group: Group) {
         return this.httpClient.put<Group>(`http://localhost:5000/groups/${group.id}`, group);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ScientificStudyWeb.Data.Interfaces;
+using ScientificStudyWeb.Helpers;
 using ScientificStudyWeb.Models;
 namespace ScientificStudyWeb.Data
 {
@@ -21,11 +22,18 @@ namespace ScientificStudyWeb.Data
             .Where(g => g.Id == Id)
             .Include(g => g.TestSubjects).FirstOrDefaultAsync();
         }
-        
+
         public new async Task<IEnumerable<Group>> GetAll()
         {
             return await _scientificStudiesContext.Groups
             .Include(g => g.Study).ToListAsync();
+        }
+
+        public async Task<PagedList<Group>> GetAllFiltered(SearchParameters parameters)
+        {
+            var groups = _scientificStudiesContext.Groups
+            .Where(g => g.Name.ToLower().Contains(parameters.SearchTerm.ToLower()));
+            return await PagedList<Group>.ToPagedListAsync(groups, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

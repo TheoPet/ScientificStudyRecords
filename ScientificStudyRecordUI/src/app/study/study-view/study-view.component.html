@@ -28,17 +28,11 @@
         <mat-panel-title>
           Groups
         </mat-panel-title>
-        <!-- <mat-panel-description>
-          Type your name and age
-          <mat-icon>account_circle</mat-icon>
-        </mat-panel-description> -->
       </mat-expansion-panel-header>
       <mat-nav-list>
         <ng-container *ngFor="let group of loadedStudy.groups">
           <mat-list-item>
-            <a matLine routerLink="/groups/{{ group.id }}">{{
-              group.name
-            }}</a>
+            <a matLine routerLink="/groups/{{ group.id }}">{{ group.name }}</a>
             <button mat-icon-button (click)="onDeleteGroup(group.id)">
               <mat-icon>clear</mat-icon>
             </button>
@@ -57,7 +51,7 @@
       <mat-nav-list>
         <ng-container *ngFor="let task of loadedStudy.tasks">
           <mat-list-item>
-            <a matLine routerLink="/tasks/{{task.id}}">{{ task.name }}</a>
+            <a matLine routerLink="/tasks/{{ task.id }}">{{ task.name }}</a>
             <button mat-icon-button (click)="onDelete(task.id)">
               <mat-icon>clear</mat-icon>
             </button>
@@ -68,7 +62,6 @@
     </mat-expansion-panel>
   </mat-accordion>
 </div>
-
 
 <!-- <div class="container">
   <div class="row">

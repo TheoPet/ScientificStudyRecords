@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ScientificStudyWeb.Data.Interfaces;
+using ScientificStudyWeb.Helpers;
 using ScientificStudyWeb.Models;
 
 namespace ScientificStudyWeb.Data
@@ -16,7 +17,7 @@ namespace ScientificStudyWeb.Data
             _scientificStudiesContext = context;
         }
 
-         public override async Task<TestSubject> Get(int Id)
+        public override async Task<TestSubject> Get(int Id)
         {
             return await _scientificStudiesContext.TestSubjects
             .Where(t => t.Id == Id)
@@ -29,13 +30,13 @@ namespace ScientificStudyWeb.Data
 
         public async Task<TestSubject> GetWithFilteredExperiments(int id, int groupId)
         {
-          var testSubject =  await _scientificStudiesContext.TestSubjects
-            .Where(t => t.Id == id)
-            .Include(s => s.Study)
-            .Include(g => g.Group)
-            .Include(t => t.Experiments)
-                .ThenInclude(e => e.Task)
-            .FirstOrDefaultAsync();
+            var testSubject = await _scientificStudiesContext.TestSubjects
+              .Where(t => t.Id == id)
+              .Include(s => s.Study)
+              .Include(g => g.Group)
+              .Include(t => t.Experiments)
+                  .ThenInclude(e => e.Task)
+              .FirstOrDefaultAsync();
 
             var filteredExperiments = testSubject.Experiments.Where(e => e.GroupId == groupId).ToList();
             testSubject.Experiments = filteredExperiments;
@@ -47,6 +48,14 @@ namespace ScientificStudyWeb.Data
             return await _scientificStudiesContext.TestSubjects
             .Include(s => s.Study)
             .Include(g => g.Group).ToListAsync();
+        }
+
+        public async Task<PagedList<TestSubject>> GetAllFiltered(SearchParameters parameters)
+        {
+            var testSubjects = _scientificStudiesContext.TestSubjects
+            .Where(t => t.Name.ToLower().Contains(parameters.SearchTerm.ToLower())
+                        || t.Surname.ToLower().Contains(parameters.SearchTerm.ToLower()));
+            return await PagedList<TestSubject>.ToPagedListAsync(testSubjects, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

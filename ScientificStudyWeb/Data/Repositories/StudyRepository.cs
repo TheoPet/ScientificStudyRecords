@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using ScientificStudyWeb.Helpers;
 
 namespace ScientificStudyWeb.Data
 {
@@ -43,7 +44,12 @@ namespace ScientificStudyWeb.Data
             .Include(s => s.Tasks)
             .Include(s => s.TestSubjects).ToListAsync();
         }
-
+        public async Task<PagedList<Study>> GetAllFiltered(SearchParameters parameters)
+        {
+            var studies =  _scientificStudiesContext.Studies
+            .Where(studies=> studies.Name.ToLower().Contains(parameters.SearchTerm.ToLower()));
+            return await PagedList<Study>.ToPagedListAsync(studies, parameters.PageNumber, parameters.PageSize);
+        }
         public override bool Remove(int Id)
         {
             var studyToDelete = _scientificStudiesContext.Studies

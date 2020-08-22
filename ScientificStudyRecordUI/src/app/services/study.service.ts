@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map } from 'rxjs/operators';
 
@@ -9,6 +9,7 @@ import { BasicStudy } from '../shared/models/basic-study.model';
 import { BasicGroup } from '../shared/models/basic-group.model';
 import { BasicData } from '../shared/models/basic-data.model';
 import { BasicTask } from '../shared/models/basic-task.model';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StudyService {
@@ -20,9 +21,15 @@ export class StudyService {
 
   addGroupOrTask(studyId: number, dataToAdd: BasicData, addGroup = false) {
     if (addGroup) {
-      return this.httpClient.patch<Study>(`http://localhost:5000/studies/${studyId}?addGroup=true`, dataToAdd);
+      return this.httpClient.patch<Study>(
+        `http://localhost:5000/studies/${studyId}?addGroup=true`,
+        dataToAdd
+      );
     } else {
-      return this.httpClient.patch<Study>(`http://localhost:5000/studies/${studyId}`, dataToAdd);
+      return this.httpClient.patch<Study>(
+        `http://localhost:5000/studies/${studyId}`,
+        dataToAdd
+      );
     }
   }
 
@@ -31,7 +38,10 @@ export class StudyService {
   }
 
   editStudy(study: Study) {
-    return this.httpClient.put<Study>(`http://localhost:5000/studies/${study.id}`, study);
+    return this.httpClient.put<Study>(
+      `http://localhost:5000/studies/${study.id}`,
+      study
+    );
   }
 
   getStudy(id: number) {
@@ -45,13 +55,28 @@ export class StudyService {
   }
 
   getStudies() {
-    return this.httpClient.get<Study[]>('http://localhost:5000/studies/');
+    return this.httpClient.get<Study[]>('http://localhost:5000/studies');
   }
 
   getStudiesLookup() {
     return this.httpClient.get<BasicStudy[]>(
       'http://localhost:5000/studies?simplified=true'
     );
+  }
+
+  getStudiesFiltered(
+    pageNumber: number = 1,
+    pageSize: number = 5,
+    filter: string = ''
+  ) {
+    return this.httpClient
+      .get<BasicStudy[]>('http://localhost:5000/studies/filtered', {
+        observe: 'response',
+        params: new HttpParams()
+          .set('pageSize', pageSize.toString())
+          .set('pageNumber', pageNumber.toString())
+          .set('searchTerm', filter),
+      });
   }
 
   getGroupsLookup(id: number) {
@@ -64,13 +89,17 @@ export class StudyService {
     return this.httpClient.get<BasicTask[]>(
       `http://localhost:5000/studies/${id}/tasks`
     );
-}
+  }
 
   deleteGroupOrTask(studyId: number, id: number, deleteGroup = false) {
     if (deleteGroup) {
-      return this.httpClient.delete<Study>(`http://localhost:5000/studies/${studyId}/${id}?deleteGroup=true`);
+      return this.httpClient.delete<Study>(
+        `http://localhost:5000/studies/${studyId}/${id}?deleteGroup=true`
+      );
     } else {
-      return this.httpClient.delete<Study>(`http://localhost:5000/studies/${studyId}/${id}`);
+      return this.httpClient.delete<Study>(
+        `http://localhost:5000/studies/${studyId}/${id}`
+      );
     }
   }
 
