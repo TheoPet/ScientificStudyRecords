@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScientificStudyWeb.Models
 {
-    public class Experiment 
+    public class Experiment
     {
         public int Id { get; set; }
 
         public string Time { get; set; }
-        
+
         [MaxLength(256)]
         public string Comment { get; set; }
 
@@ -18,6 +18,8 @@ namespace ScientificStudyWeb.Models
         public Task Task { get; set; }
 
         public int GroupId { get; set; }
+
+        public int StudyId { get; set; }
 
     }
 }

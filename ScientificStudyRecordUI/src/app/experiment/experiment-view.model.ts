@@ -8,6 +8,7 @@ export class Experiment {
       public testSubject: BasicTestSubject,
       public task: BasicTask,
       public groupId: number,
+      public studyId: number,
       public id?: number
     ) {}
   }

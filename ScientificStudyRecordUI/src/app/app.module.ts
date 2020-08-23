@@ -20,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 // tslint:disable-next-line: max-line-length
-import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatGridListModule, MatMenuModule, MatExpansionModule } from '@angular/material';
+import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatGridListModule, MatMenuModule, MatExpansionModule, MatSelectModule } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
@@ -114,7 +114,8 @@ import { StudyHomeComponent } from './study/study-home/study-home.component';
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     MatMenuModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ],
   providers: [
     StudyService,

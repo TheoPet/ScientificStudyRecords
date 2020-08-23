@@ -12,7 +12,7 @@ using ScientificStudiesRecord.DataObjects;
 
 namespace ScientificStudyWeb.Controllers
 {
-    [Route("master/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthentificationController : ControllerBase
     {

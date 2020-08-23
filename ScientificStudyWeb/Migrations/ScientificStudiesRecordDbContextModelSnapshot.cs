@@ -33,6 +33,9 @@ namespace ScientificStudiesRecord.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("StudyId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TaskId")
                         .HasColumnType("integer");
 

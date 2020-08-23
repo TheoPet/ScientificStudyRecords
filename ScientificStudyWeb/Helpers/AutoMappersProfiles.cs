@@ -69,6 +69,20 @@ namespace ScientificStudyWeb.Helpers
             .ForPath(dest => dest.Task.Name,
             opt => opt.MapFrom(src => src.Task.Name));
 
+            CreateMap<Experiment, ReportExperimentData>()
+            .ForMember(dest => dest.Group,
+            opt => opt.MapFrom(src => src.TestSubject.Group.Name))
+            .ForMember(dest => dest.Study,
+            opt => opt.MapFrom(src => src.TestSubject.Study.Name))
+            .ForMember(dest => dest.Task,
+            opt => opt.MapFrom(src => src.Task.Name))
+            .ForMember(dest => dest.TestSubject,
+            opt => opt.MapFrom(src => (src.TestSubject.Name + ' ' + src.TestSubject.Surname)))
+            .ForMember(dest => dest.TestSubjectComment,
+            opt => opt.MapFrom(src => src.TestSubject.Comment))
+            .ForMember(dest => dest.TestSubjectEntryTime,
+            opt => opt.MapFrom(src => src.TestSubject.EntryTime));
+
             CreateMap<TaskData, Task>()
             .ForMember(dest => dest.Study,
             opt => opt.MapFrom(src => src.Study.Name))

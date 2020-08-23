@@ -52,8 +52,6 @@ namespace ScientificStudyWeb.Controllers
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
 
-
-
             return Ok(studiesToReturn);
         }
 

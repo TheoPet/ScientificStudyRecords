@@ -118,7 +118,8 @@ export class DialogExperimentInputComponent implements OnInit {
       this.dialogForm.get('comment').value,
       new BasicTestSubject(this.testSubject.name, this.testSubject.surname, this.testSubject.id),
       this.dialogForm.get('task').value,
-      this.testSubject.group.id
+      this.testSubject.group.id,
+      this.testSubject.study.id
     );
 
     if (this.modalData.editExperiment) {

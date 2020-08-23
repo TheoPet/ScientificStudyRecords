@@ -11,7 +11,6 @@ import { GroupService } from '../services/group.service';
 import { Subscription } from 'rxjs';
 import { MatDialogConfig, MatDialog} from '@angular/material';
 import { DialogSubjectInputComponent } from '../shared/modal/dialog-subject-input/dialog-subject-input.component';
-import { DialogSubjectListComponent } from '../shared/modal/dialog-subject-list/dialog-subject-list.component';
 import { DialogGroupInputComponent } from '../shared/modal/dialog-group-input/dialog-group-input.component';
 import { DialogDeleteComponent } from '../shared/modal/dialog-delete/dialog-delete.component';
 
@@ -86,23 +85,6 @@ export class GroupComponent implements OnInit, OnDestroy {
       dialogConfig
     );
     this.afterClosedSubscription = modalDialog
-      .afterClosed()
-      .subscribe((data) => {
-        if (data !== undefined) {
-          this.loadedGroup = data;
-        }
-      });
-  }
-
-  openAssignTestSubjectDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.id = 'modal-component';
-    dialogConfig.data = this.loadedGroup.id;
-    const modalDialog = this.matDialog.open(
-      DialogSubjectListComponent,
-      dialogConfig
-    );
-    this.afterAssignedClosedSubscription = modalDialog
       .afterClosed()
       .subscribe((data) => {
         if (data !== undefined) {

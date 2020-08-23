@@ -49,6 +49,7 @@ export class DialogTaskExperimentInputComponent implements OnInit {
       this.dialogForm.get('testSubject').value,
       this.modalData.task,
       this.dialogForm.get('testSubject').value.groupId,
+      this.modalData.studyId
     );
 
     return this.experimentService.saveExperiment(experiment).subscribe( data => {

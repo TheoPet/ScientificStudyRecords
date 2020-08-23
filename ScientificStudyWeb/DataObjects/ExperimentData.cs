@@ -8,7 +8,9 @@ namespace ScientificStudyWeb.DataObjects
         public BasicTestSubject TestSubject { get; set; }
 
         public int GroupId { get; set; }
-        
+
+        public int StudyId { get; set; }
+
         public BasicData Task { get; set; }
 
         public int? Id { get; set; }
