@@ -17,6 +17,8 @@ namespace ScientificStudyWeb.Data
 
         public ITestSubjectRepository testSubjectRepository { get; }
 
+        public IUserRepository userRepository { get; }
+
         public UnitOfWork(ScientificStudiesRecordDbContext context)
         {
             _context = context;
@@ -24,8 +26,9 @@ namespace ScientificStudyWeb.Data
             experimentRepository = new ExperimentRepository(_context);
             groupRepository = new GroupRepository(_context);
             studyRepository = new StudyRepository(_context);
-            taskRepository = new TaskRepository (_context);
+            taskRepository = new TaskRepository(_context);
             testSubjectRepository = new TestSubjectRepository(_context);
+            userRepository = new UserRepository(_context);
 
         }
         public void Dispose()

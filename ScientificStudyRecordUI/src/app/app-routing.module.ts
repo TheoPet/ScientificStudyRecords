@@ -16,10 +16,13 @@ import { TaskComponent } from './task/task.component';
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { GroupStartComponent } from './group-start/group-start.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
+import { AuthGuardService } from './shared/authorization/auth-guard.service';
+import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
   {
     path: 'studies',
     component: StudyHomeComponent,
@@ -29,6 +32,7 @@ const appRoutes: Routes = [
       { path: ':id', component: StudyViewComponent },
       { path: ':id/edit', component: StudyEditComponent },
     ],
+     canActivate: [AuthGuardService]
   },
   {
     path: 'testsubjects',

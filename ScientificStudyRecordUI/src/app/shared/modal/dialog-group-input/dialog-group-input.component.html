@@ -1,9 +1,12 @@
-<h1 mat-dialog-title>{{modalData.title}}</h1>
+<h1 style="text-align: center;" mat-dialog-title>{{modalData.title}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
       <mat-label>{{modalData.description}}</mat-label>
-      <input matInput formControlName="name">
+      <input matInput required formControlName="name" >
+      <mat-error>
+        Please enter group name
+      </mat-error>
     </mat-form-field>
     <ng-container *ngIf="!this.modalData.editGroup" class="form-group">
       <mat-form-field class="example-full-width">
@@ -14,7 +17,11 @@
           matInput
           formControlName="study"
           [matAutocomplete]="auto"
+          required
         />
+        <mat-error>
+          Please choose a study
+        </mat-error>
         <mat-autocomplete
           #auto="matAutocomplete"
           [displayWith]="displayFunction"
@@ -31,7 +38,7 @@
   </form>
   </div>
   <div mat-dialog-actions style="justify-content: center;">
-    <button mat-button color="primary" (click)="onSubmit(dialogForm.value)"
+    <button mat-raised-button color="primary" (click)="onSubmit(dialogForm.value)"
     [disabled]="dialogForm.invalid || dialogForm.untouched"
     > Add group
 </button>

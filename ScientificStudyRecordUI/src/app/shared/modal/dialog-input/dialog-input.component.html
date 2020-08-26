@@ -1,14 +1,23 @@
-<h1 mat-dialog-title>{{modalData.title}}</h1>
+<h1 mat-dialog-title style="text-align: center;">{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
-      <mat-label>{{modalData.description}}</mat-label>
-      <input matInput formControlName="name">
+      <mat-label>{{ modalData.description }}</mat-label>
+      <input matInput required formControlName="name" />
+      <mat-error>
+        Please add {{modalData.description}}
+      </mat-error>
     </mat-form-field>
   </form>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-button (click)="onSubmit()"
-    [disabled]="dialogForm.invalid || dialogForm.untouched"
-    >Ok</button>
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      type="submit"
+      [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+      Add
+    </button>
 </div>

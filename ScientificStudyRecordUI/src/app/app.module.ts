@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { StudyViewComponent } from './study/study-view/study-view.component';
@@ -20,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 // tslint:disable-next-line: max-line-length
-import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatGridListModule, MatMenuModule, MatExpansionModule, MatSelectModule } from '@angular/material';
+import { MatDatepickerModule, MatPaginatorModule, MatTableModule, MatListModule, MatIconModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatGridListModule, MatMenuModule, MatExpansionModule, MatSelectModule, MatSnackBarModule } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TestSubjectViewComponent } from './test-subject/test-subject-view/test-subject-view.component';
 import { TestSubjectEditComponent } from './test-subject/test-subject-edit/test-subject-edit.component';
@@ -54,6 +54,8 @@ import { DialogStudyAssignComponent } from './shared/modal/dialog-study-assign/d
 import { GroupStartComponent } from './group-start/group-start.component';
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
+import { LoginComponent } from './login/login.component';
+import { ServerErrorInterceptor } from './shared/error/interceptor/server-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -85,6 +87,7 @@ import { StudyHomeComponent } from './study/study-home/study-home.component';
     GroupStartComponent,
     GroupHomeComponent,
     StudyHomeComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -115,7 +118,8 @@ import { StudyHomeComponent } from './study/study-home/study-home.component';
     NgxMatNativeDateModule,
     MatMenuModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   providers: [
     StudyService,
@@ -124,6 +128,7 @@ import { StudyHomeComponent } from './study/study-home/study-home.component';
     TaskService,
     FilterService,
     MatDatepickerModule,
+    { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

@@ -1,13 +1,19 @@
-<h1 mat-dialog-title>{{ modalData.title }}</h1>
+<h1 style="text-align: center;" mat-dialog-title>{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name" />
+      <input matInput formControlName="name" required />
+      <mat-error>
+        Please enter test subject's name
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Surname</mat-label>
-      <input matInput formControlName="surname" />
+      <input matInput formControlName="surname" required/>
+      <mat-error>
+        Please enter test subject's surname
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
@@ -42,7 +48,11 @@
           matInput
           formControlName="study"
           [matAutocomplete]="auto"
+          required
         />
+        <mat-error>
+          Please assign test subject to study
+        </mat-error>
         <mat-autocomplete
           #auto="matAutocomplete"
           [displayWith]="displayFunction"
@@ -65,7 +75,11 @@
           matInput
           formControlName="group"
           [matAutocomplete]="auto"
+          required
         />
+        <mat-error>
+          Please assign test subject to a group
+        </mat-error>
         <mat-autocomplete
           #auto="matAutocomplete"
           [displayWith]="displayFunction"
@@ -82,14 +96,14 @@
   </form>
 </div>
 
-<div mat-dialog-actions>
+<div mat-dialog-actions style="justify-content: center;">
   <ng-container>
     <button
-      mat-button
+      mat-raised-button color="primary"
       (click)="onSubmit(dialogForm.value)"
       [disabled]="dialogForm.invalid || dialogForm.untouched"
     >
-      Add
+      Add test subject
     </button>
   </ng-container>
 </div>

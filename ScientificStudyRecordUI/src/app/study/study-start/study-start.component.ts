@@ -52,7 +52,7 @@ export class StudyStartComponent implements OnInit, OnDestroy {
   onAddStudy() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '250px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: 'Add study',
       editStudy: false,

@@ -54,6 +54,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
       this.loadedStudy.id,
       true
     );
+
     const modalDialog = this.matDialog.open(DialogInputComponent, dialogConfig);
 
     this.groupDialogClosedSubscription = modalDialog
@@ -90,7 +91,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   ) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '250px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title,
       description,
@@ -103,7 +104,7 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   openEditStudyDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '250px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: 'Edit study',
       description: 'Please enter new study name',

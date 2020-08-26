@@ -13,9 +13,3 @@ input.ng-invalid.ng-touched {
   margin-top: 2%;
 }
 
-tr {
-  cursor: pointer;
-}
-tr.mat-row:hover {
-  background: rgba(0, 0, 0, 0.04);
-}

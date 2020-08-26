@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using AutoMapper;
-using ScientificStudiesRecord.DataObjects;
 using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Models;
 

@@ -8,12 +8,12 @@
   </button>
 </mat-toolbar>
 
-<div class="container" style="margin-top: 3%;">
+<div class="container" style="margin-top: 3%;padding-left:1%">
   <mat-grid-list cols="4" rowHeight="80px">
     <form class="example-form" [formGroup]="searchForm">
       <ng-container *ngIf="filterByStudyFlag">
         <mat-grid-tile [colspan]="2">
-          <mat-form-field class="example-full-width" style="padding: 2%;">
+          <mat-form-field class="example-full-width">
             <input
               type="text"
               placeholder="Study"
@@ -103,7 +103,7 @@
                 {{ option.name }} {{ option.surname }}
               </mat-option>
               <mat-paginator
-                #paginator
+                #subjectSearchPaginator
                 [length]="totalSubjectsCount"
                 [pageSize]="5"
                 [pageSizeOptions]="[5, 10]"
@@ -129,11 +129,11 @@
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
-      <button mat-button (click)="search()">Search</button>
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
-<div class="container">
+<div class="container" style="padding:2%">
   <ng-container *ngIf="dataSource.data.length > 0">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <!-- Study Column -->
@@ -168,7 +168,7 @@
         <ng-container matColumnDef="testSubjectEntryTime">
           <th mat-header-cell *matHeaderCellDef>Test subject entry time</th>
           <td mat-cell *matCellDef="let experiment">
-            {{ experiment.testSubjectEntryTime | date:'medium'}}
+            {{ experiment.testSubjectEntryTime | date:'short'}}
           </td>
         </ng-container>
       <!-- Task Column -->
@@ -197,13 +197,17 @@
         *matRowDef="let row; columns: getDisplayedColumns()"
       ></tr>
     </table>
-    <mat-paginator
-                #paginator
+    
+    </ng-container>
+    <ng-container *ngIf="showTablePagination">
+      <mat-paginator
+                #experimentPaginator
                 [length]="totalExperimentsCount"
-                [pageSize]="5"
-                [pageSizeOptions]="[5, 10]"
-                (page)="onPageFired($event)"
+                [pageSize]="10"
+                [pageSizeOptions]="[10,15]"
+                (page)="onPageFiredExperiment($event)"
               >
               </mat-paginator>
     </ng-container>
+    
 </div>

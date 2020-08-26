@@ -20,4 +20,14 @@ table {
     font-size: 14px;
     width: 100%;
   }
-  
+  tr {
+    cursor: pointer;
+  }
+  tr.mat-row:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+  .mat-row {
+    align-items: stretch;
+    min-height: 100%;
+    
+}

@@ -10,6 +10,7 @@ namespace ScientificStudyWeb.Data.Interfaces
         IStudyRepository studyRepository { get; }
         ITaskRepository taskRepository { get; }
         ITestSubjectRepository testSubjectRepository { get; }
+        IUserRepository userRepository { get; }
 
         int SaveChanges();
         Task SaveChangesAsync();

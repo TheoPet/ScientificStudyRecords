@@ -8,11 +8,14 @@ using AutoMapper;
 using ScientificStudyWeb.DataObjects;
 using ScientificStudyWeb.Helpers;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using ScientificStudyWeb.Data.Authorization;
 
 namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    // [Authorize]
     public class StudiesController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -39,11 +42,12 @@ namespace ScientificStudyWeb.Controllers
                 PageNumber = pageNumber,
                 SearchTerm = term
             };
-            
+
             var studies = await _unitOfWork.studyRepository.GetAllFiltered(parameters);
             var studiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<BasicData>>(studies);
-            
-            var metadata = new {
+
+            var metadata = new
+            {
                 pageSize = studies.PageSize,
                 pageNumber = studies.CurrentPage,
                 totalCount = studies.TotalCount
@@ -62,7 +66,6 @@ namespace ScientificStudyWeb.Controllers
 
             if (simplified)
             {
-
                 var simplifiedStudiesToReturn = _mapper.Map<IEnumerable<Study>, IEnumerable<BasicData>>(studies);
                 return Ok(simplifiedStudiesToReturn);
             }
@@ -109,10 +112,11 @@ namespace ScientificStudyWeb.Controllers
             return Ok(studyToReturn);
         }
 
+        // [Authorize(Policy = Policies.Admin)]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateStudy(StudyData data)
+        public async Task<IActionResult> UpdateStudy(StudyData data, int id)
         {
-            var studyToUpdate = await _unitOfWork.studyRepository.Get(data.Id.Value);
+            var studyToUpdate = await _unitOfWork.studyRepository.Get(id);
 
             if (!string.IsNullOrEmpty(data.Name))
             {

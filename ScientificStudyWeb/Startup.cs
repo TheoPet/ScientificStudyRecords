@@ -13,6 +13,10 @@ using DinkToPdf;
 using System.Runtime.Loader;
 using System;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ScientificStudyWeb.Data.Authorization;
 
 namespace ScientificStudiesRecord
 {
@@ -66,17 +70,29 @@ namespace ScientificStudiesRecord
             services.AddDbContext<ScientificStudiesRecordDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IAuthentificationRepository, AuthentificationRepository>();
-            /* services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                     .AddJwtBearer(options => {
-                         options.TokenValidationParameters = new TokenValidationParameters
-                         {
-                             ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                             ValidateIssuer = false,
-                             ValidateAudience = false
-                         };
-                     });*/
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("Jwt:SecretKey").Value)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
+                config.AddPolicy(Policies.User, Policies.UserPolicy());
+            });
 
             services.AddScoped<IExperimentRepository, ExperimentRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
@@ -88,21 +104,16 @@ namespace ScientificStudiesRecord
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-
-            }
 
             app.UseRouting();
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseStaticFiles();
             //app.UseCookiePolicy();

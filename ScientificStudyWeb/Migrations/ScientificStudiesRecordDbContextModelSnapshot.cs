@@ -167,6 +167,9 @@ namespace ScientificStudiesRecord.Migrations
                     b.Property<byte[]>("PaswordSalt")
                         .HasColumnType("bytea");
 
+                    b.Property<string>("UserRole")
+                        .HasColumnType("text");
+
                     b.Property<string>("Username")
                         .HasColumnType("text");
 

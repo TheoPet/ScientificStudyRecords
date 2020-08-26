@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BasicData } from '../../models/basic-data.model';
@@ -91,8 +91,9 @@ export class DialogTestSubjectInputComponent implements OnInit {
       surname: new FormControl('', Validators.required),
       entryTime: new FormControl(new Date(), Validators.required),
       comment: new FormControl(''),
-      study: new FormControl(null, RequireMatch),
+      study: new FormControl(null, [Validators.required, RequireMatch]),
       group: new FormControl(null, [
+        Validators.required,
         RequireMatch,
         conditionalValidator(() => this.dialogForm.get('study').value),
       ]),

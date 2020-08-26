@@ -1,13 +1,19 @@
-<h1 mat-dialog-title>{{ modalData.title }}</h1>
+<h1 style="text-align: center;" mat-dialog-title>{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name" />
+      <input matInput formControlName="name" required />
+      <mat-error>
+        Please enter test subject's name
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Surname</mat-label>
-      <input matInput formControlName="surname" />
+      <input matInput formControlName="surname" required />
+      <mat-error>
+        Please enter test subject's name
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
@@ -35,20 +41,23 @@
     </mat-form-field>
   </form>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions style="justify-content: center;">
   <ng-container *ngIf="this.modalData.editTestSubject">
     <button
-      mat-button
+      mat-raised-button
+      type="submit"
+      color="primary"
       (click)="onSubmit(dialogForm.value)"
       [disabled]="dialogForm.invalid || dialogForm.untouched"
     >
       Save
     </button>
   </ng-container>
-  <ng-container>
+  <ng-container *ngIf="!this.modalData.editTestSubject">
     <button
-      *ngIf="!this.modalData.editTestSubject"
-      mat-button
+      mat-raised-button
+      type="submit"
+      color="primary"
       (click)="onSubmit(dialogForm.value)"
       [disabled]="dialogForm.invalid || dialogForm.untouched"
     >

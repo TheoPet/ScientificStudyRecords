@@ -12,7 +12,7 @@ import { DialogStudyAssignComponent } from 'src/app/shared/modal/dialog-study-as
 @Component({
   selector: 'app-test-subject-start',
   templateUrl: './test-subject-start.component.html',
-  styleUrls: ['./test-subject-start.component.css']
+  styleUrls: ['./test-subject-start.component.css'],
 })
 export class TestSubjectStartComponent implements OnInit, OnDestroy {
   loadedTestSubjects: TestSubject[];
@@ -20,23 +20,33 @@ export class TestSubjectStartComponent implements OnInit, OnDestroy {
   afterClosedSubscription: Subscription;
   dataSource = new MatTableDataSource([]);
   private paginator: MatPaginator;
-  displayedColumns: string[] = ['testSubject', 'entryTime', 'comment', 'study', 'group'];
+  displayedColumns: string[] = [
+    'testSubject',
+    'entryTime',
+    'comment',
+    'study',
+    'group',
+  ];
 
-  @ViewChild(MatPaginator, {static: false}) set matPaginator(mp: MatPaginator) {
+  @ViewChild(MatPaginator, { static: false }) set matPaginator(
+    mp: MatPaginator
+  ) {
     this.paginator = mp;
     this.dataSource.paginator = this.paginator;
   }
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private service: TestSubjectService,
-              public matDialog: MatDialog) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private service: TestSubjectService,
+    public matDialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.getTestSubjects();
   }
 
   getTestSubjects() {
-    this.subscription = this.service.getAllTestSubjects().subscribe(data => {
+    this.subscription = this.service.getAllTestSubjects().subscribe((data) => {
       this.loadedTestSubjects = data;
       this.dataSource.data = this.loadedTestSubjects;
     });
@@ -49,37 +59,10 @@ export class TestSubjectStartComponent implements OnInit, OnDestroy {
   }
 
   openTestSubject(testSubject: TestSubject) {
-
-    if (testSubject.study.name === null) {
-      this.assignTestSubjectToStudy(testSubject);
-    } else {
-      this.router.navigate(['../testsubjects', testSubject.id, 'groups', testSubject.group.id], { relativeTo: this.route });
-
-    }
-  }
-
-  assignTestSubjectToStudy(testSubject: TestSubject) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.id = 'modal-component';
-    dialogConfig.width = '350px';
-    dialogConfig.panelClass = 'mat-dialog-assign';
-    dialogConfig.data = {
-      title: 'Assign ' + testSubject.name + ' ' + testSubject.surname + ' to study',
-      testSubject
-    };
-
-    const modalDialog = this.matDialog.open(
-      DialogStudyAssignComponent,
-      dialogConfig
+    this.router.navigate(
+      ['../testsubjects', testSubject.id, 'groups', testSubject.group.id],
+      { relativeTo: this.route }
     );
-    this.afterClosedSubscription = modalDialog
-      .afterClosed()
-      .subscribe((data) => {
-        if (data !== undefined) {
-          this.loadedTestSubjects.push(data);
-          this.dataSource.data = this.loadedTestSubjects;
-        }
-      });
   }
 
   onAddTestSubject() {

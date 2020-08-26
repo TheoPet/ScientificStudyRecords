@@ -51,7 +51,7 @@ export class GroupStartComponent implements OnInit {
     dialogConfig.panelClass = 'mat-dialog-group';
     dialogConfig.data = {
       title: 'Add group',
-      description: 'Add new group',
+      description: 'Group name',
       editGroup: false
     };
 

@@ -1,16 +1,36 @@
-<h1 mat-dialog-title>{{modalData.title}}</h1>
+<h1 mat-dialog-title style="text-align: center;">{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field>
-      <mat-label>{{modalData.description}}</mat-label>
-      <input matInput formControlName="name">
+      <mat-label>{{ modalData.description }}</mat-label>
+      <input matInput formControlName="name" required />
+      <mat-error>
+        Please enter study name
+      </mat-error>
     </mat-form-field>
   </form>
-  </div>
-  <div mat-dialog-actions style="justify-content: center;">
-    <button mat-icon-button color="primary" (click)="onSubmit(dialogForm.value)"
-    [disabled]="dialogForm.invalid || dialogForm.untouched"
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+  <ng-container *ngIf="this.modalData.editStudy">
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      (click)="onSubmit(dialogForm.value)"
+      [disabled]="!dialogForm.dirty"
     >
-    <mat-icon>add_box</mat-icon>
-</button>
+      Save
+    </button>
+  </ng-container>
+  <ng-container *ngIf="!this.modalData.editStudy">
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      (click)="onSubmit(dialogForm.value)"
+      [disabled]="dialogForm.invalid || dialogForm.untouched"
+    >
+      Add study
+    </button>
+  </ng-container>
 </div>

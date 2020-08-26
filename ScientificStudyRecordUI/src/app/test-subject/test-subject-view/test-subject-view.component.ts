@@ -102,7 +102,7 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
   openEditTestSubjectDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '300px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: 'Edit test subject',
       testSubject: this.loadedSubject,
