@@ -72,7 +72,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   openAddExperimentDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '300px';
+    dialogConfig.width = '350px';
     dialogConfig.panelClass = 'mat-dialog-experiments';
     dialogConfig.data = {
       title: 'Add experiment',

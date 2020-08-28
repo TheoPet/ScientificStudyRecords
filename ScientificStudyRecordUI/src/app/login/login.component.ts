@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from '../shared/authorization/auth.service';
-import { BasicUserResponse } from './user-response.model';
 import { User } from './user.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
@@ -29,14 +28,13 @@ export class LoginComponent implements OnInit {
     );
   }
 
-
   onSubmit() {
     const email = this.loginForm.get('username').value;
     const password = this.loginForm.get('password').value;
     const userData = new User(email, password);
     this.authService.login(userData).subscribe(
       (response) => {
-        this.router.navigate(['../home'], { relativeTo: this.route });
+        this.router.navigate(['../'], { relativeTo: this.route });
       }
     );
   }

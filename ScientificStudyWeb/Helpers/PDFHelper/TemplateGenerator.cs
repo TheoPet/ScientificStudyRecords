@@ -6,9 +6,9 @@ using static ScientificStudyWeb.Helpers.Utility;
 
 namespace ScientificStudyWeb.Helpers.PDFHelper
 {
-    public static class TemplateGenerator
+    public  class TemplateGenerator
     {
-        public static string GetHTMLStringForExperimentReport(ReportType reportType, string header,
+        public string GetHTMLStringForExperimentReport(ReportType reportType, string header,
                                                               IEnumerable<ReportExperimentData> experiments)
         {
             var sb = new StringBuilder();

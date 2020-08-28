@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatDialog, MatDialogConfig } from '@angular/material';
 import { GroupService } from '../services/group.service';
 import { DialogGroupInputComponent } from '../shared/modal/dialog-group-input/dialog-group-input.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group-start',
@@ -26,7 +27,8 @@ export class GroupStartComponent implements OnInit {
   }
 
   constructor(public service: GroupService,
-              public matDialog: MatDialog ) { }
+              public matDialog: MatDialog ,
+              private router: Router) { }
 
   ngOnInit() {
     this.getGroups();
@@ -68,6 +70,7 @@ export class GroupStartComponent implements OnInit {
         }
       });
   }
-
-
+  openGroup(group: Group) {
+    this.router.navigate(['../groups', group.id]);
+  }
 }

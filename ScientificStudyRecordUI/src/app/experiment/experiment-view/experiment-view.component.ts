@@ -111,7 +111,10 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
       deleteMethodName: 'deleteExperiment',
       data: this.loadedExperiment,
     };
-
+    const modalDialog = this.matDialog.open(
+      DialogDeleteComponent,
+      dialogConfig
+    );
   }
 
   ngOnDestroy() {
@@ -122,23 +125,5 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
     if (this.afterClosedSubscription) {
       this.afterClosedSubscription.unsubscribe();
     }
-  }
-
-  onSubmit() {
-    const testSubject = new BasicTestSubject(
-      this.loadedTestSubject.name,
-      this.loadedTestSubject.surname,
-      this.loadedTestSubject.id
-    );
-    const experiment = new Experiment(
-      this.experimentForm.get('time').value,
-      this.experimentForm.get('comment').value,
-      testSubject,
-      this.experimentForm.get('task').value,
-      this.loadedTestSubject.group.id,
-      this.experimentId
-    );
-
-    this.experimentService.updateExperiment(experiment).subscribe();
   }
 }

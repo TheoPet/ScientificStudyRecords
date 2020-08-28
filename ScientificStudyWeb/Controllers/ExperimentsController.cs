@@ -15,6 +15,8 @@ using ScientificStudyWeb.Helpers;
 using DinkToPdf.Contracts;
 using static ScientificStudiesRecord.Startup;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using ScientificStudyWeb.Data.Authorization;
 
 namespace ScientificStudyWeb.Controllers
 {
@@ -59,6 +61,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(experimentToReturn);
         }
 
+        // [Authorize(Policy = Policies.Admin)]
         [HttpPut]
         public async Task<IActionResult> Update(ExperimentData experiment)
         {
@@ -108,7 +111,7 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpGet("filtered/groups/{groupId:int}")]
-        public async Task<IActionResult> GetExperimentsFilteredByGroup(int groupId,[FromQuery] int pageSize,
+        public async Task<IActionResult> GetExperimentsFilteredByGroup(int groupId, [FromQuery] int pageSize,
                                                                                    [FromQuery] int pageNumber)
         {
             var parameters = new PaginationParameters()
@@ -134,7 +137,7 @@ namespace ScientificStudyWeb.Controllers
         }
 
         [HttpGet("filtered/testsubjects/{testSubjectId:int}")]
-        public async Task<IActionResult> GetExperimentsFilteredByTestSubject(int testSubjectId,[FromQuery] int pageSize,
+        public async Task<IActionResult> GetExperimentsFilteredByTestSubject(int testSubjectId, [FromQuery] int pageSize,
                                                                                                [FromQuery] int pageNumber)
         {
             var parameters = new PaginationParameters()
@@ -164,10 +167,11 @@ namespace ScientificStudyWeb.Controllers
         {
             var experiments = await _unitOfWork.experimentRepository.GetAll(e => e.StudyId == studyId);
             var experimentsToExport = _mapper.Map<IEnumerable<Experiment>, IEnumerable<ReportExperimentData>>(experiments);
-
-            var globalSettings = PDFHelper.SetGlobalSettings("Experiment report - filtered by study");
-            var objectSettings = PDFHelper.SetObjectSettings();
-            objectSettings.HtmlContent = TemplateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByStudy,
+            var pdfHelp = new PDFHelper();
+            var globalSettings = pdfHelp.SetGlobalSettings("Experiment report - filtered by study");
+            var objectSettings = pdfHelp.SetObjectSettings();
+            var templateGenerator = new TemplateGenerator();
+            objectSettings.HtmlContent = templateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByStudy,
                                                                                             studyName, experimentsToExport);
 
             var pdf = new HtmlToPdfDocument()
@@ -185,10 +189,12 @@ namespace ScientificStudyWeb.Controllers
         {
             var experiments = await _unitOfWork.experimentRepository.GetAll(e => e.GroupId == groupId);
             var experimentsToExport = _mapper.Map<IEnumerable<Experiment>, IEnumerable<ReportExperimentData>>(experiments);
+            var pdfHelp = new PDFHelper();
+            var templateGenerator = new TemplateGenerator();
 
-            var globalSettings = PDFHelper.SetGlobalSettings("Experiment report - filtered by group");
-            var objectSettings = PDFHelper.SetObjectSettings();
-            objectSettings.HtmlContent = TemplateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByGroup,
+            var globalSettings = pdfHelp.SetGlobalSettings("Experiment report - filtered by group");
+            var objectSettings = pdfHelp.SetObjectSettings();
+            objectSettings.HtmlContent = templateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByGroup,
                                                                                             groupName, experimentsToExport);
 
             var pdf = new HtmlToPdfDocument()
@@ -206,10 +212,11 @@ namespace ScientificStudyWeb.Controllers
         {
             var experiments = await _unitOfWork.experimentRepository.GetAll(e => e.TestSubjectId == testSubjectId);
             var experimentsToExport = _mapper.Map<IEnumerable<Experiment>, IEnumerable<ReportExperimentData>>(experiments);
-
-            var globalSettings = PDFHelper.SetGlobalSettings("Experiment report - filtered by test subject");
-            var objectSettings = PDFHelper.SetObjectSettings();
-            objectSettings.HtmlContent = TemplateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByTestSubject,
+            var pdfHelp = new PDFHelper();
+            var templateGenerator = new TemplateGenerator();
+            var globalSettings = pdfHelp.SetGlobalSettings("Experiment report - filtered by test subject");
+            var objectSettings = pdfHelp.SetObjectSettings();
+            objectSettings.HtmlContent = templateGenerator.GetHTMLStringForExperimentReport(Utility.ReportType.FilteredByTestSubject,
                                                                                             testSubjectName, experimentsToExport);
 
             var pdf = new HtmlToPdfDocument()
@@ -222,6 +229,7 @@ namespace ScientificStudyWeb.Controllers
             return File(file, "application/pdf");
         }
 
+        // [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {

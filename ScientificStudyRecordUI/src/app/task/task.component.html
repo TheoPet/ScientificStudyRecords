@@ -22,7 +22,7 @@
   </mat-menu>
 </mat-toolbar>
 
-<div *ngIf="loadedTask" class="container">
+<div *ngIf="loadedTask" class="container" style="padding:2%;">
   <div *ngIf="dataSource.data.length === 0">
     <p>Experiments for this task have not been conducted.</p>
   </div>
@@ -30,6 +30,7 @@
   <ng-container *ngIf="dataSource.data.length > 0">
     <mat-form-field>
       <mat-label>Search</mat-label>
+      <mat-icon matSuffix>search</mat-icon>
       <input
         matInput
         (keyup)="applyFilter($event)"
@@ -51,7 +52,7 @@
       <ng-container matColumnDef="experimentTime">
         <th mat-header-cell *matHeaderCellDef>Experiment time</th>
         <td mat-cell *matCellDef="let experiment">
-          {{ experiment.time | date: "hh:mm" }}
+          {{ experiment.time }}
         </td>
       </ng-container>
 
@@ -74,8 +75,7 @@
       </tr>
     </table>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons
+      [pageSizeOptions]="[5, 10]"
     ></mat-paginator>
   </ng-container>
 </div>

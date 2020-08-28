@@ -15,7 +15,7 @@ namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize(Policy = Policies.User)]
     public class StudiesController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -28,6 +28,7 @@ namespace ScientificStudyWeb.Controllers
             _mapper = mapper;
             _unitOfWork = new UnitOfWork(_context);
         }
+
 
         [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredPaginatedResults([FromQuery] int pageSize,
@@ -59,6 +60,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(studiesToReturn);
         }
 
+        //[Authorize(Policy = Policies.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetStudies([FromQuery] bool simplified)
         {
@@ -98,6 +100,7 @@ namespace ScientificStudyWeb.Controllers
             var tasksToReturn = _mapper.Map<IEnumerable<Models.Task>, IEnumerable<BasicData>>(study.Tasks);
             return Ok(tasksToReturn);
         }
+
         [HttpPost]
         public async Task<IActionResult> Save(StudyData data)
 
@@ -112,7 +115,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(studyToReturn);
         }
 
-        // [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = Policies.Admin)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateStudy(StudyData data, int id)
         {
@@ -172,6 +175,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(studyToReturn);
         }
 
+        [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {

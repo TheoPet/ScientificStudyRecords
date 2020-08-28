@@ -27,12 +27,6 @@ export class GroupComponent implements OnInit, OnDestroy {
   afterClosedSubscription: Subscription;
   editGroupDialogClosedSubscription: Subscription;
 
-  searchText = '';
-
-  toggleSearch = false;
-
-  @ViewChild('searchbar', { static: false }) searchBar: ElementRef;
-
   constructor(
     private route: ActivatedRoute,
     private groupService: GroupService,
@@ -46,14 +40,6 @@ export class GroupComponent implements OnInit, OnDestroy {
     });
   }
 
-  openSearch() {
-    this.toggleSearch = true;
-    this.searchBar.nativeElement.focus();
-  }
-  searchClose() {
-    this.searchText = '';
-    this.toggleSearch = false;
-  }
   getGroup(id: number) {
     this.loadGroupSubscription = this.groupService
       .getGroup(id)
@@ -73,7 +59,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   openAddTestSubjectDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '250px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: 'Add test subject',
       groupId: this.loadedGroup.id,
@@ -96,7 +82,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   openEditGroupDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '250px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: 'Edit group',
       description: 'Please enter new group name',
@@ -120,7 +106,7 @@ export class GroupComponent implements OnInit, OnDestroy {
   openDeleteGroupDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'dialog-delete-component';
-    dialogConfig.width = '300px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
       title: this.loadedGroup.name,
       deleteMethodName: 'deleteGroup',

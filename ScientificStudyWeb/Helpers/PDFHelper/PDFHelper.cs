@@ -3,9 +3,9 @@ using DinkToPdf;
 
 namespace ScientificStudyWeb.Helpers.PDFHelper
 {
-    public static class PDFHelper
+    public class PDFHelper
     {
-        public static GlobalSettings SetGlobalSettings(string documentTitle)
+        public  GlobalSettings SetGlobalSettings(string documentTitle)
         {
             return new GlobalSettings
             {
@@ -17,7 +17,7 @@ namespace ScientificStudyWeb.Helpers.PDFHelper
             };
         }
 
-        public static ObjectSettings SetObjectSettings()
+        public  ObjectSettings SetObjectSettings()
         {
             return new ObjectSettings
             {

@@ -10,12 +10,14 @@ using AutoMapper;
 using System.Collections.Generic;
 using ScientificStudyWeb.Helpers;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using ScientificStudyWeb.Data.Authorization;
 
 namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-
+    // [Authorize]
     public class TestSubjectsController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -130,6 +132,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(testSubjectsToReturn);
         }
 
+        // [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
@@ -142,6 +145,7 @@ namespace ScientificStudyWeb.Controllers
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
         }
 
+        [Authorize(Policy = Policies.Admin)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(TestSubjectData testSubject)
         {

@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { AuthenticationService } from './shared/authorization/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class AppComponent {
   title = 'ScientificStudyRecordUI';
+  loggedIn: false;
+
+  constructor(private authService: AuthenticationService) {}
+
 }
 

@@ -18,11 +18,16 @@ import { GroupStartComponent } from './group-start/group-start.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { AuthGuardService } from './shared/authorization/auth-guard.service';
 import { LoginComponent } from './login/login.component';
+import { HomeLayoutComponent } from './home-layout/home-layout.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuardService],
+  },
   {
     path: 'studies',
     component: StudyHomeComponent,
@@ -32,7 +37,7 @@ const appRoutes: Routes = [
       { path: ':id', component: StudyViewComponent },
       { path: ':id/edit', component: StudyEditComponent },
     ],
-     canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService],
   },
   {
     path: 'testsubjects',
@@ -48,7 +53,7 @@ const appRoutes: Routes = [
     path: 'groups',
     component: GroupHomeComponent,
     children: [
-      { path: '', component: GroupStartComponent},
+      { path: '', component: GroupStartComponent },
       { path: ':id', component: GroupComponent },
     ],
   },

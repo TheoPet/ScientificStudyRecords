@@ -25,6 +25,7 @@ export class DialogExperimentInputComponent implements OnInit {
   testSubject: TestSubject;
   experiment: Experiment;
   filteredOptions: Observable<BasicTask[]>;
+  time: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogExperimentInputComponent>,
@@ -37,6 +38,7 @@ export class DialogExperimentInputComponent implements OnInit {
   ngOnInit() {
     this.testSubject = this.modalData.testSubject;
     this.experiment = this.modalData.experiment;
+    this.setTime();
     this.initForm();
   }
 
@@ -65,15 +67,12 @@ export class DialogExperimentInputComponent implements OnInit {
   }
 
   initForm() {
-
     this.dialogForm = new FormGroup({
       study: new FormControl(null, Validators.required),
       group: new FormControl(null, Validators.required),
       task: new FormControl(null, Validators.required),
-      time: new FormControl(new Date(), Validators.required),
       comment: new FormControl(null),
     });
-
 
     if (this.modalData.editExperiment) {
       this.dialogForm = new FormGroup({
@@ -85,15 +84,20 @@ export class DialogExperimentInputComponent implements OnInit {
           { value: this.testSubject.group.name, disabled: true },
           Validators.required
         ),
-        task: new FormControl({value: this.experiment.task, disabled: true}, Validators.required),
-        time: new FormControl(new Date(this.experiment.time), Validators.required),
+        task: new FormControl(
+          { value: this.experiment.task, disabled: true },
+          Validators.required
+        ),
+        time: new FormControl(
+          new Date(this.experiment.time),
+          Validators.required
+        ),
         comment: new FormControl(this.experiment.comment),
       });
-
-      } else {
-        this.studyService
+    } else {
+      this.studyService
         .getTaskLookup(this.testSubject.study.id)
-         .subscribe((tasks) => {
+        .subscribe((tasks) => {
           this.dialogForm = new FormGroup({
             study: new FormControl(
               { value: this.testSubject.study.name, disabled: true },
@@ -109,14 +113,21 @@ export class DialogExperimentInputComponent implements OnInit {
           });
           this.filterTasks();
         });
-      }
+    }
   }
 
+  onTimeChange(event) {
+    this.time = event;
+  }
   onSubmit() {
     const experiment = new Experiment(
-      this.dialogForm.get('time').value,
+      this.time,
       this.dialogForm.get('comment').value,
-      new BasicTestSubject(this.testSubject.name, this.testSubject.surname, this.testSubject.id),
+      new BasicTestSubject(
+        this.testSubject.name,
+        this.testSubject.surname,
+        this.testSubject.id
+      ),
       this.dialogForm.get('task').value,
       this.testSubject.group.id,
       this.testSubject.study.id
@@ -124,12 +135,27 @@ export class DialogExperimentInputComponent implements OnInit {
 
     if (this.modalData.editExperiment) {
       experiment.id = this.experiment.id;
-      return this.experimentService.updateExperiment(experiment).subscribe( data => {
+      return this.experimentService
+        .updateExperiment(experiment)
+        .subscribe((data) => {
+          this.dialogRef.close(data);
+        });
+    }
+    return this.experimentService
+      .saveExperiment(experiment)
+      .subscribe((data) => {
         this.dialogRef.close(data);
       });
+  }
+
+  setTime() {
+    const date = new Date();
+    if (this.modalData.editExperiment) {
+      return  this.time = this.experiment.time;
     }
-    return this.experimentService.saveExperiment(experiment).subscribe( data => {
-      this.dialogRef.close(data);
-    });
+
+    const hour = date.getHours().toString();
+    const minutes = date.getMinutes().toString();
+    this.time = hour + ':' + minutes;
   }
 }

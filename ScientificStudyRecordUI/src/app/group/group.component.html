@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" [class.hidden]="toggleSearch">
+<mat-toolbar color="primary">
   <span class="text-center">{{ loadedGroup.name }} </span>
   <span class="filler"></span>
   <button
@@ -17,11 +17,8 @@
       Delete group
     </button>
   </mat-menu>
-  <button mat-icon-button  (click)="openSearch()">
-    <mat-icon>search</mat-icon>
-</button>
 </mat-toolbar>
-<div class="component-margin-top">
+<div class="container" style="padding:2%;">
   <mat-nav-list>
     <ng-container *ngFor="let subject of loadedGroup.testSubjects">
       <mat-list-item>

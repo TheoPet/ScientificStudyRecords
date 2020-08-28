@@ -39,6 +39,8 @@ namespace ScientificStudiesRecord
             }
         }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -111,19 +113,28 @@ namespace ScientificStudiesRecord
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            //app.UseStaticFiles();
-            //app.UseCookiePolicy();
+            // app.UseRouting();
+            // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            // app.UseAuthentication();
+            // app.UseAuthorization();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            //app.UseStaticFiles();
+            //app.UseCookiePolicy();
+
+            // app.UseCors(MyAllowSpecificOrigins);
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllers();
+            // });
 
 
         }

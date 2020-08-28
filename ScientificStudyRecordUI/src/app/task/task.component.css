@@ -6,3 +6,10 @@ table {
     font-size: 14px;
     width: 100%;
   }
+
+  tr {
+    cursor: auto
+  }
+  tr.mat-row:hover {
+    background: rgba(0, 0, 0, 0.0);
+  }

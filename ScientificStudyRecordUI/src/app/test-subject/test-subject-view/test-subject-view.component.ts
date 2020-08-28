@@ -125,9 +125,9 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
   openDeleteTestSubjectDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'dialog-delete-component';
-    dialogConfig.width = '300px';
+    dialogConfig.width = '350px';
     dialogConfig.data = {
-      title: this.loadedSubject.name,
+      title: this.loadedSubject.name + ' ' + this.loadedSubject.surname,
       deleteMethodName: 'deleteTestSubject',
       data: this.loadedSubject,
     };

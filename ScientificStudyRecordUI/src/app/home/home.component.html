@@ -168,7 +168,7 @@
         <ng-container matColumnDef="testSubjectEntryTime">
           <th mat-header-cell *matHeaderCellDef>Test subject entry time</th>
           <td mat-cell *matCellDef="let experiment">
-            {{ experiment.testSubjectEntryTime | date:'short'}}
+            {{ experiment.testSubjectEntryTime | date:'dd/MM/yyyy HH:MM'}}
           </td>
         </ng-container>
       <!-- Task Column -->

@@ -20,6 +20,7 @@ import { FilterUtils } from '../../filter/filter-util';
 export class DialogTaskExperimentInputComponent implements OnInit {
   dialogForm: FormGroup;
   filteredOptions: Observable<BasicTestSubject[]>;
+  time: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogTaskExperimentInputComponent>,
@@ -31,20 +32,30 @@ export class DialogTaskExperimentInputComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.setTime();
   }
 
   initForm() {
     this.dialogForm = new FormGroup({
       testSubject: new FormControl(null, Validators.required),
-      time: new FormControl(new Date(), Validators.required),
       comment: new FormControl(''),
     });
     this.filterTestSubjects();
   }
 
+  onTimeChange(event: string) {
+    this.time = event;
+  }
+
+  setTime() {
+    const date = new Date();
+    const hour = date.getHours().toString();
+    const minutes = date.getMinutes().toString();
+    this.time = hour + ':' + minutes;
+  }
   onSubmit() {
     const experiment = new Experiment(
-      this.dialogForm.get('time').value,
+      this.time,
       this.dialogForm.get('comment').value,
       this.dialogForm.get('testSubject').value,
       this.modalData.task,
@@ -76,7 +87,7 @@ export class DialogTaskExperimentInputComponent implements OnInit {
       }));
   }
 
-  displayFunction(object: BasicData) {
-    return FilterUtils.displayFunction(object);
+  displayFunction(object: BasicTestSubject) {
+    return FilterUtils.displaFunctionTestSubject(object);
   }
 }

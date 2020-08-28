@@ -9,11 +9,14 @@ using System.Linq;
 using ScientificStudyWeb.Models;
 using ScientificStudyWeb.Helpers;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using ScientificStudyWeb.Data.Authorization;
 
 namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    // [Authorize]
     public class GroupsController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -39,7 +42,7 @@ namespace ScientificStudyWeb.Controllers
                 var groupsLookupToReturn = _mapper.Map<IEnumerable<BasicData>>(groups);
                 return Ok(groupsLookupToReturn);
             }
-            
+
             var groupsToReturn = _mapper.Map<IEnumerable<GroupData>>(groups);
 
             return Ok(groupsToReturn);
@@ -106,6 +109,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(groupToReturn);
         }
 
+        // [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -118,6 +122,7 @@ namespace ScientificStudyWeb.Controllers
             return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
         }
 
+        [Authorize(Policy = Policies.Admin)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateGroup(GroupData data)
         {

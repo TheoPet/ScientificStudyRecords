@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ modalData.title }}</h1>
+<h1 style="text-align: center;" mat-dialog-title>{{ modalData.title }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="dialogForm">
     <mat-form-field class="example-full-width">
@@ -20,12 +20,16 @@
       </mat-autocomplete>
     </mat-form-field>
     <div>
-      <label for="time">Time</label>
-      <ngx-mat-timepicker
-        formControlName="time"
-        [showSpinners]="false"
-      ></ngx-mat-timepicker>
+    <label for="time">Time</label>
+    <div style="margin-bottom: 5%;">
+      <ngx-timepicker-field
+        [controlOnly]="true"
+        [format]="24"
+        [defaultTime]="this.time"
+        (timeChanged)="onTimeChange($event)" 
+      ></ngx-timepicker-field>
     </div>
+  </div>
     <div>
       <label for="comment">Comment</label>
       <mat-form-field>
@@ -34,15 +38,17 @@
           class="form-control"
           id="comment"
           formControlName="comment"
-          rows="3"
+          rows="6"
         ></textarea>
       </mat-form-field>
     </div>
   </form>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions style="justify-content: center;">
   <button
-    mat-button
+    mat-raised-button
+    color="primary"
+    type="submit"
     (click)="onSubmit()"
     [disabled]="dialogForm.invalid || dialogForm.untouched"
   >

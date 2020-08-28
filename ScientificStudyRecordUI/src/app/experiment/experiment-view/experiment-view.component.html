@@ -9,10 +9,6 @@
     </div>
   </div>
   <span class="filler"></span>
-  <button mat-icon-button aria-label="Export group data">
-    <mat-icon>save_alt</mat-icon>
-  </button>
-
   <button mat-button [matMenuTriggerFor]="Menu">More...</button>
   <mat-menu #Menu="matMenu" yPosition="below">
     <button mat-menu-item (click)="openEditExperimentDialog()">
@@ -24,7 +20,7 @@
   </mat-menu>
 </mat-toolbar>
 <div>
-  <div *ngIf="loadedTestSubject">
+  <div class="container" style="padding:2%;" *ngIf="loadedTestSubject">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ loadedTestSubject.name }} {{ loadedTestSubject.surname }}</mat-card-title>
@@ -36,53 +32,12 @@
           <mat-grid-tile>Comment</mat-grid-tile>
         </mat-grid-list>
         <mat-divider></mat-divider>
-        <mat-grid-list cols="3" rowHeight="50px">
+        <mat-grid-list cols="3"  rowHeight="6em">
           <mat-grid-tile>{{loadedExperiment.task.name}}</mat-grid-tile>
-          <mat-grid-tile>{{loadedExperiment.time | date:'hh:mm'}}</mat-grid-tile>
+          <mat-grid-tile>{{loadedExperiment.time}}</mat-grid-tile>
           <mat-grid-tile>{{loadedExperiment.comment}}</mat-grid-tile>
         </mat-grid-list>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
-
-<!-- <div *ngIf="loadedTestSubject" class="container">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-        <form [formGroup]="experimentForm">
-          <div class="form-group">
-            <mat-form-field>
-              <label for="task">Task</label>
-              <input
-                matInput
-                type="text"
-                id="task"
-                formControlName="task"
-                class="form-control"
-                [value]="experimentForm.get('task').value.name"
-              />
-            </mat-form-field>
-          </div>
-          <label for="time">Time</label>
-          <ngx-mat-timepicker
-              id="timepicker" 
-              formControlName="time"
-              [showSpinners]="false"></ngx-mat-timepicker>
-          <div class="form-group">
-            <mat-form-field>
-              <label for="comment">Comment</label>
-              <textarea
-                matInput
-                class="form-control"
-                id="comment"
-                formControlName="comment"
-                rows="3"
-              ></textarea>
-            </mat-form-field>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->

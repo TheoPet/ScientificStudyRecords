@@ -56,6 +56,10 @@ import { GroupHomeComponent } from './group-home/group-home.component';
 import { StudyHomeComponent } from './study/study-home/study-home.component';
 import { LoginComponent } from './login/login.component';
 import { ServerErrorInterceptor } from './shared/error/interceptor/server-error.interceptor';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { HomeLayoutComponent } from './home-layout/home-layout.component';
+import { AuthInterceptorService } from './shared/authorization/auth-interceptor.service';
+
 
 @NgModule({
   declarations: [
@@ -88,6 +92,7 @@ import { ServerErrorInterceptor } from './shared/error/interceptor/server-error.
     GroupHomeComponent,
     StudyHomeComponent,
     LoginComponent,
+    HomeLayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -119,7 +124,8 @@ import { ServerErrorInterceptor } from './shared/error/interceptor/server-error.
     MatMenuModule,
     MatExpansionModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [
     StudyService,
@@ -128,6 +134,7 @@ import { ServerErrorInterceptor } from './shared/error/interceptor/server-error.
     TaskService,
     FilterService,
     MatDatepickerModule,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],

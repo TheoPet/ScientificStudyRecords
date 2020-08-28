@@ -38,16 +38,14 @@ namespace ScientificStudyWeb.Controllers
             var user = await _unitOfWork.userRepository.Login(userData.Username, userData.Password);
 
             if (user == null)
-                return Unauthorized();
+                return StatusCode(401, "Username or password incorrect");
 
 
-            var expires_in = DateTime.Now.AddMinutes(30);
-            var temp = expires_in.ToLocalTime();
-
+            var expiresAt = DateTime.Now.AddDays(1);
             var userDataToReturn = new UserDataToReturn()
             {
-                AccessToken = _userService.GenerateJWTToken(user, expires_in),
-                ExpiresAt = expires_in,
+                AccessToken = _userService.GenerateJWTToken(user, expiresAt),
+                ExpiresAt = expiresAt,
                 User = new BasicUser()
                 {
                     Username = user.Username,

@@ -3,7 +3,7 @@
   <form [formGroup]="dialogForm">
     <mat-form-field>
       <mat-label>Study</mat-label>
-      <input matInput formControlName="study" cdkFocusInitial />
+      <input matInput formControlName="study"/>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Group</mat-label>
@@ -46,14 +46,16 @@
         </mat-autocomplete>
       </mat-form-field>
     </ng-container>
-    <div>
-      <label for="time">Time</label>
-      <ng-container style="justify-content: center;">
-      <ngx-mat-timepicker
-        formControlName="time"
-        [showSpinners]="false"
-      ></ngx-mat-timepicker>
-    </ng-container>
+    <div>    
+    <label for="time">Time</label>
+      <div style="margin-bottom: 5%;">
+        <ngx-timepicker-field
+          [controlOnly]="true"
+          [format]="24"
+          [defaultTime]="this.time"
+          (timeChanged)="onTimeChange($event)" 
+        ></ngx-timepicker-field>
+      </div>
     </div>
     <div>
       <label for="comment">Comment</label>
@@ -63,13 +65,14 @@
           class="form-control"
           id="comment"
           formControlName="comment"
-          rows="3"
+          rows="6"
         ></textarea>
       </mat-form-field>
     </div>
   </form>
 </div>
 <div mat-dialog-actions style="justify-content: center;">
+  <ng-container *ngIf="!this.modalData.editExperiment">
   <button
     mat-raised-button
     color="primary"
@@ -79,4 +82,15 @@
   >
     Add experiment
   </button>
+  </ng-container>
+  <ng-container *ngIf="this.modalData.editExperiment">
+    <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="onSubmit()"
+  >
+    Save
+  </button>
+  </ng-container>
 </div>

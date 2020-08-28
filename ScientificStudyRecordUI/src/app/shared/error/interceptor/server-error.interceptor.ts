@@ -18,7 +18,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
   }
 
   openSnackBar(error) {
-    this.snackBar.open(error.message, 'End now', {
+    this.snackBar.open(error.error, 'End now', {
       duration: 2000,
       horizontalPosition: 'center',
       verticalPosition: 'top',

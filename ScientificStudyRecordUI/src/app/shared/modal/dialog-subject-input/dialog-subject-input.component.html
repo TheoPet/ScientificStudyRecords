@@ -29,16 +29,18 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #myDatepicker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field>
-      <label for="comment">Comment</label>
-      <textarea
-        matInput
-        class="form-control"
-        id="comment"
-        formControlName="comment"
-        rows="3"
-      ></textarea>
-    </mat-form-field>
+    <div>
+      <label style = "margin-bottom: 5%;"for="comment">Comment</label>
+      <mat-form-field>
+        <textarea
+          matInput
+          class="form-control"
+          id="comment"
+          formControlName="comment"
+          rows="6"
+        ></textarea>
+      </mat-form-field>
+    </div>
   </form>
 </div>
 <div mat-dialog-actions style="justify-content: center;">

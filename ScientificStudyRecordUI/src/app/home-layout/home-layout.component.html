@@ -1,0 +1,20 @@
+<ng-container *ngIf="this.userLoggedIn | async">
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #drawer mode="side" opened role="navigation">
+      <mat-nav-list style="justify-content: center;">
+        <a mat-list-item routerLink="/" routerLinkActive>Home</a>
+        <a mat-list-item routerLink="/studies" routerLinkActive>Studies</a>
+        <a mat-list-item routerLink="/groups"routerLinkActive>Groups</a>
+        <a mat-list-item  routerLink="/testsubjects"routerLinkActive>Test Subjects</a>
+        <button mat-icon-button  (click)="logOut()"><mat-icon>highlight_off</mat-icon></button>
+        
+      </mat-nav-list>
+      
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div style="height: 88vh;">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

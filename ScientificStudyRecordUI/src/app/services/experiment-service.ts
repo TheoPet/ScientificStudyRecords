@@ -32,7 +32,7 @@ export class ExperimentService {
 
   exportReportFilteredByGroup(groupId: number, groupName: string) {
     return this.httpClient.get(
-      `http://localhost:5000/experiments/export/study/${groupId}`,
+      `http://localhost:5000/experiments/export/group/${groupId}`,
       {
         responseType: 'blob',
         params: new HttpParams().set('groupName', groupName),
@@ -44,7 +44,7 @@ export class ExperimentService {
     testSubjectName: string
   ) {
     return this.httpClient.get(
-      `http://localhost:5000/experiments/export/study/${testSubjectId}`,
+      `http://localhost:5000/experiments/export/testsubject/${testSubjectId}`,
       {
         responseType: 'blob',
         params: new HttpParams().set('testSubjectName', testSubjectName),
@@ -71,14 +71,7 @@ export class ExperimentService {
   deleteExperiment(experiment: Experiment) {
     this.httpClient
       .delete(`http://localhost:5000/experiments/${experiment.id}`)
-      .subscribe(
-        (val) => {
-          console.log('DELETE call successful value returned in body', val);
-        },
-        (response) => {
-          console.log('DELETE call in error', response);
-        }
-      );
+      .subscribe();
     this.router.navigate(
       [
         '../testsubjects',

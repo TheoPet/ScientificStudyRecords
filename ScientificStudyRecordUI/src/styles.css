@@ -12,4 +12,13 @@ input.ng-invalid.ng-touched {
 .component-margin-top {
   margin-top: 2%;
 }
-
+tr {
+  cursor: pointer;
+}
+tr.mat-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.mat-row {
+  align-items: stretch;
+  min-height: 100%;  
+}
