@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { DialogInputComponent } from 'src/app/shared/modal/dialog-input/dialog-input.component';
 import { DialogStudyInputComponent } from 'src/app/shared/modal/dialog-study-input/dialog-study-input.component';
 import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
+import { AuthenticationService } from 'src/app/shared/authorization/auth.service';
 
 @Component({
   selector: 'app-study-view',
@@ -26,17 +27,20 @@ export class StudyViewComponent implements OnInit, OnDestroy {
   groupDialogClosedSubscription: Subscription;
   taskDialogClosedSubscription: Subscription;
   editStudyDialogClosedSubscription: Subscription;
+  userRole: string;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private studyService: StudyService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.loadedStudy.id = +params.id;
+      this.userRole = this.authService.getUserRole();
       this.getStudy(this.loadedStudy.id);
     });
   }

@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./home-layout.component.css'],
 })
 export class HomeLayoutComponent implements OnInit, OnDestroy {
-  userLoggedIn: BehaviorSubject<boolean>;
+  userLoggedIn: boolean;
   subscription: Subscription;
 
   constructor(
@@ -19,7 +19,11 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.userLoggedIn = this.authService.userLoggedIn;
+    this.subscription = this.authService.userLoggedIn.subscribe(data => {
+      this.userLoggedIn = data;
+      console.log(this.userLoggedIn);
+    }
+      );
   }
 
   ngOnDestroy() {

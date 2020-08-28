@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { DialogDeleteComponent } from '../shared/modal/dialog-delete/dialog-delete.component';
 import { DialogTaskExperimentInputComponent } from '../shared/modal/dialog-task-experiment-input/dialog-task-experiment-input.component';
 import { BasicTask } from '../shared/models/basic-task.model';
+import { AuthenticationService } from '../shared/authorization/auth.service';
 
 @Component({
   selector: 'app-task',
@@ -27,6 +28,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   loadedTask: Task;
   taskSubscription: Subscription;
   afterClosedSubscription: Subscription;
+  userRole: string;
 
   @ViewChild(MatPaginator, { static: false }) set matPaginator(
     mp: MatPaginator
@@ -38,10 +40,11 @@ export class TaskComponent implements OnInit, OnDestroy {
   constructor(public service: TaskService,
               public matDialog: MatDialog,
               private route: ActivatedRoute,
-              private router: Router) {}
+              private authService: AuthenticationService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
+      this.userRole = this.authService.getUserRole();
       this.getTask(+params.id);
     });
   }

@@ -48,6 +48,7 @@ const appRoutes: Routes = [
       { path: ':id/groups/:groupId', component: TestSubjectViewComponent },
       { path: ':id/edit', component: TestSubjectEditComponent },
     ],
+    canActivate: [AuthGuardService],
   },
   {
     path: 'groups',
@@ -56,6 +57,7 @@ const appRoutes: Routes = [
       { path: '', component: GroupStartComponent },
       { path: ':id', component: GroupComponent },
     ],
+    canActivate: [AuthGuardService],
   },
   {
     path: 'experiments',
@@ -64,6 +66,7 @@ const appRoutes: Routes = [
       { path: '', component: ExperimentStartComponent },
       { path: ':id', component: ExperimentViewComponent },
     ],
+    canActivate: [AuthGuardService],
   },
   { path: 'tasks/:id', component: TaskComponent },
 ];

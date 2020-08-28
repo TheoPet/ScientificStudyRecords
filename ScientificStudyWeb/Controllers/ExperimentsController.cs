@@ -22,6 +22,7 @@ namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class ExperimentsController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -61,7 +62,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(experimentToReturn);
         }
 
-        // [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = Policies.Admin)]
         [HttpPut]
         public async Task<IActionResult> Update(ExperimentData experiment)
         {
@@ -229,7 +230,7 @@ namespace ScientificStudyWeb.Controllers
             return File(file, "application/pdf");
         }
 
-        // [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {

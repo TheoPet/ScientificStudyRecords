@@ -67,7 +67,7 @@ namespace ScientificStudyWeb.Controllers
             var userForCreation = new User
             {
                 Username = userData.Username,
-                UserRole = "User"
+                UserRole = userData.Role
             };
 
             var createdUser = _userService.Register(userForCreation, userData.Password);

@@ -15,7 +15,7 @@ namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize]
     public class StudiesController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -60,7 +60,6 @@ namespace ScientificStudyWeb.Controllers
             return Ok(studiesToReturn);
         }
 
-        //[Authorize(Policy = Policies.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetStudies([FromQuery] bool simplified)
         {

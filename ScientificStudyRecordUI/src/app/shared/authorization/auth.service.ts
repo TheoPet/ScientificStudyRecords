@@ -14,7 +14,6 @@ export class AuthenticationService {
   constructor(private http: HttpClient) {}
 
   login(userData: User) {
-    console.log(this.userLoggedIn);
     this.userLoggedIn.next(true);
     return this.http
       .post<AuthResponse>(`${environment.studyApiEndpoint}/login`, userData)
@@ -25,15 +24,21 @@ export class AuthenticationService {
     const expiresAt = moment(new Date(loginResponse.expiresAt), 'second');
     localStorage.setItem('access_token', loginResponse.accessToken);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    localStorage.setItem('user_role', loginResponse.user.role);
   }
 
   public isLoggedIn() {
     return this.getAccessToken() && moment().isBefore(this.getExpiration());
   }
 
+  getUserRole() {
+    return localStorage.getItem('user_role');
+  }
+
   logoutWhenSessionExpired() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('user_role');
     this.userLoggedIn.next(false);
     this.setLoggedIn(false);
   }
@@ -41,6 +46,7 @@ export class AuthenticationService {
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('user_role');
     this.userLoggedIn.next(false);
     this.setLoggedIn(false);
   }

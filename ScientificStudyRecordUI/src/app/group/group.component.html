@@ -8,7 +8,7 @@
   >
     Add test subject
   </button>
-  <button mat-button [matMenuTriggerFor]="Menu">More...</button>
+  <button *ngIf="userRole === 'Admin'" mat-button [matMenuTriggerFor]="Menu">More...</button>
   <mat-menu #Menu="matMenu" yPosition="below">
     <button mat-menu-item (click)="openEditGroupDialog()">
       Edit group

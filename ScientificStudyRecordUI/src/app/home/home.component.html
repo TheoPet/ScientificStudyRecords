@@ -159,14 +159,14 @@
         </ng-container>
            <!-- Test Subject Comment Column -->
            <ng-container matColumnDef="testSubjectComment">
-            <th mat-header-cell *matHeaderCellDef>Test subject comment</th>
+            <th mat-header-cell *matHeaderCellDef>Comment</th>
             <td mat-cell *matCellDef="let experiment">
               {{ experiment.testSubjectComment }}
             </td>
           </ng-container>
              <!-- Test Subject Entry Time Column -->
         <ng-container matColumnDef="testSubjectEntryTime">
-          <th mat-header-cell *matHeaderCellDef>Test subject entry time</th>
+          <th mat-header-cell *matHeaderCellDef>Entry time</th>
           <td mat-cell *matCellDef="let experiment">
             {{ experiment.testSubjectEntryTime | date:'dd/MM/yyyy HH:MM'}}
           </td>
@@ -181,7 +181,7 @@
 
       <!-- Experiment Time Column -->
       <ng-container matColumnDef="experimentTime">
-        <th mat-header-cell *matHeaderCellDef>Experiment time</th>
+        <th mat-header-cell *matHeaderCellDef>Time</th>
         <td mat-cell *matCellDef="let experiment">{{ experiment.time | date:'hh:mm'}}</td>
       </ng-container>
 

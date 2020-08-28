@@ -11,6 +11,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
 import { DialogExperimentInputComponent } from 'src/app/shared/modal/dialog-experiment-input/dialog-experiment-input.component';
 import { BasicTestSubject } from 'src/app/shared/models/basic-test-subject.model';
+import { AuthenticationService } from 'src/app/shared/authorization/auth.service';
 
 @Component({
   selector: 'app-experiment-view',
@@ -24,17 +25,20 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
   loadedExperiment: Experiment;
   afterClosedSubscription: Subscription;
   experimentId: number;
+  userRole: string;
 
   constructor(
     private route: ActivatedRoute,
     private experimentService: ExperimentService,
     private testSubjectService: TestSubjectService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    public authService: AuthenticationService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.experimentId = +params.id;
+      this.userRole = this.authService.getUserRole();
       this.initForm(this.experimentId);
     });
   }

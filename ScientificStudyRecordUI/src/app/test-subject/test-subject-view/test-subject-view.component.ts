@@ -9,6 +9,7 @@ import { DialogExperimentInputComponent } from 'src/app/shared/modal/dialog-expe
 import { Experiment } from 'src/app/experiment/experiment-view.model';
 import { DialogDeleteComponent } from 'src/app/shared/modal/dialog-delete/dialog-delete.component';
 import { DialogSubjectInputComponent } from 'src/app/shared/modal/dialog-subject-input/dialog-subject-input.component';
+import { AuthenticationService } from 'src/app/shared/authorization/auth.service';
 
 @Component({
   selector: 'app-test-subject-view',
@@ -23,6 +24,7 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['task', 'comment', 'entryTime'];
   dataSource = new MatTableDataSource([]);
   private paginator: MatPaginator;
+  userRole: string;
 
 
   @ViewChild(MatPaginator, {static: false}) set matPaginator(mp: MatPaginator) {
@@ -34,11 +36,13 @@ export class TestSubjectViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private service: TestSubjectService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
+      this.userRole = this.authService.getUserRole();
       this.getTestSubject(+params.id, +params.groupId);
     });
   }

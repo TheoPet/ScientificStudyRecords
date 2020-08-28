@@ -13,6 +13,7 @@ import { MatDialogConfig, MatDialog} from '@angular/material';
 import { DialogSubjectInputComponent } from '../shared/modal/dialog-subject-input/dialog-subject-input.component';
 import { DialogGroupInputComponent } from '../shared/modal/dialog-group-input/dialog-group-input.component';
 import { DialogDeleteComponent } from '../shared/modal/dialog-delete/dialog-delete.component';
+import { AuthenticationService } from '../shared/authorization/auth.service';
 
 @Component({
   selector: 'app-group',
@@ -26,16 +27,19 @@ export class GroupComponent implements OnInit, OnDestroy {
   afterAssignedClosedSubscription: Subscription;
   afterClosedSubscription: Subscription;
   editGroupDialogClosedSubscription: Subscription;
+  userRole: string;
 
   constructor(
     private route: ActivatedRoute,
     private groupService: GroupService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.loadedGroup.id = +params.id;
+      this.userRole = this.authService.getUserRole();
       this.getGroup(this.loadedGroup.id);
     });
   }

@@ -15,7 +15,7 @@ namespace ScientificStudyWeb.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class TasksController : ControllerBase
     {
         private readonly ScientificStudiesRecordDbContext _context;
@@ -40,7 +40,7 @@ namespace ScientificStudyWeb.Controllers
             return Ok(taskToReturn);
         }
 
-        // [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = Policies.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
