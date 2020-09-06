@@ -10,7 +10,6 @@ namespace ScientificStudyWeb.Models
 
         public int StudyId { get; set; }
 
-        [ForeignKey("StudyId")]
         public Study Study {get; set;}
         
         [MaxLength(50)]

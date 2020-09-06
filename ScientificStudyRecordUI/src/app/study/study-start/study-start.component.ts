@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { DialogStudyInputComponent } from 'src/app/shared/modal/dialog-study-input/dialog-study-input.component';
+import { AuthenticationService } from 'src/app/shared/authorization/auth.service';
 
 @Component({
   selector: 'app-study-start',
@@ -21,15 +22,18 @@ export class StudyStartComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource([]);
   private paginator: MatPaginator;
   displayedColumns: string[] = ['study'];
+  userRole: string;
 
   constructor(
     private studyService: StudyService,
     private route: ActivatedRoute,
     private router: Router,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
+    this.userRole = this.authService.getUserRole();
     this.getStudies();
   }
 

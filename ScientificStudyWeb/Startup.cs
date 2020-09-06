@@ -39,8 +39,6 @@ namespace ScientificStudiesRecord
             }
         }
 
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -57,7 +55,7 @@ namespace ScientificStudiesRecord
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            // services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             services.AddCors();
             services.AddAutoMapper(typeof(StudyRepository).Assembly);
@@ -113,11 +111,6 @@ namespace ScientificStudiesRecord
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseRouting();
-            // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            // app.UseAuthentication();
-            // app.UseAuthorization();
-
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseRouting();
@@ -126,17 +119,6 @@ namespace ScientificStudiesRecord
             {
                 endpoints.MapControllers();
             });
-
-            //app.UseStaticFiles();
-            //app.UseCookiePolicy();
-
-            // app.UseCors(MyAllowSpecificOrigins);
-            // app.UseEndpoints(endpoints =>
-            // {
-            //     endpoints.MapControllers();
-            // });
-
-
         }
     }
 }

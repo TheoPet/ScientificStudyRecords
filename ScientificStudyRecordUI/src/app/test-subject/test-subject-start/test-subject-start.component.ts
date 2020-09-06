@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogTestSubjectInputComponent } from 'src/app/shared/modal/dialog-test-subject-input/dialog-test-subject-input.component';
 import { DialogStudyAssignComponent } from 'src/app/shared/modal/dialog-study-assign/dialog-study-assign.component';
+import { AuthenticationService } from 'src/app/shared/authorization/auth.service';
 
 @Component({
   selector: 'app-test-subject-start',
@@ -27,6 +28,7 @@ export class TestSubjectStartComponent implements OnInit, OnDestroy {
     'study',
     'group',
   ];
+  userRole: string;
 
   @ViewChild(MatPaginator, { static: false }) set matPaginator(
     mp: MatPaginator
@@ -38,10 +40,12 @@ export class TestSubjectStartComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private service: TestSubjectService,
+    private authService: AuthenticationService,
     public matDialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.userRole = this.authService.getUserRole();
     this.getTestSubjects();
   }
 

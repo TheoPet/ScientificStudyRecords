@@ -151,7 +151,6 @@ namespace ScientificStudyWeb.Controllers
         {
             var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id.Value);
 
-            //Teo: dodaj validaciju
             if (testSubjectToUpdate == null)
                 return Ok("Element does not exist");
 
@@ -172,7 +171,6 @@ namespace ScientificStudyWeb.Controllers
         {
             var testSubjectToUpdate = await _unitOfWork.testSubjectRepository.Get(testSubject.Id.Value);
 
-            //Teo: dodaj validaciju
             if (testSubjectToUpdate == null)
                 return Ok("Element does not exist");
 

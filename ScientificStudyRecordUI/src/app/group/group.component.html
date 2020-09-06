@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <span class="text-center">{{ loadedGroup.name }} </span>
   <span class="filler"></span>
-  <button
+  <button *ngIf="userRole === 'Admin'"
     mat-button
     aria-label="Add test subject button"
     (click)="openAddTestSubjectDialog()"

@@ -88,6 +88,6 @@ export class DialogTaskExperimentInputComponent implements OnInit {
   }
 
   displayFunction(object: BasicTestSubject) {
-    return FilterUtils.displaFunctionTestSubject(object);
+    return FilterUtils.displayFunctionTestSubject(object);
   }
 }

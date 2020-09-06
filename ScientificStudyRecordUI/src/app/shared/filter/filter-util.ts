@@ -9,10 +9,9 @@ export class FilterUtils {
     }
     return '';
   }
-  static displaFunctionTestSubject(object: BasicTestSubject) {
+  static displayFunctionTestSubject(object: BasicTestSubject) {
     if (object) {
       const fullName = object.name + ' ' + object.surname;
-      console.log(fullName)
       return fullName;
     }
     return '';

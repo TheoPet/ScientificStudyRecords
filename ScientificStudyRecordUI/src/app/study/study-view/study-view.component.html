@@ -1,10 +1,10 @@
 <mat-toolbar color="primary" class="header mat-elevation-z4">
   <span class="text-center">{{ loadedStudy.name }} </span>
   <span class="filler"></span>
-  <button mat-button aria-label="Add study button" (click)="openGroupModal()">
+  <button *ngIf="userRole === 'Admin'" mat-button aria-label="Add study button" (click)="openGroupModal()">
     Add group
   </button>
-  <button mat-button aria-label="Add study button" (click)="openTaskModal()">
+  <button *ngIf="userRole === 'Admin'" mat-button aria-label="Add study button" (click)="openTaskModal()">
     Add task
   </button>
   <button *ngIf="userRole === 'Admin'" mat-button [matMenuTriggerFor]="Menu">More...</button>

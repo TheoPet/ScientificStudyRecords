@@ -257,6 +257,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.afterInitNotCalled = false;
     }
   }
+
   onPageFiredExperiment(event: PageEvent) {
     this.search(event.pageIndex);
   }
@@ -319,7 +320,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   displayFunctionTestSubject(data: BasicTestSubject) {
-    return FilterUtils.displaFunctionTestSubject(data);
+    return FilterUtils.displayFunctionTestSubject(data);
   }
 
   filterByStudy() {

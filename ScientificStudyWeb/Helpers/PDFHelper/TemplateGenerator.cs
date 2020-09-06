@@ -72,7 +72,7 @@ namespace ScientificStudyWeb.Helpers.PDFHelper
                                         <th>Task</th>
                                         <th>Experiment time</th>
                                         <th>Experiment comment</th>
-                                    </tr>", header,header, DateTime.Now.ToLocalTime().ToString());
+                                    </tr>", header, DateTime.Now.ToLocalTime().ToString());
                         foreach (var exp in experiments)
                         {
                             sb.AppendFormat(@"<tr>

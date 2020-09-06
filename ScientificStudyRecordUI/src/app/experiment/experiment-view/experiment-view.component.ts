@@ -83,7 +83,7 @@ export class ExperimentViewComponent implements OnInit, OnDestroy {
     dialogConfig.width = '350px';
     dialogConfig.panelClass = 'mat-dialog-experiments';
     dialogConfig.data = {
-      title: 'Add experiment',
+      title: 'Edit experiment',
       testSubject: this.loadedTestSubject,
       experiment: this.loadedExperiment,
       editExperiment: true,

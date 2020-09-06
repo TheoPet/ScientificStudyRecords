@@ -8,6 +8,7 @@
   </div>
   <span class="filler"></span>
   <button
+  *ngIf="userRole === 'Admin'"
     mat-button
     aria-label="Add experiment"
     (click)="openAddExperimentDialog()"
